@@ -5,6 +5,8 @@ Route::rule('/'.BOOKCTRL.'/:id', 'index/books/index');
 Route::rule('/'.BOOKLISTACT, 'index/booklist/index');
 Route::rule('/getBooks', 'index/booklist/getBooks');
 Route::rule('/getOptions', 'index/booklist/getOptions');
+Route::rule('/getCates', 'index/booklist/getCates');
+Route::rule('/getRanks', 'index/rank/getRanks');
 Route::rule('/'.CHAPTERCTRL.'/:id', 'index/chapters/index');
 Route::rule('/'.SEARCHCTRL.'/[:keyword]', 'index/index/search');
 Route::rule('/'.RANKCTRL, 'index/rank/index');

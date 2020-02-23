@@ -67,7 +67,28 @@
                     <div class="goodbook-tabcont">
                         <div>
                             <ul class="goodbook-b">
-                                {volist name="newest" id="vo" length="8"}
+                                {volist name="newest" id="vo" length="4"}
+                                <dl class="book-block">
+                                    <dt>
+                                        <a href="/{$book_ctrl}/{$vo.param}" target="_blank">
+                                            <img class="lazyimg" data-original="{$vo.cover_url}" src="https://s1.ax1x.com/2018/12/13/FN8WLQ.jpg" style="display: block;">
+                                        </a>
+                                    </dt>
+                                    <dd>
+                                        <a href="/{$book_ctrl}/{$vo.param}" class="book-name" target="_blank">{$vo.book_name}</a>
+                                        <span class="book-info">
+		            						{$vo.summary}
+		            					</span>
+                                        <span class="book-author">
+		            								作者：
+		            								<a href="/{$search_ctrl}/{$vo.author_name}" target="_blank">{$vo.author_name}</a>
+		            							</span>
+                                    </dd>
+                                </dl>
+                                {/volist}
+                            </ul>
+                            <ul class="goodbook-b">
+                                {volist name="newest" id="vo" offset="4" length="4"}
                                 <dl class="book-block">
                                     <dt>
                                         <a href="/{$book_ctrl}/{$vo.param}" target="_blank">
@@ -100,7 +121,28 @@
                     <div class="goodbook-tabcont">
                         <div>
                             <ul class="goodbook-b">
-                                {volist name="cateItem.books" id="vo" length="10"}
+                                {volist name="cateItem.books" id="vo" length="4"}
+                                <dl class="book-block">
+                                    <dt>
+                                        <a href="/{$book_ctrl}/{$vo.param}" target="_blank">
+                                            <img class="lazyimg" data-original="{$vo.cover_url}" src="https://s1.ax1x.com/2018/12/13/FN8WLQ.jpg" style="display: block;">
+                                        </a>
+                                    </dt>
+                                    <dd>
+                                        <a href="/{$book_ctrl}/{$vo.param}" class="book-name" target="_blank">{$vo.book_name}</a>
+                                        <span class="book-info">
+		            						{$vo.summary}
+		            					</span>
+                                        <span class="book-author">
+		            								作者：
+		            								<a href="/{$search_ctrl}/{$vo.author_name}" target="_blank">{$vo.author_name}</a>
+		            							</span>
+                                    </dd>
+                                </dl>
+                                {/volist}
+                            </ul>
+                            <ul class="goodbook-b">
+                                {volist name="cateItem.books" id="vo" offset="4" length="4"}
                                 <dl class="book-block">
                                     <dt>
                                         <a href="/{$book_ctrl}/{$vo.param}" target="_blank">
@@ -131,7 +173,7 @@
                 <div class="rank-list">
                     <span class="titmenu">更新榜</span>
                     <ul class="rank-1">
-                        {volist name="newest" id="vo" key="k"}
+                        {volist name="newest" id="vo" key="k" length="10"}
                         {if $k == 1}
                         <li class="top topred">
                             <span class="num">{$k}</span>
@@ -244,4 +286,8 @@
         </div>
     </div>
 </div>
+{/block}
+{block name="js"}
+<script type="text/javascript" src="/static/js/jquery.SuperSlide.2.1.1.js"></script>
+<script type="text/javascript" src="/static/js/slide.js"></script>
 {/block}

@@ -1,0 +1,216 @@
+{extend name="./template/default/pc/pub/base.html" /}
+{block name="seo"}
+<title>小说分类-{$site_name}</title>
+{/block}
+{block name="main"}
+<div class="body-bg" id="app">
+    <div class="wrap">
+        <div class="containerbox">
+            <div class="block10"></div>
+            <div class="wrap1200 ranklist">
+                <div class="leftbar fl">
+                    <div class="selectlist">
+                        <div class="select selchannel">
+                            <span class="tname">频道</span>
+                            <ul class="textlist">
+                                <li :class="{'on' : gender == 1}">
+                                    <a @click="genderChange(1)">男频</a>
+                                </li>
+                                <li :class="{'on' : gender == 2}">
+                                    <a @click="genderChange(2)">女频</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="select selstyle">
+                            <span class="tname">分类</span>
+                            <ul class="textlist" v-show="gender == 1">
+                                <li :class="{'on' : cate == -1}">
+                                    <a @click="cateChange(-1)">全部</a>
+                                </li>
+                                <li :class="{'on' : cate == item.id}" v-for="(item, index) in boys" :key="index">
+                                    <a @click="cateChange(item.id)">{{item.cate_name}}</a>
+                                </li>
+                            </ul>
+                            <ul class="textlist" v-show="gender == 2">
+                                <li :class="{'on' : cate == -1}">
+                                    <a @click="cateChange(-1)">全部</a>
+                                </li>
+                                <li :class="{'on' : cate == item.id}" v-for="(item, index) in girls" :key="index">
+                                    <a @click="cateChange(item.id)">{{item.cate_name}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="select selnum">
+                            <span class="tname">字数</span>
+                            <ul class="textlist">
+                                <li :class="{'on' : words == 9999}">
+                                    <a @click="wordsChange(9999)">全部</a>
+                                </li>
+                                <li :class="{'on' : words == 30}">
+                                    <a @click="wordsChange(30)">30万字以内</a>
+                                </li>
+                                <li :class="{'on' : words == 50}">
+                                    <a @click="wordsChange(50)">50万字以内</a>
+                                </li>
+                                <li :class="{'on' : words == 100}">
+                                    <a @click="wordsChange(100)">100万字以内</a>
+                                </li>
+                                <li :class="{'on' : words == 200}">
+                                    <a @click="wordsChange(200)">200万字以内</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="select selstatus">
+                            <span class="tname">状态</span>
+                            <ul class="textlist">
+                                <li :class="{'on' : end == -1}">
+                                    <a @click="statusChange(-1)">全部</a>
+                                </li>
+                                <li :class="{'on' : end == 2}">
+                                    <a @click="statusChange(2)">连载</a>
+                                </li>
+                                <li :class="{'on' : end == 1}">
+                                    <a @click="statusChange(1)">完本</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="right-cont-box fr rankdata">
+                    <div class="rankdatacont">
+                        <div class="tabsbox1">
+                            <div class="rankday">
+                                <div class="tabsday-cont">
+                                    <div class="tab-cont-1 secd-rank-list">
+                                        <div class="listboxw">
+                                            <dl v-for="(item, index) in books" :key="index">
+                                                <dt>
+                                                    <a :href="'/{$book_ctrl}/'+ item.param" target="_blank">
+                                                        <img class="lazyimg" :src="item.cover_url" style="display: block;">
+                                                    </a>
+                                                </dt>
+                                                <dd>
+                                                    <a href="'/{$book_ctrl}/'+ item.param" class="bigpic-book-name" target="_blank">
+                                                        {{item.book_name}}
+                                                    </a>
+                                                    <p>
+                                                        <a :href="'/{$search_ctrl}/' + item.author_name" target="_blank">
+                                                            {{item.author_name}}
+                                                        </a>|
+                                                        <a :href="'/booklist?cate=' + item.cate_id" target="_blank">
+                                                            {{item.cate_name}}
+                                                        </a>|
+                                                        {{item.end == 1 ? '已完结' : '连载中'}}
+                                                    </p>
+                                                    <p class="big-book-info">
+                                                        {{item.summary}}
+                                                    </p>
+                                                    <p>
+                                                        <span href="javascript:;" target="_blank">{{item.words}}万字 |</span>
+                                                        共<span class="red">{{item.chapter_count}}</span>章
+                                                    </p>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            gender: 1,
+            cate: -1,
+            boys: [],
+            girls: [],
+            words: 9999,
+            end: -1,
+            page: 0,
+            isMore: 1,
+            books: []
+        },
+        methods: {
+            genderChange(index) {
+                this.gender = index
+                this.cate = -1
+            },
+            wordsChange(words) {
+                this.words = words
+                this.page = 0
+                this.getBooks(1)
+            },
+            cateChange(cate) {
+                this.cate = cate
+                this.page = 0
+                this.getBooks(1)
+            },
+            statusChange(end) {
+                this.end = end
+                this.page = 0
+                this.getBooks(1)
+            },
+            onScroll() {                    //可滚动容器的高度
+                var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                //变量windowHeight是可视区的高度
+                var windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+                //变量scrollHeight是滚动条的总高度
+                var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+                //滚动条到底部的条件
+                if (scrollTop + windowHeight == scrollHeight) {
+                    if (this.isMore == 1) { //如果还有更多数据，再请求接口，否则不再请求，节省服务器资源
+                        this.page = this.page + 20
+                        this.getBooks(0)
+                    }
+                }
+            },
+            getBooks(isRefresh) {
+                axios.get("/getBooks", {
+                    params: {
+                        cate: this.cate,
+                        words: this.words,
+                        end: this.end,
+                        page: this.page
+                    }
+                }).then(response => {
+                    if (isRefresh == 1) { //为1是重新渲染
+                        this.books =  response.data.books
+                    } else {
+                        if (response.data.err == 1) {
+                            this.isMore = 0 //设置好之后，上拉加载就不再请求接口了
+                            ShowDialog('没有更多了')
+                        } else {
+                            this.books = this.books.concat(response.data.books)
+                        }
+                    }
+                })
+
+            },
+        },
+        mounted() {
+            axios.get("/getCates").then(response => {
+                let cates = response.data.cates
+                for (let i = 0; i < cates.length; i++) {
+                    if (cates[i].gender == 1) {
+                        this.boys.push(cates[i])
+                    } else {
+                        this.girls.push(cates[i])
+                    }
+                }
+            })
+            this.getBooks(1)
+        },
+        created() {
+            window.addEventListener('scroll', this.onScroll);
+        }
+    })
+</script>
+{/block}

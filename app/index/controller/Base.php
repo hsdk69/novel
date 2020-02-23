@@ -5,6 +5,7 @@ namespace app\index\controller;
 
 
 use app\BaseController;
+use app\model\Cate;
 use app\model\FriendshipLink;
 use think\facade\Env;
 use think\facade\View;

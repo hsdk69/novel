@@ -119,12 +119,15 @@ class Books extends Base
 
                 $book->author_id = $author->id;
                 $book->author_name = $author->author_name;
-                $c = (int)Book::where('unique_id','=',$data['unique_id'])->count();
-                if ($c > 0) {
-                    $book->unique_id = md5(time() . mt_rand(1,1000000)); //如果已经存在相同标识，则生成一个新的随机标识
-                } else {
-                    $book->unique_id = $data['unique_id'];
+                if($data['unique_id'] != $book->unique_id) {
+                    $c = (int)Book::where('unique_id','=',$data['unique_id'])->count();
+                    if ($c > 0) {
+                        $book->unique_id = md5(time() . mt_rand(1,1000000)); //如果已经存在相同标识，则生成一个新的随机标识
+                    } else {
+                        $book->unique_id = $data['unique_id'];
+                    }
                 }
+
                 $book->last_time = time();
                 $dir = 'book/cover';
                 if (request()->file() != null) {

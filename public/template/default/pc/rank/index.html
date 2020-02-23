@@ -1,0 +1,119 @@
+{extend name="./template/default/pc/pub/base.html" /}
+{block name="seo"}
+<title>小说排行榜-{$site_name}</title>
+{/block}
+{block name="main"}
+<div class="body-bg" id="app">
+    <div class="wrap">
+        <div class="containerbox">
+            <div class="block10"></div>
+            <div class="wrap1200 ranklist">
+                <div class="leftbarlist fl">
+                    <ul>
+                        <li :class="{'on' : op1 == 'new'}">
+                            <a :class="{'alicon' : op1 == 'new'}" @click="opfirst('new', '')">新书榜</a>
+                        </li>
+                        <li :class="{'on' : op1 == 'click'}">
+                            <a :class="{'alicon' : op1 == 'click'}" @click="opfirst('click', 'year')">点击榜</a>
+                        </li>
+                        <li :class="{'on' : op1 == 'end'}">
+                            <a :class="{'alicon' : op1 == 'end'}" @click="opfirst('end', '')">完结榜</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="right-cont-box fr ranklistdata">
+                    <div class="comment-r-menu">
+                        <span class="fl r-c-t">点击榜</span>
+                        <ul class="fl comment-status">
+                            <li :class="{'on' : op2 == 'year'}">
+                                <a class="r-all-btn" @click="opsecond('year')">总榜</a>
+                            </li>
+                            <li :class="{'on' : op2 == 'day'}">
+                                <a class="r-new-btn" @click="opsecond('day')">日榜</a>
+                            </li>
+                            <li :class="{'on' : op2 == 'week'}">
+                                <a class="r-cream-btn" @click="opsecond('week')">周榜</a>
+                            </li>
+                            <li :class="{'on' : op2 == 'month'}">
+                                <a class="r-all-btn" @click="opsecond('month')">月榜</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="rankdatacont">
+                        <div class="secd-rank-list rank" v-for="(item, index) in books" :key="index">
+                            <dl>
+                                <dt>
+                                    <a :href="'/{$book_ctrl}/'+ item.param" target="_blank">
+                                        <img :src="item.cover_url" style="display: block;">
+                                    </a>
+                                </dt>
+                                <dd>
+                                    <a :href="'/{$book_ctrl}/'+ item.param" class="bigpic-book-name" target="_blank">
+                                        <span class="num red">{{index}}</span>{{item.book_name}}
+                                    </a>
+                                    <p>
+                                        <a :href="'/{$search_ctrl}/' + item.author_name" target="_blank">
+                                            {{item.author_name}}
+                                        </a> |
+                                        <a :href="'/booklist?cate=' + item.cate_id"
+                                           target="_blank">{{item.cate_name}}</a> |
+                                        {{item.end == 1 ? '已完结' : '连载中'}}
+                                        <span class="clicknum">{{item.clicks}} 点击</span>
+                                    </p>
+                                    <p class="big-book-info">{{item.summary}}</p>
+                                    <p>
+                                        <a :href="'/{$search_ctrl}/' + item.author_name" target="_blank" class="red">
+                                            共{{item.chapter_count}}章
+                                        </a>
+                                        <span>| {{item.date}}</span>
+                                    </p>
+                                </dd>
+                            </dl>
+                            <div class="bigbtn">
+                                <a :href="'/{$book_ctrl}/'+ item.param" class="detailbtn" target="_blank">书籍详情</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            op1: 'new',
+            op2: '',
+            books: []
+        },
+        methods: {
+            opfirst(op, opp) {
+                this.op1 = op
+                this.op2 = opp
+                this.getBooks(op, 'year')
+            },
+            opsecond(date) {
+              this.op1 = 'click'
+              this.op2 = date
+              this.getBooks(this.op1, date)
+            },
+            getBooks(op, date) {
+                axios.get("/getRanks", {
+                    params: {
+                        op: op,
+                        date: date
+                    }
+                }).then(response => {
+                    this.books = response.data.books
+                })
+            }
+        },
+        mounted() {
+            this.getBooks('new', 'year')
+        },
+    })
+</script>
+{/block}

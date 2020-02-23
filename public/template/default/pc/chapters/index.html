@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>{$chapter.chapter_name}-{$site_name}</title>
+    <meta name="description" content="{$chapter.book.book_name}{$chapter.chapter_name}在线阅读">
+    <link rel="stylesheet" href="/static/css/chapter.css" type="text/css"/>
+    <script src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+</head>
+<body class="theme-0 w800">
+<div class="wrap">
+    <div class="read-header" id="readHeader">
+        <div class="wrap-center cf">
+            <div class="left-nav fl">
+                <div class="logo">
+                    <a class="logo-ico" href="/"><img src="/static/images/logo.png"></a>
+                </div>
+                <ul>
+                    <li>
+                        <cite><a href="/">首页</a></cite>
+                    </li>
+                </ul>
+            </div>
+            <div class="read-login fr">
+                <ul>
+                    <li id="min-search">
+                        <form action="http://demo.kyxscms.com/search.html" method="post" target="_blank">
+                            <input class="submit-input" type="submit" id="searchSubmit">
+                            <input id="pin-input" class="pin-input hide" name="keyword" type="text" placeholder="">
+                            <label id="pin-search" for="searchSubmit">
+                                <em class="iconfont"></em>
+                            </label>
+                        </form>
+                    </li>
+                    <li class="line"></li>
+                    {empty name="user"}
+                    <li class="sign-out">
+                        <a id="pin-login" href="/login">登录</a>
+                        <a class="reg" href="/register" target="_blank">注册</a>
+                    </li>
+                    {else /}
+                    <li class="sign-in">
+                        <img src="/static/images/mrtx.gif" class="headPortrait">
+                        <a href="/ucenter">{$user}</a>
+                        <div class="dropdown">
+                            <a href="/ucenter">个人中心</a>
+                            <a href="/bookshelf">我的书架</a>
+                            <a href="/history">阅读记录</a>
+                            <a href="/logout" class="exit">退出</a>
+                        </div>
+                    </li>
+                    {/empty}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="crumbs-nav">
+        <a href="/" target="_blank">首页</a>
+        <em class="iconfont"></em>
+        <a href="/{$booklist_act}" target="_blank">{$chapter.book.cate.gender == 1 ? '男频' : '女频'}</a>
+        <em class="iconfont"></em>
+        <a href="/{$booklist_act}?cate={$chapter.book.cate_id}" target="_blank">{$chapter.book.cate.cate_name}</a>
+        <em class="iconfont"></em>
+        <a href="/{$book_ctrl}/{$chapter.book.param}" target="_blank">{$chapter.book.book_name}</a>
+    </div>
+    <div class="read-main-wrap font-family01" style="font-size:18px" id="j_readMainWrap">
+        <div id="j_chapterBox">
+            <div class="text-wrap">
+                <div class="main-text-wrap">
+                    <div class="text-head">
+                        <h3 class="j_chapterName">{$chapter.chapter_name}</h3>
+                        <div class="text-info cf">
+                            <div class="info fl">
+                                <a href="/{$book_ctrl}/{$chapter.book.param}" target="_blank">
+                                    <em class="iconfont"></em> {$chapter.book.book_name}
+                                </a>
+                                <a href="/search?keyword={$chapter.book.author_name}" target="_blank">
+                                    <em class="iconfont"></em> {$chapter.book.author_name}
+                                </a>
+                                <i><em class="iconfont"></em><span
+                                        class="j_chapterWordCut">{$words}</span>字</i>
+                                <i><em class="iconfont"></em><span class="j_updateTime">{$chapter.create_time|date='Y-m-d'}</span></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="read-content j_readContent">
+                        {$content|raw}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="la-ball-pulse j_chapterLoad hidden" style="display: none;">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="chapter-control dib-wrap">
+            {if $prev == "null"}
+            <a class="block" style="color: lightgrey">上一章</a>
+            {else/}
+            <a href="/{$chapter_ctrl}/{$prev.id}" class="block" title="{$prev.chapter_name}">上一章</a>
+            {/if}
+            <span>|</span>
+            {if $next == "null"}
+            <a class="block" style="color: lightgrey">下一章</a>
+            {else/}
+            <a href="/{$chapter_ctrl}/{$next.id}" class="block" title="{$next.chapter_name}">下一章</a>
+            {/if}
+        </div>
+    </div>
+</div>
+<div class="float-wrap fix-float-wrap" id="j_floatWrap">
+    <div class="left-bar-list" id="j_leftBarList" style="top: 119px;">
+        <dl>
+            <dd id="j_navCatalogBtn">
+                <a href="javascript:">
+                    <i><em class="iconfont"></em><span>目录</span></i>
+                </a>
+            </dd>
+            <dd id="j_navSettingBtn" class="">
+                <a href="javascript:">
+                    <i><em class="iconfont"></em><span>设置</span></i>
+                </a>
+            </dd>
+            <dd>
+                <a href="http://demo.kyxscms.com/novel/363.html" target="_blank">
+                    <i><em class="iconfont"></em><span>书页</span></i>
+                </a>
+            </dd>
+        </dl>
+        <!-- start 目录面板浮层 -->
+        <div class="panel-wrap catalog" id="j_catalog" style="display: none;">
+            <a class="iconfont close-panel" href="javascript:"></a>
+            <div class="panel-box">
+                <div class="catalog-tab dib-wrap">
+                    <span class="lang act">目录</span>
+                </div>
+                <div>
+                    <!-- start 目录列表 -->
+                    <div class="panel-list-wrap catalog-scroll-wrap" style="max-height: 253px;">
+                        <div class="catalog-list-wrap">
+                            <div class="volume-list">
+                                <ul>
+                                    {volist name="chapters" id="vo"}
+                                    <li>
+                                        <a href="/{$chapter_ctrl}/{$chapter.id}">{$chapter.chapter_name}</a>
+                                    </li>
+                                    {/volist}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end 目录面板浮层 -->
+        <!-- start 设置面板浮层 -->
+        <div class="panel-wrap setting" id="j_setting" style="display: none;">
+            <a class="iconfont close-panel setting-close" href="javascript:"></a>
+            <div class="panel-box">
+                <h4 class="lang">设置</h4>
+                <div class="setting-list-wrap">
+                    <ul>
+                        <li class="theme-list" id="j_themeList">
+                            <i>阅读主题</i>
+                            <span title="默认" class="theme-0 act" data-st="0">
+										<em class="iconfont"></em>
+									</span>
+                            <span title="牛皮纸" class="theme-1 " data-st="1">
+										<em class="iconfont"></em>
+									</span>
+                            <span title="淡绿色" class="theme-2 " data-st="2">
+										<em class="iconfont"></em>
+									</span>
+                            <span title="淡蓝色" class="theme-3 " data-st="3">
+										<em class="iconfont"></em>
+									</span>
+                            <span title="淡粉色" class="theme-4 " data-st="4">
+										<em class="iconfont"></em>
+									</span>
+                            <span title="灰色" class="theme-5 " data-st="5">
+										<em class="iconfont"></em>
+									</span>
+                            <span title="黑色" class="theme-6 " data-st="6">
+										<em class="iconfont"></em>
+										<cite class="iconfont"></cite>
+									</span>
+
+                        </li>
+                        <li class="font-family" id="j_fontFamily">
+                            <i>正文字体</i>
+                            <span data-st="1" class="yahei act">雅黑</span>
+                            <span data-st="2" class="yahei ">宋体</span>
+                            <span data-st="3" class="yahei ">楷书</span>
+                        </li>
+                        <li class="font-size" id="j_fontSize">
+                            <i>字体大小</i>
+                            <cite>
+										<span class="prev">
+											<em class="iconfont"></em>
+										</span> <b></b>
+                                <span class="lang">18</span> <b></b>
+                                <span class="next">
+											<em class="iconfont"></em>
+										</span>
+                            </cite>
+                        </li>
+                        <li class="page-width" id="j_pageWidth">
+                            <i>页面宽度</i>
+                            <cite>
+										<span class="prev">
+											<em class="iconfont"></em>
+										</span>
+                                <b></b>
+                                <span class="lang">
+											800										</span>
+                                <b></b>
+                                <span class="next">
+											<em class="iconfont"></em>
+										</span>
+                            </cite>
+                        </li>
+                    </ul>
+                    <div class="btn-wrap dib-wrap">
+                        <a class="red-btn" id="j_setSave" href="javascript:">保存</a>
+                        <a class="grey-btn" id="j_setCancel" href="javascript:">取消</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end 设置面板浮层 -->
+    </div>
+    <div class="right-bar-list" id="j_rightBarList" style="bottom: 0px;">
+        <dl>
+            <dd class="go-top" id="j_goTop" title="返回顶部" style="display: none;">
+                <a href="javascript:">
+                    <i>
+                        <em class="iconfont"></em>
+                    </i>
+                </a>
+            </dd>
+
+        </dl>
+    </div>
+</div>
+</body>
+</html>

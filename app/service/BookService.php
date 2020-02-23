@@ -129,14 +129,9 @@ class BookService
         }
     }
 
-    public function getRecommand($tags, $end_point)
+    public function getRecommand($cate_id, $end_point)
     {
-        $arr = explode('|', $tags);
-        $map = array();
-        foreach ($arr as $value) {
-            $map[] = ['tags', 'like', '%' . $value . '%'];
-        }
-        $books = Book::where($map)->limit(10)->select();
+        $books = Book::whereOr('cate_id','=',$cate_id)->limit(10)->select();
         foreach ($books as &$book) {
             $book['chapter_count'] = Chapter::where('book_id', '=', $book['id'])->count();
             if ($end_point == 'id') {
@@ -151,6 +146,19 @@ class BookService
     public function getByCate($cate_id, $end_point)
     {
         $books = Book::where('cate_id', '=', $cate_id)->select();
+        foreach ($books as &$book) {
+            $book['chapter_count'] = Chapter::where('book_id', '=', $book['id'])->count();
+            if ($end_point == 'id') {
+                $book['param'] = $book['id'];
+            } else {
+                $book['param'] = $book['unique_id'];
+            }
+        }
+        return $books;
+    }
+
+    public function getByAuthor($id, $end_point) {
+        $books = Book::where('author_id', '=', $id)->select();
         foreach ($books as &$book) {
             $book['chapter_count'] = Chapter::where('book_id', '=', $book['id'])->count();
             if ($end_point == 'id') {

@@ -40,7 +40,6 @@ class Index extends Base
                 array_push($dirs,$fileinfo->getFilename());
             }
         }
-
         View::assign([
             'schema' => $schema,
             'site_name' => $site_name,
