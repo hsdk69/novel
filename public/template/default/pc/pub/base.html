@@ -14,10 +14,10 @@
 
             <!--搜索部分 start-->
             <div class="wrap1200 logo">
-                <a href="http://demo.kyxscms.com/" class="fl"><img src="/static/images/logo.png" class="logoImage"></a>
+                <a href="/" class="fl"><img src="/static/images/logo.png" class="logoImage"></a>
                 <div id="mod-search1">
                     <div class="searchbox">
-                        <form action="http://demo.kyxscms.com/search.html" method="get">
+                        <form action="/search" method="get">
                             <div class="searchbox-inner">
                                 <input type="text" name="keyword" placeholder="找书" class="searchinput">
                                 <i class="search-icon"></i>
@@ -27,12 +27,20 @@
                         </form>
                     </div>
                 </div>
+                {empty name="xwx_user"}
                 <div class="mybookshelf fr">
                     <i class="user"></i>
                     <a href="/login">登录</a>
                     <a href="/register">注册</a>
                 </div>
-                <a href="http://demo.kyxscms.com/user/bookshelf/index.html" class="mybookshelf fr"> <i></i>
+                {else /}
+                <div class="mybookshelf isLogged fr">
+                    <img src="/static/images/mrtx.gif" class="headPortrait">
+                    <a href="/ucenter">{{xwx_user}}</a>
+                    <span></span>
+                </div>
+                {/empty}}
+                <a href="/bookshelf" class="mybookshelf fr"> <i></i>
                     我的书架
                 </a>
             </div>

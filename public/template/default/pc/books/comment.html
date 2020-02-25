@@ -345,7 +345,7 @@
 		</span>
     <span id="post-box">
 			<div class="uyanpost">
-				<form class="form-x">
+				<form class="form-x" onsubmit="subcomment();return;">
 				<div class="resetbox sectionbox">
 					<div class="blockbox">
 						<div class="postarea">
@@ -358,9 +358,11 @@
 								<button class="btn btn-info ajaxpost" type="submit" target-form="form-x">发 送</button>
 							</div>
 						</div>
-						<input type="hidden" name="mid" value="434">
+                        <input type="hidden" id="book_id" value="{$book.id}">
+                        <input type="hidden" id="session_uid" value="{$xwx_user_id|default=-1}">
 					</div>
 				</div>
+
 				</form>
 			</div>
 		</span>

@@ -146,6 +146,50 @@ class Books extends Base
         return view($this->tpl);
     }
 
+    public function addfavor()
+    {
+        if (request()->isPost()) {
+            if (is_null($this->uid)) {
+                return json(['err' => 1, 'msg' => '用户未登录']);
+            }
+            $redis = RedisHelper::GetInstance();
+            if ($redis->exists('favor_lock:' . $this->uid)) { //如果存在锁
+                return json(['err' => 1, 'msg' => '操作太频繁']);
+            } else {
+                $redis->set('favor_lock:' . $this->uid, 1, 3); //写入锁
+                $val = input('val');
+                $book_id = input('book_id');
+
+                if ($val == 0) { //未收藏
+                    $where[] = ['book_id', '=', $book_id];
+                    $where[] = ['user_id', '=', $this->uid];
+                    try {
+                        UserFavor::where($where)->findOrFail();
+                        return json(['err' => 1, 'msg' => '已加入书架']); //isfavor表示已收藏
+                    } catch (DataNotFoundException $e) {
+                    } catch (ModelNotFoundException $e) {
+                        $userFaver = new UserFavor();
+                        $userFaver->book_id = $book_id;
+                        $userFaver->user_id = $this->uid;
+                        $userFaver->save();
+                        return json(['err' => 0, 'isfavor' => 1]); //isfavor表示已收藏
+                    }
+                } else {
+                    $where[] = ['book_id', '=', $book_id];
+                    $where[] = ['user_id', '=', $this->uid];
+                    try {
+                        $userFaver = UserFavor::where($where)->findOrFail();
+                        $userFaver->delete();
+                        return json(['err' => 0, 'isfavor' => 0]); //isfavor为0表示未收藏
+                    } catch (DataNotFoundException $e) {
+                    } catch (ModelNotFoundException $e) {
+                        return json(['err' => 1, 'msg' => '取消收藏出错']); //isfavor为0表示未收藏
+                    }
+                }
+            }
+        }
+        return json(['err' => 1, 'msg' => '不是post请求']);
+    }
 
     private function getComments($book_id)
     {
@@ -156,5 +200,27 @@ class Books extends Base
             cache('comments:' . $book_id, $comments);
         }
         return $comments;
+    }
+
+    public function commentadd()
+    {
+        $book_id = input('book_id');
+        $redis = RedisHelper::GetInstance();
+        if ($redis->exists('comment_lock:' . $this->uid)) {
+            return json(['msg' => '每10秒只能评论一次', 'err' => 1]);
+        } else {
+            $comment = new Comments();
+            $comment->user_id = $this->uid;
+            $comment->book_id = $book_id;
+            $comment->content = strip_tags(input('comment'));
+            $result = $comment->save();
+            if ($result) {
+                $redis->set('comment_lock:' . $this->uid, 1, 10); //加10秒锁
+                cache('comments:' . $book_id, null);
+                return json(['msg' => '评论成功', 'err' => 0]);
+            } else {
+                return json(['msg' => '评论失败', 'err' => 1]);
+            }
+        }
     }
 }

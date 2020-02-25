@@ -83,7 +83,7 @@
                     </div>
                 </div>
                 <div class="reader_comments" id="comment-tab">
-                    {include file="./template/default/pc/pub/comment.html"}
+                    {include file="./template/default/pc/books/comment.html"}
                 </div>
             </div>
             <div class="column_right fr">
@@ -173,5 +173,51 @@
             controls: false,
         });
     });
+    $('.addshelf').click(function () {
+        var val = $(this).attr('data-val');
+        $.post({
+            url:`/addfavor`,
+            data:{'book_id' : {$book.id}, 'val' : val },
+            success: function (res) {
+                if (res.err == 1) {
+                    layer.msg(res.msg,{icon: 0,shade: 0.3})
+                } else {
+                    layer.msg(res.msg,{icon: 1,shade: 0.3})
+                }
+
+            },
+            error: function (data) {
+                layer.msg(data,{icon: 0,shade: 0.3})
+            }
+        })
+    })
+    function subcomment() {
+        var uid = $('#session_uid').val();
+        var comment = $('#content').val();
+        var book_id = $('#book_id').val();
+        if (uid == '-1') {
+            layer.msg('请先登录', {icon: 0,shade: 0.3})
+        } else if (comment.length <= 0) {
+            layer.msg('请勿提交空评论', {icon: 0,shade: 0.3})
+        } else {
+            $.post({
+                url: '/commentadd',
+                data: {comment: comment, book_id: book_id},
+                success(res) {
+                    if (res.err == 1) {
+                        layer.msg(res.msg,{icon: 0,shade: 0.3})
+                    } else {
+                        layer.msg(res.msg,{icon: 1,shade: 0.3})
+                        setTimeout(function () {
+                            location.reload();
+                        },1000)
+                    }
+                },
+                error(res) {
+                    layer.msg('表单提交出错', {icon: 0,shade: 0.3})
+                }
+            })
+        }
+    }
 </script>
 {/block}

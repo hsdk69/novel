@@ -4,10 +4,15 @@
 namespace app\index\controller;
 
 
+use app\model\Author;
 use app\model\Banner;
 use app\model\Cate;
+use app\model\Chapter;
 use app\service\BookService;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\ModelNotFoundException;
 use think\facade\View;
+use util\RedisHelper;
 
 class Index extends Base
 {
@@ -90,6 +95,50 @@ class Index extends Base
             'most_charged' => $most_charged,
             'cates' => $cates,
             'catelist' => $catelist
+        ]);
+        return view($this->tpl);
+    }
+
+    public function search()
+    {
+        $keyword = input('keyword');
+        $redis = RedisHelper::GetInstance();
+        $redis->zIncrBy($this->redis_prefix . 'hot_search', 1, $keyword); //搜索词写入redis热搜
+        $hot_search_json = $redis->zRevRange($this->redis_prefix . 'hot_search', 0, 4, true);
+        $hot_search = array();
+        foreach ($hot_search_json as $k => $v) {
+            $hot_search[] = $k;
+        }
+        $books = cache('searchresult:' . $keyword);
+        if (!$books) {
+            $books = $this->bookService->search($keyword, 35, $this->prefix);
+            foreach ($books as &$book) {
+                try {
+                    $author = Author::findOrFail($book['author_id']);
+                    $cate = Cate::findOrFail($book['cate_id']);
+                    $book['author'] = $author;
+                    $book['cate'] = $cate;
+                    $book['last_chapter'] = Chapter::where('book_id','=',$book['id'])->order('chapter_order','desc')->limit(1)->find();
+
+                    if ($this->end_point == 'id') {
+                        $book['param'] = $book['id'];
+                    } else {
+                        $book['param'] = $book['unique_id'];
+                    }
+                } catch (DataNotFoundException $e) {
+                    abort(404, $e->getMessage());
+                } catch (ModelNotFoundException $e) {
+                    abort(404, $e->getMessage());
+                }
+            }
+            cache('searchresult:' . $keyword, $books, null, 'redis');
+        }
+
+        View::assign([
+            'books' => $books,
+            'count' => count($books),
+            'hot_search' => $hot_search,
+            'keyword' => $keyword
         ]);
         return view($this->tpl);
     }

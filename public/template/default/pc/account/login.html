@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>狂雨小说</title>
+    <link href="/static/css/login.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://lib.baomitu.com/layer/3.1.1/theme/default/layer.css">
+</head>
+<body style="">
+<div class="header">
+    <div class="box-center">
+        <div class="logo cf">
+            <a href="/">
+                <img src="/static/images/logo.png"></a>
+            <em></em>
+            <span class="lang">用户登录</span>
+        </div>
+    </div>
+</div>
+<div class="box-center">
+    <div class="login-area-wrap cf">
+        <div class="login-op-img fl">
+            <img src="/static/images/loginBg.jpg">
+        </div>
+        <!-- start 登录区 -->
+        <div class="login-wrap type-20 fl">
+            <div class="login-box">
+                <div class="input-mode">
+                    <div class="error-tip hidden"></div>
+                    <dl>
+                        <dd class="">
+                            <em class="iconfont"></em>
+                            <input name="username" type="text" placeholder="用户名" id="username" autocomplete="off">
+                        </dd>
+                        <dd class="">
+                            <em class="iconfont"></em>
+                            <input name="password" type="password" placeholder="密码" id="password" autocomplete="off">
+                        </dd>
+                    </dl>
+                    <!-- start 登录操作 -->
+                    <div class="login-common-wrap">
+                        <div class="auto-login-box cf">
+                            <div class="link fr">
+                                <a href="#" target="_blank">忘记密码</a>
+                                <em>|</em>
+                                <a href="/register">免费注册</a>
+                            </div>
+                            <input type="checkbox" id="autologin" name="autologin">
+                            <label for="autologin" class="ui-checkbox"></label><label for="autologin">自动登录</label>
+                        </div>
+                        <a class="blue-btn go-login btnLogin login-button" href="/login">登 录</a>
+                    </div>
+                    <!-- end 登录操作 -->
+                </div>
+                <div class="common-html-wrap">
+                    <div class="reg-wrap">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end 登录区 -->
+    </div>
+</div>
+<div class="footer-wrap">
+    <div class="footer">
+        <div class="copy-right">
+            <p></p>
+            <p>
+                Copyright © 2020 All Rights Reserved
+                <a href="http://demo.kyxscms.com/" target="_blank">{$site_name}</a>版权所有
+            </p>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://lib.baomitu.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://lib.baomitu.com/layer/3.1.1/layer.js"></script>
+<script src="/static/js/login.js"></script>
+<script type="text/javascript">
+    var login = new login();
+</script>
+</body>
+</html>
