@@ -62,20 +62,6 @@
                 <span><img src="/static/images/mrtx.gif"></span>
             </div>
             <div class="name">{$user.username}</div>
-            <div class="user_block_list2">
-                <ul>
-                    <li style="cursor: default">
-					<span class="borderBottom"> <i class="iconfont"></i>
-						vip：{$day} 天
-                    </span>
-                    </li>
-                    <li style="cursor: default">
-					<span class="borderBottom"> <i class="iconfont"></i>
-						余额：{$balance} 元
-                    </span>
-                    </li>
-                </ul>
-            </div>
         </div>
         <p class="title">
             <i class="iconfont"></i>
@@ -121,4 +107,7 @@
 <script src="https://lib.baomitu.com/layer/3.1.1/layer.js"></script>
 <script type="text/javascript" src="/static/js/user.js"></script>
 <script type="text/javascript" src="/static/js/ajax.js"></script>
-</body></html>
+<script src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+{block name="js"}{/block}
+</body>
+</html>

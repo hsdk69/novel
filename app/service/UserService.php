@@ -4,6 +4,7 @@
 namespace app\service;
 
 use app\model\Book;
+use app\model\Cate;
 use app\model\User;
 use app\model\UserFavor;
 use think\db\exception\DataNotFoundException;
@@ -38,10 +39,12 @@ class UserService
     {
         try {
             $where[] = ['user_id', '=', $uid];
-            $data = UserFavor::where($where)->order('create_time', 'desc')->paginate(10, false);
+            $data = UserFavor::where($where)->order('create_time', 'desc')->paginate(5, false);
             $books = array();
             foreach ($data as &$favor) {
                 $book = Book::findOrFail($favor->book_id);
+                $cate = Cate::findOrFail($book->cate_id);
+                $book['cate'] = $cate;
                 if ($end_point == 'id') {
                     $book['param'] = $book['id'];
                 } else {
@@ -67,13 +70,11 @@ class UserService
         }
     }
 
-    public function delFavors($uid, $ids)
+    public function delFavors($uid, $id)
     {
         $where[] = ['user_id', '=', $uid];
-        $where[] = ['book_id', 'in', $ids];
-        $favors = UserFavor::where($where)->selectOrFail();
-        foreach ($favors as $favor) {
-            $favor->delete();
-        }
+        $where[] = ['book_id', 'in', $id];
+        $favor = UserFavor::where($where)->find();
+        $favor->delete();
      }
 }

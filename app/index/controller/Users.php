@@ -34,17 +34,16 @@ class Users extends BaseUc
             cache('balance:' . $this->uid, $balance, '', 'pay');
         }
         try {
-            $user = User::findOrFail($this->uid);
-            $time = $user->vip_expire_time - time();
+            $time = $this->user->vip_expire_time - time();
             $day = 0;
             if ($time > 0) {
-                $day = ceil(($user->vip_expire_time - time()) / (60 * 60 * 24));
+                $day = ceil(($this->user->vip_expire_time - time()) / (60 * 60 * 24));
             }
-            cookie('xwx_vip_expire_time', $user->vip_expire_time); //在session里更新用户vip过期时间
+            cookie('xwx_vip_expire_time', $this->user->vip_expire_time); //在session里更新用户vip过期时间
             View::assign([
                 'balance' => $balance,
-                'user' => $user,
-                'day' => $day
+                'day' => $day,
+                'xwx_vip_expire_time' => $this->user->vip_expire_time
             ]);
             return view($this->tpl);
         } catch (DataNotFoundException $e) {
@@ -59,10 +58,9 @@ class Users extends BaseUc
         $nick_name = input('nick_name');
         $email = input('email');
         try {
-            $user = User::findOrFail($this->uid);
-            $user->nick_name = $nick_name;
-            $user->email = $email;
-            $result = $user->save();
+            $this->user->nick_name = $nick_name;
+            $this->user->email = $email;
+            $result = $this->user->save();
             if ($result) {
                 cookie('xwx_nick_name', $nick_name);
                 return json(['msg' => '修改成功', 'err' => 0]);
@@ -74,5 +72,33 @@ class Users extends BaseUc
         } catch (ModelNotFoundException $e) {
             return json(['msg' => '用户不存在', 'err' => 1]);
         }
+    }
+
+    public function bookshelf()
+    {
+        $data = $this->userService->getFavors($this->uid, $this->end_point);
+        unset($data['page']['query']['page']);
+        $param = '';
+        foreach ($data['page']['query'] as $k => $v) {
+            $param .= '&' . $k . '=' . $v;
+        }
+        View::assign([
+            'books' => $data['books'],
+            'page' => $data['page'],
+            'param' => $param
+        ]);
+        return view($this->tpl);
+    }
+
+    public function delfavors()
+    {
+        $id = explode(',', input('id')); //书籍id;
+        $this->userService->delFavors($this->uid, $id);
+        return json(['err' => 0, 'msg' => '删除收藏']);
+    }
+
+    public function history()
+    {
+        return view($this->tpl);
     }
 }

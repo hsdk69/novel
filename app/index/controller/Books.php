@@ -172,7 +172,7 @@ class Books extends Base
                         $userFaver->book_id = $book_id;
                         $userFaver->user_id = $this->uid;
                         $userFaver->save();
-                        return json(['err' => 0, 'isfavor' => 1]); //isfavor表示已收藏
+                        return json(['err' => 0, 'msg' => '成功加入书架']); //isfavor表示已收藏
                     }
                 } else {
                     $where[] = ['book_id', '=', $book_id];
