@@ -9,7 +9,7 @@
 
 # 关于
 - 官方博客：http://xhxcms.com
-- 文档地址：
+- 文档地址：https://www.kancloud.cn/hiliqi/xhxxscms
 - 官方QQ群：1067970473
 
 # 开源协议
