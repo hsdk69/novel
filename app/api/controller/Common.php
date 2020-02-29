@@ -5,7 +5,7 @@ namespace app\api\controller;
 
 
 use app\BaseController;
-use util\RedisHelper;
+use app\common\RedisHelper;
 use think\facade\Cache;
 use think\facade\App;
 use app\model\Clicks;

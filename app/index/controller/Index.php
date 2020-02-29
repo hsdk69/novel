@@ -4,6 +4,7 @@
 namespace app\index\controller;
 
 
+use app\common\RedisHelper;
 use app\model\Author;
 use app\model\Banner;
 use app\model\Cate;
@@ -12,7 +13,6 @@ use app\service\BookService;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\facade\View;
-use util\RedisHelper;
 
 class Index extends Base
 {

@@ -18,7 +18,7 @@
             <div class="clearfix">
                 <div class="formControls col-xs-3 col-sm-3">
                     <a href="javascript:;" onclick="delAll('请选择要删除的章节','chapters')" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
-                    <a class="btn btn-primary radius" href="" onclick="editCreate('添加章节','{:url(\'chapters/create\',[\'book_id\'=>$book.id])}')">添加章节</a>
+                    <a class="btn btn-primary radius" href="{:url('chapters/create',['book_id'=>$book.id])}">添加章节</a>
                 </div>
                 <div class="formControls col-xs-3 col-sm-3">
                     <span class="r">共有数据：<strong>{$count}</strong> 条</span>

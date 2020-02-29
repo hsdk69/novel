@@ -12,13 +12,26 @@
 <body>
 <div id="app" :class="'skin-' + theme" style="width: 100%; height: 100%">
     <div class="page-read ">
-        <div class="page-read-content" @click="touch()">
-            <article class="read-article" :style="{'font-size': fontsize + 'rem'}">
+        <div class="page-read-content">
+            <article class="read-article" :style="{'font-size': fontsize + 'rem'}" @click="touch(true)">
                 <section class="read-section jsChapterWrapper">
                     <h3>{$chapter.chapter_name}</h3>
                     {$content|raw}
                 </section>
             </article>
+            <div class="read-load-next">
+                {if $prev == "null"}
+                <a href="javascript:" class="btn-normal red">上一章</a>
+                {else/}
+                <a href="/{$chapter_ctrl}/{$prev.id}" class="btn-normal red" title="{$prev.chapter_name}">上一章</a>
+                {/if}
+                <span>|</span>
+                {if $next == "null"}
+                <a href="javascript:" class="btn-normal red">下一章</a>
+                {else/}
+                <a href="/{$chapter_ctrl}/{$next.id}" class="btn-normal red" title="{$next.chapter_name}">下一章</a>
+                {/if}
+            </div>
         </div>
         <div class="page-read-top">
             <h1 class="read-book-name">{$chapter.chapter_name}</h1>
@@ -52,7 +65,7 @@
                 返回我的书架
             </a>
         </div>
-        <div @click="touch()" style="width: 100%; height: 80%; margin-bottom: 10%; margin-top: 10%">
+        <div @click="touch(false)" style="width: 100%; height: 80%; margin-bottom: 10%; margin-top: 10%">
 
         </div>
         <div class="read-opt-bot read-opt-set" :class="{'active' : settingShow}">
@@ -154,8 +167,8 @@
             range: 119.5
         },
         methods: {
-            touch() {
-                this.show = !this.show
+            touch(flag) {
+                this.show = flag
             },
             tagMenu() {
                 this.showMenu = !this.showMenu

@@ -4,11 +4,11 @@
 namespace app\index\controller;
 
 
+use app\common\RedisHelper;
 use app\model\User;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\facade\View;
-use util\RedisHelper;
 
 class Account extends Base
 {

@@ -346,3 +346,5 @@ CREATE TABLE `xwx_chapter_logs`  (
   INDEX `chapter_name`(`chapter_name`) USING BTREE,
   INDEX `log_time`(`log_time`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 ROW_FORMAT = Dynamic;
+
+INSERT INTO xwx_admin(username, `password`) VALUES('admin','123456')
