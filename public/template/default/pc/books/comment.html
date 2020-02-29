@@ -345,25 +345,22 @@
 		</span>
     <span id="post-box">
 			<div class="uyanpost">
-				<form class="form-x" onsubmit="subcomment();return;">
 				<div class="resetbox sectionbox">
 					<div class="blockbox">
 						<div class="postarea">
 							<div class="postborder">
                                 <div style="background:#fff;width: 99.8%;height: 80px;font-size: 12px;box-sizing:border-box;padding:10px">
-                                    <textarea name="content"></textarea>
+                                    <textarea name="content" id="content"></textarea>
                                 </div>
                             </div>
 							<div style="display: block;text-align: right;margin-top:38px">
-								<button class="btn btn-info ajaxpost" type="submit" target-form="form-x">发 送</button>
+								<button class="btn btn-info" onclick="subcomment();">发 送</button>
 							</div>
 						</div>
                         <input type="hidden" id="book_id" value="{$book.id}">
                         <input type="hidden" id="session_uid" value="{$xwx_user_id|default=-1}">
 					</div>
 				</div>
-
-				</form>
 			</div>
 		</span>
     <span id="nav-box">
@@ -394,7 +391,7 @@
                             </div>
                         </div>
                         <div class="u-footer">
-                            <div class="time-ago">{$vo.create_time|date='Y-m-d H:i:s'}</div>
+                            <div class="time-ago">{$i}楼 {$vo.create_time|date='Y-m-d H:i:s'}</div>
                         </div>
                     </div>
                 </div>
@@ -405,6 +402,36 @@
     <span id="loadmore" style="display: none;"></span>
     <div class="ujian-uyan"></div>
 </div>
-
+<script>
+    function subcomment() {
+        console.log(111)
+        var uid = $('#session_uid').val();
+        var comment = $('#content').val();
+        var book_id = $('#book_id').val();
+        if (uid == '-1') {
+            layer.msg('请先登录', {icon: 0,shade: 0.3})
+        } else if (comment.length <= 0) {
+            layer.msg('请勿提交空评论', {icon: 0,shade: 0.3})
+        } else {
+            $.post({
+                url: '/commentadd',
+                data: {comment: comment, book_id: book_id},
+                success(res) {
+                    if (res.err == 1) {
+                        layer.msg(res.msg,{icon: 0,shade: 0.3})
+                    } else {
+                        layer.msg(res.msg,{icon: 1,shade: 0.3})
+                        setTimeout(function () {
+                            location.reload();
+                        },1000)
+                    }
+                },
+                error(res) {
+                    layer.msg('表单提交出错', {icon: 0,shade: 0.3})
+                }
+            })
+        }
+    }
+</script>
 </body>
 </html>

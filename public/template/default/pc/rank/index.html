@@ -49,7 +49,7 @@
                                 </dt>
                                 <dd>
                                     <a :href="'/{$book_ctrl}/'+ item.param" class="bigpic-book-name" target="_blank">
-                                        <span class="num red">{{index}}</span>{{item.book_name}}
+                                        <span class="num red">{{index + 1}}</span>{{item.book_name}}
                                     </a>
                                     <p>
                                         <a :href="'/{$search_ctrl}/' + item.author_name" target="_blank">
@@ -112,7 +112,7 @@
             }
         },
         mounted() {
-            this.getBooks('new', 'year')
+            this.getBooks(this.op, 'year')
         },
     })
 </script>

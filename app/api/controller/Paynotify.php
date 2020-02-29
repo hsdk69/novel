@@ -10,7 +10,7 @@ use app\service\PromotionService;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 
-class Zhapaynotify
+class Paynotify
 {
     public function index()
     {

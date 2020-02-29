@@ -39,14 +39,18 @@
             </div>
             <div class="hits">
                 <i></i><span>{$book.words}万 字</span>
-                <i></i><span>总点击 {$clicks}</span>
+                <i></i><span>阅读 {$clicks}</span>
             </div>
             <p class="brief_text">
                 {$book.summary}
             </p>
             <div class="btns">
-                <a href="/{$chapter_ctrl}/{$start}" class="free on ui_bg_bdcolor"
-                   target="_blank">马上阅读</a>
+                {if $start > -1}
+                <a href="/{$chapter_ctrl}/{$start}" class="free on ui_bg_bdcolor" target="_blank">马上阅读</a>
+                {else /}
+                <a class="free on ui_bg_bdcolor" target="_blank">马上阅读</a>
+                {/if}
+
                 <a href="javascript:;" class="addshelf">加入书架</a>
             </div>
         </div>
@@ -122,11 +126,10 @@
                                      style="display: inline;" alt="{$vo.book_name}">
                             </a>
                             <div class="rec-detail fl">
-                                <a href="http://demo.kyxscms.com/novel/434.html" class="rec-con-title"
+                                <a href="/{$book_ctrl}/{$vo.param}" class="rec-con-title"
                                    target="_blank">{$vo.book_name}</a>
                                 <p class="rec-author">
-                                    <a href="http://demo.kyxscms.com/search/%E5%BC%A0%E5%AE%B6%E4%B8%89%E5%8F%94.html"
-                                       target="_blank">作者 : {$vo.author_name}</a>
+                                    <a href="/{search_ctrl}?keyword={$vo.author_name}" target="_blank">作者 : {$vo.author_name}</a>
                                 </p>
                                 <p class="rec-text">
                                     {$vo.summary}
@@ -191,33 +194,5 @@
             }
         })
     })
-    function subcomment() {
-        var uid = $('#session_uid').val();
-        var comment = $('#content').val();
-        var book_id = $('#book_id').val();
-        if (uid == '-1') {
-            layer.msg('请先登录', {icon: 0,shade: 0.3})
-        } else if (comment.length <= 0) {
-            layer.msg('请勿提交空评论', {icon: 0,shade: 0.3})
-        } else {
-            $.post({
-                url: '/commentadd',
-                data: {comment: comment, book_id: book_id},
-                success(res) {
-                    if (res.err == 1) {
-                        layer.msg(res.msg,{icon: 0,shade: 0.3})
-                    } else {
-                        layer.msg(res.msg,{icon: 1,shade: 0.3})
-                        setTimeout(function () {
-                            location.reload();
-                        },1000)
-                    }
-                },
-                error(res) {
-                    layer.msg('表单提交出错', {icon: 0,shade: 0.3})
-                }
-            })
-        }
-    }
 </script>
 {/block}

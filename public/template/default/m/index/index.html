@@ -1,0 +1,99 @@
+{extend name="./template/default/m/pub/base.html" /}
+{block name="seo"}
+<title>{$site_name}-免费的无弹窗小说阅读网</title>
+<meta name="description"
+      content="{$site_name}是广大书友最值得收藏的网络小说阅读网，{$site_name}收录了当前最火热的网络小说，{$site_name}免费提供高质量的小说最新章节，{$site_name}是广大网络小说爱好者必备的小说阅读网。">
+{/block}
+{block name="main"}
+<div class="x-city__banner">
+    <div class="swiper-container" id="swiper">
+        <div class="swiper-wrapper">
+            {volist name="banners" id="vo"}
+            <div class="swiper-slide">
+                <a href="{if $end_point == 'id'}
+                                      /{$book_ctrl}/{$vo.book_id}
+                                      {else /}
+                                      /{$book_ctrl}/{$vo.book.unique_id}
+                                      {/if}">
+                    <img src="/static/upload/{$vo.pic_name}">
+                </a>
+            </div>
+            {/volist}
+        </div>
+        <div class="van-swipe__indicators">
+        </div>
+    </div>
+    <img src="/static/images/shadow.png" alt="" class="banner-shadow">
+</div>
+<section class="x-city__part hr-top">
+    <div class="x-part__title">万众追更</div>
+    <div class="x-part__books">
+        <div class="x-part__books--cover">
+            {volist name="newest" id="vo" length="6"}
+            <div class="x-book">
+                <a href="/{$book_ctrl}/{$vo.param}">
+                    <div class="x-book__coverbox">
+                        <img class="x-book__cover" src="{$vo.cover_url}">
+                    </div>
+                    <div class="x-book__text--normal">{$vo.book_name}</div>
+                </a>
+            </div>
+            {/volist}
+        </div>
+    </div>
+</section>
+{volist name="catelist" id="cateItem" key="k"}
+{in name="$cateItem.cate.id" value="1,2,3"}
+<section class="x-city__part hr-top">
+    <div class="x-part__title">{$cateItem.cate.cate_name}</div>
+    <div class="x-part__books">
+        <div class="x-part__books--cover">
+            {volist name="cateItem.books" id="vo" length="4"}
+            <div class="m-book-single f-cb">
+                <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.book_name}">
+                    <img src="{$vo.cover_url}" alt="{$vo.book_name}">
+                    <h3>{$vo.book_name}</h3>
+                    <p>{$vo.author_name}</p>
+                    <p>{$vo.summary}</p>
+                    <p class="tag">
+                        <span>{$vo.end == 1 ? '已完结' : '连载中'}</span>
+                        <span>{$vo.words}万字</span>
+                    </p>
+                </a>
+            </div>
+            {/volist}
+        </div>
+    </div>
+</section>
+{/in}
+{/volist}
+<section class="x-city__part hr-top">
+    <div class="x-part__title">最受欢迎</div>
+    <div class="x-part__books">
+        {volist name="hot" id="vo"}
+        <div class="x-city__swiper--item">
+            <div class="x-book">
+                <div class="x-book__nocover">
+                    <div class="x-book__text--multi">
+                        <p class="x-book__name">
+                            <span class="x-book__titleName">
+                                <a href="/{$book_ctrl}/{$vo.param}">{$vo.book_name}</a>
+                            </span>
+                            <span class="x-book__tag">{$vo.cate.cate_name}</span>
+                            <span class="x-book__tag">{$vo.author_name}</span>
+                        </p>
+                        <p class="x-book__intro">
+                            <a href="/{$book_ctrl}/{$vo.param}">{$vo.clicks}次点击</a>|
+                            <a href="/{$book_ctrl}/{$vo.param}">{$vo.last_time|date='Y-m-d H:i:s'}</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {/volist}
+    </div>
+</section>
+{/block}
+{block name="js"}
+<script type="text/javascript" src="/static/js/touchslide.1.1.js"></script>
+{/block}

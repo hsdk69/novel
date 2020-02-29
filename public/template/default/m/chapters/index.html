@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <title>{$chapter.chapter_name}-{$site_name}</title>
+    <meta name="description" content="您现在正在阅读{$chapter.book.book_name}的{$chapter.chapter_name}">
+    <link rel="stylesheet" href="/static/css/mread.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/css/font.css" type="text/css"/>
+    <link href="https://lib.baomitu.com/layer/3.1.1/mobile/need/layer.css" rel="stylesheet">
+</head>
+<body>
+<div id="app" :class="'skin-' + theme" style="width: 100%; height: 100%">
+    <div class="page-read ">
+        <div class="page-read-content" @click="touch()">
+            <article class="read-article" :style="{'font-size': fontsize + 'rem'}">
+                <section class="read-section jsChapterWrapper">
+                    <h3>{$chapter.chapter_name}</h3>
+                    {$content|raw}
+                </section>
+            </article>
+        </div>
+        <div class="page-read-top">
+            <h1 class="read-book-name">{$chapter.chapter_name}</h1>
+        </div>
+    </div>
+    <div id="pageReadOpt" class="page-read-opt" :class="{'active' : show}">
+        <header class="header read-opt-header">
+            <a href="javascript:window.history.go(-1)" class="header-back jsBack">
+                <i class="iconfont icon-previewleft"><title>返回</title></i>
+            </a>
+            <div class="header-operate"  @click="tagMenu()">
+                <a  href="javascript:" class="iconfont icon-dotshorizontal jsLayerTrigger" title="更多操作">
+                </a>
+            </div>
+        </header>
+        <div class="read-opt-more" :class="{'active' : showMenu}">
+            <a href="/" class="read-opt-a">
+                <i class="iconfont icon-zhuye1"></i>
+                <h4>返回首页</h4>
+            </a>
+            <!-- <a href="javascript:" id="btnDownloadFreeChapters" class="read-opt-a">
+                <i class="iconfont icon-lixianxiazai"></i>
+                离线章节
+            </a> -->
+            <a href="/{$book_ctrl}/{$chapter.book_id}" class="read-opt-a">
+                <i class="iconfont icon-SU"></i>
+                书籍详情
+            </a>
+            <a href="/history" class="read-opt-a">
+                <i class="iconfont icon-books"></i>
+                返回我的书架
+            </a>
+        </div>
+        <div @click="touch()" style="width: 100%; height: 80%; margin-bottom: 10%; margin-top: 10%">
+
+        </div>
+        <div class="read-opt-bot read-opt-set" :class="{'active' : settingShow}">
+            <div class="read-set-font">
+                <a href="javascript:" class="read-font-down" @click="fontSizeChange('-')">
+                    <i class="iconfont icon-yueduye_zitijianxiao"></i>
+                    <aria>字号变小</aria>
+                </a>
+                <a href="javascript:" class="read-font-up" @click="fontSizeChange('+')">
+                    <i class="iconfont icon-yueduye_zitizengda"></i>
+                    <aria>字号变大</aria>
+                </a>
+                <div class="read-font-bar">
+                    <div class="range">
+                        <div class="range-track">
+                            <a class="range-thumb"></a>
+                        </div>
+                    </div>
+                    <div class="range" style="width: 279px;">
+                        <div class="range-track" :style="{'border-left-width': range + 'px'}">
+                            <a class="range-thumb"></a>
+                        </div>
+                    </div>
+                    <input type="range" name="font-size">
+                </div>
+            </div>
+            <div id="readSetSkin" class="read-set-skin">
+                <ul class="btn-group" role="radiogroup">
+                    <li class="btn-group-cell read-set-cell">
+                        <input type="radio" id="skinDefault" title="默认皮肤" @click="themeChange('default')">
+                        <label class="read-skin-default" title="默认皮肤" :style="{'color': theme == 'default' ? 'red' : ''}">
+                            <i class="iconfont icon-ok center"></i>
+                        </label>
+                    </li>
+                    <li class="btn-group-cell read-set-cell">
+                        <input type="radio" id="skinBlue" title="蓝色皮肤" @click="themeChange('blue')">
+                        <label class="read-skin-blue"  title="蓝色皮肤" :style="{'color': theme == 'blue' ? 'red' : ''}">
+                            <i class="iconfont icon-ok center"></i>
+                        </label>
+                    </li>
+                    <li class="btn-group-cell read-set-cell">
+                        <input type="radio" id="skinGreen"  title="绿色皮肤" @click="themeChange('green')">
+                        <label class="read-skin-green"  title="绿色皮肤" :style="{'color': theme == 'green' ? 'red' : ''}">
+                            <i class="iconfont icon-ok center"></i>
+                        </label>
+                    </li>
+                    <li class="btn-group-cell read-set-cell">
+                        <input type="radio" id="skinLight" title="浅色皮肤" @click="themeChange('light')">
+                        <label class="read-skin-light"  title="浅色皮肤" :style="{'color': theme == 'light' ? 'red' : ''}">
+                            <i class="iconfont icon-ok center"></i>
+                        </label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <footer class="read-opt-footer" v-show="show">
+            <div class="btn-group">
+                <a href="/{$book_ctrl}/{$chapter.book_id}" class="btn-group-cell">
+                    <i class="iconfont icon-mulu"></i>
+                    <h4 class="read-opt-footer-h">目录</h4>
+                </a>
+                <a href="javascript:"class="btn-group-cell jsLayerTrigger">
+                    <i class="iconfont icon-jindutiao"></i>
+                    <h4 class="read-opt-footer-h">进度</h4>
+                </a>
+                <a href="javascript:" class="btn-group-cell jsLayerTrigger" @click="tagSettings()">
+                    <i class="iconfont icon-shezhi"></i>
+                    <h4 class="read-opt-footer-h">设置</h4>
+                </a>
+
+                <a href="javascript:"  class="btn-group-cell" title="日间夜间模式切换">
+                    <i class="iconfont icon-yueliang"></i>
+                    <h4 class="read-opt-footer-h">夜间</h4>
+                </a>
+                <a href="/{$book_ctrl}/{$chapter.book_id}" class="btn-group-cell">
+                    <i class="iconfont icon-pinglun"></i>
+                    <h4 class="read-opt-footer-h">评论</h4>
+                </a>
+            </div>
+        </footer>
+    </div>
+</div>
+
+</body>
+<script type="text/javascript" src="https://lib.baomitu.com/zepto/1.2.0/zepto.min.js"></script>
+<script type="text/javascript" src="/static/js/mglobal.js"></script>
+<script src="https://lib.baomitu.com/layer/3.1.1/mobile/layer.js"></script>
+<script src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+<script src="https://cdn.bootcss.com/js-cookie/2.2.1/js.cookie.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            show: false,
+            showMenu: false,
+            settingShow: false,
+            theme: 'default',
+            fontsize: 0.3,
+            range: 119.5
+        },
+        methods: {
+            touch() {
+                this.show = !this.show
+            },
+            tagMenu() {
+                this.showMenu = !this.showMenu
+            },
+            tagSettings() {
+              this.settingShow = !this.settingShow
+            },
+            themeChange(theme) {
+                this.theme = theme
+                Cookies.set('m_theme', theme)
+            },
+            fontSizeChange(flag) {
+                if (flag == '+') {
+                    this.fontsize = parseFloat(this.fontsize) + 0.125
+                    this.range = parseFloat(this.range) + 39.9
+                    if (this.range >= 279) {
+                        this.range = 119.5
+                        this.fontsize = 0.3
+                    }
+                } else {
+                    this.fontsize = parseFloat(this.fontsize) - 0.125
+                    this.range = parseFloat(this.range) - 39.9
+                    if (this.range <= 0) {
+                        this.range = 119.5
+                        this.fontsize = 0.3
+                    }
+                }
+                Cookies.set('m_fontsize', this.fontsize)
+                Cookies.set('m_range', this.range)
+            }
+        },
+        mounted() {
+            this.theme = Cookies.get('m_theme')
+            if(this.theme == undefined) {
+                this.theme = 'default'
+            }
+            this.fontsize = Cookies.get('m_fontsize')
+            if (this.fontsize == undefined) {
+                this.fontsize = 0.3
+            }
+            this.range = Cookies.get('m_range')
+            if (this.range == undefined) {
+                this.range = 119.5
+            }
+        }
+    })
+
+    //--本地缓存代码开始--
+    let bookInfo = {
+        chapter_id: '{$chapter.id}',
+        end: "{$chapter.book.end == 1 ? '完结' : '连载'}",
+        chapter_name: '{$chapter.chapter_name}',
+        author_name : '{$chapter.book.author_name}',
+        cover_url:'{$chapter.book.cover_url}',
+        book_id: '{$chapter.book_id}',
+        last_time: "{$chapter.book.last_time|date='Y-m-d'}",
+        book_name:'{$chapter.book.book_name}',
+        param: '{$chapter.book.param}'
+    };
+    localStorage.setItem('manhua_{$chapter.book_id}', JSON.stringify(bookInfo));//id为键，设置缓存
+    let history = [];
+    let value = localStorage.getItem('xwx_historys'); //读取参照数组
+    if (value != undefined && value != null) {
+        history = JSON.parse(value);
+    }
+    if (history.indexOf('manhua_{$chapter.book_id}') === -1) {
+        history.push('manhua_{$chapter.book_id}'); //把id为值存入参照数组
+    }
+
+    console.log(history)
+    localStorage.setItem('xwx_historys', JSON.stringify(history));
+    //--本地缓存代码结束--
+
+    document.body.oncopy = function () {
+        return false;
+    }; //阻止复制
+    document.body.onselectstart = function () {
+        return false;
+    }; //阻止选中
+    document.oncontextmenu = function () {
+        return false;
+    }; //阻止菜单弹出
+    if (document.images) {
+        for (i = 0; i < document.images.length; i++) {
+            document.images[i].onmousedown = function () {
+                return false;
+            };
+        }
+    }
+</script>
+</html>

@@ -1,14 +1,14 @@
 <?php
 
 
-namespace app\index\controller;
+namespace app\mobile\controller;
 
 
+use app\common\RedisHelper;
 use app\model\User;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\facade\View;
-use util\RedisHelper;
 
 class Account extends Base
 {
@@ -46,6 +46,7 @@ class Account extends Base
             View::assign([
                 'site_name' => config('site.site_name'),
                 'url' => config('site.url'),
+                'header' => '用户登录'
             ]);
             return view($this->tpl);
         }
@@ -119,6 +120,7 @@ class Account extends Base
             View::assign([
                 'site_name' => config('site.site_name'),
                 'url' => config('site.schema').config('site.url'),
+                'header' => '用户注册'
             ]);
             return view($this->tpl);
         }

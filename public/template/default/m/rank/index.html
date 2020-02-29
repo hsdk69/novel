@@ -1,0 +1,91 @@
+{extend name="./template/default/m/pub/base2.html" /}
+{block name="seo"}
+<title>{$site_name}-小说排行</title>
+<meta name="description" content="{$site_name}小说新书榜、点击榜、完结榜">
+{/block}
+{block name="main"}
+<div class="x-page__content">
+    <div class="x-rank">
+        <div class="x-rank__menu">
+            <a @click="foo('new', 'new')">
+                <p class="x-rank__menu--item" :class="{'is-active' : op2 == 'new'}">新书榜</p>
+            </a>
+            <a @click="foo('click', 'year')">
+                <p class="x-rank__menu--item" :class="{'is-active' : op2 == 'year'}">点击总榜</p>
+            </a>
+            <a @click="foo('click', 'month')">
+                <p class="x-rank__menu--item" :class="{'is-active' : op2 == 'month'}">点击月榜</p>
+            </a>
+            <a @click="foo('click', 'week')">
+                <p class="x-rank__menu--item" :class="{'is-active' : op2 == 'week'}">点击周榜</p>
+            </a>
+            <a @click="foo('click', 'day')">
+                <p class="x-rank__menu--item" :class="{'is-active' : op2 == 'day'}">点击日榜</p>
+            </a>
+            <a @click="foo('end', 'end')">
+                <p class="x-rank__menu--item" :class="{'is-active' : op2 == 'end'}">完结榜</p>
+            </a>
+        </div>
+        <div class="x-rank__list" style="height: calc(736px - 1.2rem);">
+            <div class="x-book x-rank__book van-hairline--bottom" v-for="(item, index) in books" :key="index">
+                <a :href="'/{$book_ctrl}/'+ item.param">
+                    <div class="x-book__multi">
+                        <div class="x-book__coverbox">
+                            <img class="x-book__cover" :src="item.cover_url" style="width: 1.3rem; height: 1.73333rem;">
+                            <div class="x-book__coverindex">
+                                <span>{{index + 1}}</span>
+                            </div>
+                        </div>
+                        <div class="x-book__text--multi" style="width: calc(100% - 1.3rem); height: 1.73333rem;">
+                            <div class="x-rank__book--info">
+                                <p class="x-info__name">{{item.book_name}}</p>
+                                <p class="x-info__author">
+                                    {{item.cate_name}}
+                                    <span>{{item.author_name}}</span>
+                                </p>
+                                <p class="x-info__intro">
+                                    {{item.summary}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+<script src="https://lib.baomitu.com/axios/0.19.2/axios.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            op: 'new',
+            op2: 'new',
+            books: []
+        },
+        methods: {
+            foo(op, date) {
+                this.op = op
+                this.op2 = date
+                this.getBooks(this.op, date)
+            },
+            getBooks(op, date) {
+                axios.get("/getRanks", {
+                    params: {
+                        op: op,
+                        date: date
+                    }
+                }).then(response => {
+                    this.books = response.data.books
+                })
+            }
+        },
+        mounted() {
+            this.getBooks(this.op, 'year')
+        },
+    })
+</script>
+{/block}

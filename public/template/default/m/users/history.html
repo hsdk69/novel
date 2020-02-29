@@ -1,0 +1,93 @@
+{extend name="./template/default/m/pub/uc.html" /}
+{block name="seo"}
+<title>{$site_name}-我的书架</title>
+{/block}
+{block name="main"}
+<div class="app_body" id="app">
+    <div class="app_topTabBlock">
+        <span class="public_AddFloatRight rightButton" id="success" style="display: none;">完成</span>
+        <span class="public_AddFloatRight rightButton" @click="changeShow()">管理</span>
+    </div>
+    <div class="app_listBlock app_deleteMargin" id="content">
+        <div class="app_listBlock_con">
+            <ul class="app_deletePaddingBottom" id="list">
+                <li class="li2" v-for="(item, index) in books" :key="index">
+                    <a :href="'/{$chapter_ctrl}/' + item.chapter_id">
+                        <div class="leftImage2">
+                            <img :src="item.cover_url">
+                        </div>
+                        <div class="rightBlock">
+                            <span class="rightBlock_title">{{item.book_name}}</span>
+                            <span class="rightBlock_name">{{item.author_name}}</span>
+                            <span class="rightBlock_con  rightBlock_con2">
+                                <span class="con">
+                                    <span class="spanLi">{{item.chapter_name}}</span>
+                                </span>
+                                <span class="spanLi Time">{{item.end}}</span>
+                                <span class="rightJustTime" v-show="show">
+                                    继续阅读
+                                </span>
+                            </span>
+                        </div>
+                    </a>
+                    <span class="deleteBlock" @click="delHistory(item.book_id)" :style="{'display' : display}"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                books: [],
+                show: true,
+                display: 'none'
+            }
+        },
+        methods: {
+            delHistory(id) {
+                localStorage.removeItem('manhua_' + id);
+                console.log(id)
+                let value = localStorage.getItem('xwx_historys');
+                if (value != undefined && value != null) {
+                    let history = JSON.parse(value);
+                    for (let i = 0; i < history.length; i++) {
+                        if (history[i] == 'manhua_' + id){
+                            history.slice(i, 1);
+                        }
+                    }
+                    localStorage.setItem('xwx_historys', JSON.stringify(history));
+                }
+                layer.msg('删除历史', {icon: 1,shade: 0.3})
+                setTimeout(function () {
+                    location.reload();
+                },1000)
+            },
+            changeShow() {
+                this.show = !this.show
+                if (this.show == false) {
+                    this.display = 'inline-block'
+                }
+            },
+        },
+        created: function () {
+            let value = localStorage.getItem('xwx_historys');
+            if (value != undefined && value != null) {
+                let history = JSON.parse(value);
+                for (let i = 0; i < history.length; i++) {
+                    let item = localStorage.getItem(history[i]);
+                    if (item != undefined && item != null ) {
+                        let bookInfo = JSON.parse(item); //拿到缓存对象
+                        this.books.push(bookInfo);
+                    }
+                }
+            }
+        }
+    })
+</script>
+{/block}

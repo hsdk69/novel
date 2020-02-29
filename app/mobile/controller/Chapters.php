@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\index\controller;
+namespace app\mobile\controller;
 
 
 use app\model\Chapter;
@@ -68,7 +68,6 @@ class Chapters extends Base
             }
         }
         if ($flag) {
-            //$content = file_get_contents(App::getRootPath() . 'public/' . $chapter->content_url);
             $content = $this->getTxtcontent($chapter->content_url);
             $book_id = $chapter->book_id;
             $chapters = cache('mulu:' . $book_id);

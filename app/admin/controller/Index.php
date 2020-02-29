@@ -27,7 +27,6 @@ class Index extends Base
         $api_key = config('site.api_key');
         $app_key = config('site.app_key');
         $front_tpl = config('site.tpl');
-        $payment = config('site.payment');
         $cdn = config('site.cdn');
 
         $back_end_page = config('page.back_end_page');
@@ -54,7 +53,6 @@ class Index extends Base
             'api_key' => $api_key,
             'app_key' => $app_key,
             'front_tpl' => $front_tpl,
-            'payment' => $payment,
             'back_end_page' => $back_end_page,
             'img_per_page' => $img_per_page,
             'tpl_dirs' => $dirs,
@@ -79,7 +77,6 @@ class Index extends Base
             $api_key = input('api_key');
             $app_key = input('app_key');
             $front_tpl = input('front_tpl');
-            $payment = input('payment');
             $cdn = input('cdn');
             $site_code = <<<INFO
 <?php
@@ -97,7 +94,6 @@ return [
     'api_key' => '{$api_key}', 
     'app_key' => '{$app_key}',
     'tpl' => '{$front_tpl}',
-    'payment' => '{$payment}',
     'cdn' => '{$cdn}'       
  ];
 INFO;

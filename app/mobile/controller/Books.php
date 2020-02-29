@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\index\controller;
+namespace app\mobile\controller;
 
 
 use app\common\RedisHelper;
@@ -60,19 +60,6 @@ class Books extends Base
             cache('last_chapter:'.$book->id, $last_chapter, 'null', 'redis');
         }
 
-        $chapters = array();
-        $arr = array();
-        $index = 0;
-        foreach ($book['chapters'] as $chapter) {
-            $arr[$index] = $chapter;
-            $index++;
-            if ($index >= 3){
-                array_push($chapters, $arr);
-                $arr = array(); //初始化
-                $index = 0;
-            }
-        }
-
         $redis = RedisHelper::GetInstance();
         $day = date("Y-m-d", time());
         //以当前日期为键，增加点击数
@@ -81,14 +68,8 @@ class Books extends Base
 
         $recommand = cache('randBooks:' . $book->cate_id);
         if (!$recommand) {
-            $recommand = $this->bookService->getRecommand($book->cate_id, $this->end_point);
+            $recommand = $this->bookService->getRecommand($book->cate_id, $this->end_point, 3);
             cache('randBooks:' . $book->tags, $recommand, null, 'redis');
-        }
-
-        $authors = cache('booksForAuthor:'.$book->author_id);
-        if (!$authors) {
-            $authors = $this->bookService->getByAuthor($book->author_id, $this->end_point);
-            cache('booksForAuthor:'.$book->author_id, $authors, null, 'redis');
         }
 
         $start = cache('bookStart:' . $id);
@@ -134,14 +115,13 @@ class Books extends Base
             'book' => $book,
             'tags' => $tags,
             'start' => $start,
-            'authors' => $authors,
             'recommand' => $recommand,
             'isfavor' => $isfavor,
             'comments' => $comments,
             'start_pay' => $start_pay,
             'clicks' => $clicks,
             'last_chapter' => $last_chapter,
-            'chapterList' => $chapters
+            'header' => $book->book_name
         ]);
         return view($this->tpl);
     }

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\index\controller;
+namespace app\mobile\controller;
 
 
 use app\model\Book;
@@ -20,6 +20,7 @@ class Booklist extends Base
         }
         View::assign([
             'cates' => $cates,
+            'header' => '书库'
         ]);
         return view($this->tpl);
     }

@@ -129,9 +129,9 @@ class BookService
         }
     }
 
-    public function getRecommand($cate_id, $end_point)
+    public function getRecommand($cate_id, $end_point, $num = 10)
     {
-        $books = Book::whereOr('cate_id','=',$cate_id)->limit(10)->select();
+        $books = Book::whereOr('cate_id','=',$cate_id)->limit($num)->select();
         foreach ($books as &$book) {
             $book['chapter_count'] = Chapter::where('book_id', '=', $book['id'])->count();
             if ($end_point == 'id') {
