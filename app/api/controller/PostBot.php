@@ -35,7 +35,7 @@ class PostBot extends BaseController
             $where[] = ['src_url','=',$data['src_url']];
             $where[] = ['src','=',$data['src']];
             $booklog = Booklogs::where($where)->find();
-            if (is_null($booklog)) { //如果漫画不存在
+            if (is_null($booklog)) { //如果小说不存在
                 $author = Author::where('author_name', '=', trim($data['author']))->find();
                 if (is_null($author)) {//如果作者不存在
                     $author = new Author();
@@ -78,9 +78,9 @@ class PostBot extends BaseController
                     $book->update_time = time();
                     $book->save();
                 } catch (DataNotFoundException $e) {
-                    abort(404, '漫画不存在，发布出错');
+                    abort(404, '小说不存在，发布出错');
                 } catch (ModelNotFoundException $e) {
-                    abort(404, '漫画不存在，发布出错');
+                    abort(404, '小说不存在，发布出错');
                 }
 
             }
@@ -92,6 +92,11 @@ class PostBot extends BaseController
     {
         $chapterlog = ChapterLogs::where('src_url','=',$data["src_url"])->find();
         if (empty($chapterlog)) {
+            $content= $data['content'];
+            $dir = 'book/content';
+            $savename =str_replace ( '\\', '/',
+                \think\facade\Filesystem::disk('public')->putFile($dir, $content));
+
             $chapter = new Chapter();
             $chapter->chapter_name = trim($data['chapter_name']);
             $chapter->book_id = $book_id;
@@ -101,26 +106,14 @@ class PostBot extends BaseController
                 $lastChapterOrder = $lastChapter->chapter_order;
             }
             $chapter->chapter_order = $lastChapterOrder + 1;
+            if (!is_null($savename)) {
+                $chapter->content_url = '/static/upload/'.$savename;
+            }
             $chapter->save();
             $chapterlog = new ChapterLogs();
             $chapterlog->chapter_id = $chapter->id;
             $chapterlog->src_url = $data["src_url"];
             $chapterlog->save();
-            $preg = '/\bsrc\b\s*=\s*[\'\"]?([^\'\"]*)[\'\"]?/i';
-            preg_match_all($preg, $data['images'], $img_urls);
-            $lastOrder = 0;
-            $lastPhoto = $this->photoService->getLastPhoto($chapter->id);
-            if ($lastPhoto) {
-                $lastOrder = $lastPhoto->pic_order + 1;
-            }
-            foreach ($img_urls[1] as $img_url) {
-                $photo = new Photo();
-                $photo->chapter_id = $chapter->id;
-                $photo->pic_order = $lastOrder;
-                $photo->img_url = $img_url;
-                $photo->save();
-                $lastOrder++;
-            }
         }
     }
 
