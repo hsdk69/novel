@@ -116,7 +116,7 @@ class Chapters extends Base
 
     private function getTxtcontent($txtfile)
     {
-        $file = @fopen(App::getRootPath() . 'public/' . $txtfile, 'r');
+        $file = @fopen($txtfile, 'r');
         $arr = array();
         $i = 0;
         while (!feof($file)) {
