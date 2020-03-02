@@ -32,9 +32,6 @@ class Books extends Base
     {
         $data = $this->bookService->getPagedBooksAdmin(1);
         $books = $data['books'];
-        foreach ($books as &$book) {
-            $book['chapter_count'] = count($book->chapters);
-        }
         $count = $data['count'];
         View::assign([
             'books' => $books,

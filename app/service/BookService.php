@@ -31,7 +31,7 @@ class BookService
                     'var_page' => 'page',
                 ]);
         foreach ($books as &$book) {
-            $book['chapter_count'] = count($book->chapters);
+            $book['chapter_count'] = Chapter::where('book_id','=', $book->id)->count();
         }
         return [
             'books' => $books,
@@ -206,8 +206,8 @@ FROM ' . $prefix . 'book AS ad1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FRO
  GROUP BY book_id ORDER BY clicks DESC LIMIT :num", ['cdate' => $date, 'num' => $num]);
         $books = array();
         foreach ($data as $val) {
-            try {
-                $book = Book::with('chapters')->findOrFail($val['book_id']);
+            $book = Book::with('chapters')->find($val['book_id']);
+            if($book) {
                 $book['chapter_count'] = count($book->chapters);
                 $book['taglist'] = explode('|', $book->tags);
                 $book['clicks'] = $val['clicks'];
@@ -217,11 +217,8 @@ FROM ' . $prefix . 'book AS ad1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FRO
                     $book['param'] = $book['unique_id'];
                 }
                 array_push($books, $book);
-            } catch (DataNotFoundException $e) {
-                abort(404, $e->getMessage());
-            } catch (ModelNotFoundException $e) {
-                abort(404, $e->getMessage());
             }
+
         }
         return $books;
     }

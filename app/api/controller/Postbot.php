@@ -74,6 +74,7 @@ class PostBot extends BaseController
                 } else {
                     $book->unique_id = $str;
                 }
+                $book->words = (float)mb_strlen($data['content'])/10000.00;
                 $book->save();
                 $book_id = $book->id;
 
@@ -88,6 +89,7 @@ class PostBot extends BaseController
                 try {
                     $book = Book::findOrFail($book_id);
                     $book->update_time = time();
+                    $book->words = (float)$book->words +  (float)mb_strlen($data['content'])/10000.00;
                     $book->save();
                 } catch (DataNotFoundException $e) {
                     abort(404, '小说不存在，发布出错');
@@ -102,15 +104,15 @@ class PostBot extends BaseController
 
     public function addChapter($book_id, $data)
     {
-        $chapterlog = ChapterLogs::where('src_url','=',$data["src_url"])->find();
+        $chapterlog = ChapterLogs::where('c_src_url','=',$data["c_src_url"])->find();
         if (empty($chapterlog)) {
             $content= $data['content'];
-            $dir = App::getRootPath().'/public/static/upload/book/content/'.date('Y-m-d').'/';
+            $dir = App::getRootPath().'/public/static/upload/book/content/'.$book_id.'/';
             if (!file_exists($dir)) {
                 mkdir($dir,0777,true);
             }
-            $file = $dir.md5($data['chapter_name'].time()).'.txt';
-            file_put_contents($file, $content);
+            $file = md5($data['chapter_name'].time()).'.txt';
+            file_put_contents($dir . $file, $content);
             $chapter = new Chapter();
             $chapter->chapter_name = trim($data['chapter_name']);
             $chapter->book_id = $book_id;
@@ -120,11 +122,11 @@ class PostBot extends BaseController
                 $lastChapterOrder = $lastChapter->chapter_order;
             }
             $chapter->chapter_order = $lastChapterOrder + 1;
-            $chapter->content_url = $file;
+            $chapter->content_url = 'static/upload/book/content/'.$book_id.'/'.$file;
             $chapter->save();
             $chapterlog = new ChapterLogs();
             $chapterlog->chapter_id = $chapter->id;
-            $chapterlog->src_url = $data["src_url"];
+            $chapterlog->c_src_url = trim($data["c_src_url"]);
             $chapterlog->save();
         }
     }

@@ -6,6 +6,9 @@
     <title>{$chapter.chapter_name}-{$site_name}</title>
     <meta name="description" content="{$chapter.book.book_name}{$chapter.chapter_name}在线阅读">
     <link rel="stylesheet" href="/static/css/chapter.css" type="text/css"/>
+    {if $next != "null"}
+    <link rel="prefetch" href="/{$chapter_ctrl}/{$next.id}" />
+    {/if}
     <script src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
     <!---识别手机或电脑的js开始--->
     <script>
