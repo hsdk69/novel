@@ -26,19 +26,23 @@
                             <span class="tname">分类</span>
                             <ul class="textlist" v-show="gender == 1">
                                 <li :class="{'on' : cate == -1}">
-                                    <a @click="cateChange(-1)">全部</a>
+                                    <a @click="cateChange(-1, 1)">全部</a>
                                 </li>
-                                <li :class="{'on' : cate == item.id}" v-for="(item, index) in boys" :key="index">
-                                    <a @click="cateChange(item.id)">{{item.cate_name}}</a>
+                                {volist name="boys" id="vo"}
+                                <li :class="{'on' : cate == {$vo.id}}">
+                                    <a @click="cateChange({$vo.id}, 1)">{$vo.cate_name}</a>
                                 </li>
+                                {/volist}
                             </ul>
                             <ul class="textlist" v-show="gender == 2">
                                 <li :class="{'on' : cate == -1}">
-                                    <a @click="cateChange(-1)">全部</a>
+                                    <a @click="cateChange(-1, 2)">全部</a>
                                 </li>
-                                <li :class="{'on' : cate == item.id}" v-for="(item, index) in girls" :key="index">
-                                    <a @click="cateChange(item.id)">{{item.cate_name}}</a>
+                                {volist name="girls" id="vo"}
+                                <li :class="{'on' : cate == {$vo.id}}">
+                                    <a @click="cateChange({$vo.id}, 2)">{$vo.cate_name}</a>
                                 </li>
+                                {/volist}
                             </ul>
                         </div>
                         <div class="select selnum">
@@ -84,38 +88,74 @@
                                 <div class="tabsday-cont">
                                     <div class="tab-cont-1 secd-rank-list">
                                         <div class="listboxw">
-                                            <dl v-for="(item, index) in books" :key="index">
+                                            {volist name="books" id="vo"}
+                                            <dl>
                                                 <dt>
-                                                    <a :href="'/{$book_ctrl}/'+ item.param" target="_blank">
-                                                        <img class="lazyimg" :src="item.cover_url" style="display: block;">
+                                                    <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.book_name}">
+                                                        <img class="lazyimg" src="{$vo.cover_url}" style="display: block;">
                                                     </a>
                                                 </dt>
                                                 <dd>
-                                                    <a :href="'/{$book_ctrl}/'+ item.param" class="bigpic-book-name" target="_blank">
-                                                        {{item.book_name}}
+                                                    <a href="/{$book_ctrl}/{$vo.param}" class="bigpic-book-name" title="{$vo.book_name}">
+                                                        {$vo.book_name}
                                                     </a>
                                                     <p>
-                                                        <a :href="'/{$search_ctrl}/' + item.author_name" target="_blank">
-                                                            {{item.author_name}}
+                                                        <a href="/{$search_ctrl}/{$vo.author_name}" target="_blank">
+                                                            {$vo.author_name}
                                                         </a>|
-                                                        <a :href="'/booklist?cate=' + item.cate_id" target="_blank">
-                                                            {{item.cate_name}}
+                                                        <a href="/{$booklist_act}?cate={$vo.cate_id}" target="_blank">
+                                                            {$vo.cate.cate_name}
                                                         </a>|
-                                                        {{item.end == 1 ? '已完结' : '连载中'}}
+                                                        {$vo.end == 1 ? '已完结' : '连载中'}
                                                     </p>
                                                     <p class="big-book-info">
-                                                        {{item.summary}}
+                                                        {$vo.summary}
                                                     </p>
                                                     <p>
-                                                        <span href="javascript:;" target="_blank">{{item.words}}万字 |</span>
-                                                        共<span class="red">{{item.chapter_count}}</span>章
+                                                        <span href="javascript:;">{$vo.words}万字 |</span>
+                                                        共<span class="red">{$vo.chapter_count}</span>章
                                                     </p>
                                                 </dd>
                                             </dl>
+                                            {/volist}
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="pages_bottom" style="display: block;">
+                            <ul>
+                                <ul class="pagination">
+                                    {if $page.last_page > 1}
+                                    {if $page.current_page == 1}
+                                    <li class="disabled"><span>«</span></li>
+                                    {else/}
+                                    <li><a href="/{$booklist_act}?page={$page.current_page-1}{$param}" title="上一页">«</a></li>
+                                    {/if}
+
+                                    {for start="1" end="$page.last_page + 1"}
+                                    {if ($i != 1 && $i != $page.last_page)
+                                    and ($i < $page.current_page - 2 || $i > $page.current_page + 2)}
+                                    <li>
+                                        .
+                                    </li>
+                                    {else/}
+                                    {if $i == $page.current_page }
+                                    <li class="active"><span>{$i}</span></li>
+                                    {else/}
+                                    <li><a href="/{$booklist_act}?page={$i}{$param}" title="第{$i}页">{$i}</a></li>
+                                    {/if}
+                                    {/if}
+                                    {/for}
+
+                                    {if $page.current_page == $page.last_page}
+                                    <li><a>»</a></li>
+                                    {else/}
+                                    <li><a href="/{$booklist_act}?page={$page.current_page+1}{$param}" title="下一页">»</a></li>
+                                    {/if}
+                                    {/if}
+                                </ul>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -129,88 +169,33 @@
     var app = new Vue({
         el: '#app',
         data: {
-            gender: 1,
-            cate: -1,
+            gender: {$gender_selector},
+            cate: {$cate_selector},
             boys: [],
             girls: [],
-            words: 9999,
-            end: -1,
-            page: 0,
-            isMore: 1,
-            books: []
+            words: {$words_selector},
+            end: {$end_selector},
         },
         methods: {
             genderChange(index) {
                 this.gender = index
                 this.cate = -1
+                window.location.href = '/{$booklist_act}?cate_id='+this.cate+'&words='+this.words+'&end='+this.end+'&gender='+this.gender;
             },
             wordsChange(words) {
                 this.words = words
-                this.page = 0
-                this.getBooks(1)
+                window.location.href = '/{$booklist_act}?cate_id='+this.cate+'&words='+this.words+'&end='+this.end+'&gender='+this.gender;
             },
-            cateChange(cate) {
+            cateChange(cate, gender) {
                 this.cate = cate
-                this.page = 0
-                this.getBooks(1)
+                this.gender = gender
+
+                window.location.href = '/{$booklist_act}?cate_id='+this.cate+'&words='+this.words+'&end='+this.end+'&gender='+gender;
             },
             statusChange(end) {
                 this.end = end
-                this.page = 0
-                this.getBooks(1)
-            },
-            onScroll() {                    //可滚动容器的高度
-                var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-                //变量windowHeight是可视区的高度
-                var windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
-                //变量scrollHeight是滚动条的总高度
-                var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-                //滚动条到底部的条件
-                if (scrollTop + windowHeight == scrollHeight) {
-                    if (this.isMore == 1) { //如果还有更多数据，再请求接口，否则不再请求，节省服务器资源
-                        this.page = this.page + 20
-                        this.getBooks(0)
-                    }
-                }
-            },
-            getBooks(isRefresh) {
-                axios.get("/getBooks", {
-                    params: {
-                        cate: this.cate,
-                        words: this.words,
-                        end: this.end,
-                        page: this.page
-                    }
-                }).then(response => {
-                    if (isRefresh == 1) { //为1是重新渲染
-                        this.books =  response.data.books
-                    } else {
-                        if (response.data.err == 1) {
-                            this.isMore = 0 //设置好之后，上拉加载就不再请求接口了
-                            ShowDialog('没有更多了')
-                        } else {
-                            this.books = this.books.concat(response.data.books)
-                        }
-                    }
-                })
-
-            },
-        },
-        mounted() {
-            axios.get("/getCates").then(response => {
-                let cates = response.data.cates
-                for (let i = 0; i < cates.length; i++) {
-                    if (cates[i].gender == 1) {
-                        this.boys.push(cates[i])
-                    } else {
-                        this.girls.push(cates[i])
-                    }
-                }
-            })
-            this.getBooks(1)
-        },
-        created() {
-            window.addEventListener('scroll', this.onScroll);
+                window.location.href = '/{$booklist_act}?cate_id='+this.cate+'&words='+this.words+'&end='+this.end+'&gender='+this.gender;
+            }
         }
     })
 </script>

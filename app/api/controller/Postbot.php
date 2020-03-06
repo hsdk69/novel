@@ -82,7 +82,10 @@ class PostBot extends BaseController
                 $booklog->book_id = $book_id;
                 $booklog->src_url = $data['src_url'];
                 $booklog->src = $data['src'];
-                $booklog->save();
+                $result = $booklog->save();
+                if(!$result) {
+                    return json(['success' => 0, 'msg' => '小说保存失败']);
+                }
             }
             else {
                 $book_id = $booklog['book_id'];
@@ -99,6 +102,8 @@ class PostBot extends BaseController
 
             }
             $this->addChapter($book_id, $data);
+        } else {
+            return json(['success' => 0, 'msg' => '非法请求']);
         }
     }
 
@@ -127,7 +132,12 @@ class PostBot extends BaseController
             $chapterlog = new ChapterLogs();
             $chapterlog->chapter_id = $chapter->id;
             $chapterlog->c_src_url = trim($data["c_src_url"]);
-            $chapterlog->save();
+            $result = $chapterlog->save();
+            if($result) {
+                return json(['success' => 1, 'msg' => '发布成功']);
+            } else {
+                return json(['success' => 0, 'msg' => '章节保存失败']);
+            }
         }
     }
 

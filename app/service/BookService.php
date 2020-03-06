@@ -62,7 +62,7 @@ class BookService
 
     public function getPagedBooks($num, $end_point, $order = 'id', $where = '1=1')
     {
-        $data = Book::where($where)->with('chapters')->order($order, 'desc')
+        $data = Book::where($where)->with(['chapters', 'cate'])->order($order, 'desc')
             ->paginate([
                 'list_rows'=> $num,
                 'query' => request()->param(),

@@ -145,7 +145,7 @@ CREATE TABLE `xwx_book` (
   `start_pay` int(10) NOT NULL DEFAULT '99999' COMMENT '第m话开始需要付费',
   `money` decimal(10,2) DEFAULT '0' COMMENT '每章所需费用',
   `cate_id` int(11) NOT NULL COMMENT '所属题材',
-  `words` float(4,2) unsigned DEFAULT 0 COMMENT '字数',
+  `words` float(6,2) unsigned DEFAULT 0 COMMENT '字数',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `tags` (`tags`) USING BTREE,
   KEY `end` (`end`) USING BTREE,
