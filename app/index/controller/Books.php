@@ -5,6 +5,7 @@ namespace app\index\controller;
 
 
 use app\common\RedisHelper;
+use app\model\Author;
 use app\model\Book;
 use app\model\Chapter;
 use app\model\Comments;
@@ -60,18 +61,18 @@ class Books extends Base
             cache('last_chapter:'.$book->id, $last_chapter, 'null', 'redis');
         }
 
-        $chapters = array();
-        $arr = array();
-        $index = 0;
-        foreach ($book['chapters'] as $chapter) {
-            $arr[$index] = $chapter;
-            $index++;
-            if ($index >= 3){
-                array_push($chapters, $arr);
-                $arr = array(); //初始化
-                $index = 0;
-            }
-        }
+//        $chapters = array();
+//        $arr = array();
+//        $index = 0;
+//        foreach ($book['chapters'] as $chapter) {
+//            $arr[$index] = $chapter;
+//            $index++;
+//            if ($index >= 3){
+//                array_push($chapters, $arr);
+//                $arr = array(); //初始化
+//                $index = 0;
+//            }
+//        }
 
         $redis = RedisHelper::GetInstance();
         $day = date("Y-m-d", time());
@@ -141,7 +142,6 @@ class Books extends Base
             'start_pay' => $start_pay,
             'clicks' => $clicks,
             'last_chapter' => $last_chapter,
-            'chapterList' => $chapters
         ]);
         return view($this->tpl);
     }

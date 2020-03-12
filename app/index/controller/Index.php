@@ -43,13 +43,13 @@ class Index extends Base
 
         $newest = cache('newestHomepage');
         if (!$newest) {
-            $newest = $this->bookService->getBooks( $this->end_point, 'last_time', '1=1', 10);
+            $newest = $this->bookService->getBooks( $this->end_point, 'last_time', '1=1', 30);
             cache('newestHomepage', $newest, null, 'redis');
         }
 
         $ends = cache('endsHomepage');
         if (!$ends) {
-            $ends = $this->bookService->getBooks( $this->end_point, 'last_time', [['end', '=', '2']], 10);
+            $ends = $this->bookService->getBooks( $this->end_point, 'last_time', [['end', '=', '2']], 30);
             cache('endsHomepage', $ends, null, 'redis');
         }
 
@@ -109,6 +109,7 @@ class Index extends Base
         foreach ($hot_search_json as $k => $v) {
             $hot_search[] = $k;
         }
+
         $books = cache('searchresult:' . $keyword);
         if (!$books) {
             $books = $this->bookService->search($keyword, 35, $this->prefix);

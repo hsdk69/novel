@@ -69,7 +69,7 @@ class Chapters extends Base
         }
         if ($flag) {
             //$content = file_get_contents(App::getRootPath() . 'public/' . $chapter->content_url);
-            $content = $this->getTxtcontent($chapter->content_url);
+            $content = $this->getTxtcontent(App::getRootPath() . 'public/' . $chapter->content_url);
             $book_id = $chapter->book_id;
             $chapters = cache('mulu:' . $book_id);
             if (!$chapters) {
@@ -116,14 +116,18 @@ class Chapters extends Base
 
     private function getTxtcontent($txtfile)
     {
-        $file = @fopen($txtfile, 'r');
+        $file = fopen($txtfile, 'r');
         $arr = array();
         $i = 0;
-        while (!feof($file)) {
-            $arr[$i] = mb_convert_encoding(fgets($file), "UTF-8", "GBK,ASCII,ANSI,UTF-8");
-            $i++;
+        if ($file) {
+            while (!feof($file)) {
+                $arr[$i] = fgets($file);
+                $i++;
+            }
+            fclose($file);
+        } else {
+            // error opening the file.
         }
-        fclose($file);
         $arr = array_filter($arr); //数组去空
         $content = '<p>' . implode('</p><p>', $arr) . '</p>';
         return $content;

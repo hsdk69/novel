@@ -10,6 +10,7 @@ use app\service\PromotionService;
 use app\service\UserService;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
+use think\facade\Validate;
 use think\facade\View;
 
 class Users extends BaseUc
@@ -99,6 +100,34 @@ class Users extends BaseUc
 
     public function history()
     {
+        return view($this->tpl);
+    }
+
+    public function resetpwd()
+    {
+        if ($this->request->isPost()) {
+            $pwd = input('password');
+            $validate = new Validate();
+            $validate->rule('password', 'require|min:6|max:21');
+
+            $data = [
+                'password' => $pwd,
+            ];
+            if (!$validate->check($data)) {
+                return ['msg' => '密码在6到21位之间', 'err' => 1];
+            }
+            try {
+                $user = User::findOrFail($this->uid);
+                $user->password = $pwd;
+                $user->save();
+                return ['msg' => '修改成功', 'err' => 0];
+            } catch (DataNotFoundException $e) {
+                return ['msg' => '用户不存在', 'err' => 1];
+            } catch (ModelNotFoundException $e) {
+                return ['msg' => '用户不存在', 'err' => 1];
+            }
+
+        }
         return view($this->tpl);
     }
 }

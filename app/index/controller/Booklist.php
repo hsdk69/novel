@@ -76,7 +76,6 @@ class Booklist extends Base
         foreach ($data['page']['query'] as $k => $v) {
             $param .= '&' . $k . '=' . $v;
         }
-
         View::assign([
             'books' => $data['books'],
             'boys' => $boys,

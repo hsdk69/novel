@@ -8,9 +8,9 @@
 <div class="path ">
     <a href="/">首页</a>
     <span>&gt;</span>
-    <a href="{$booklist_act}">{$book.cate.gender == 1 ? '男生' : '女生'}</a>
+    <a href="/{$booklist_act}?gender={$book.cate.gender}">{$book.cate.gender == 1 ? '男生' : '女生'}</a>
     <span>&gt;</span>
-    <a href="{$booklist_act}?cate={$book.cate_id}">{$book.cate.cate_name}</a>
+    <a href="/{$booklist_act}?cate={$book.cate_id}">{$book.cate.cate_name}</a>
     <span>&gt;</span>
     <a href="#">{$book.book_name}</a>
 </div>
@@ -147,14 +147,12 @@
             </div>
             <div class="cate-list">
                 <ul>
-                    {volist name="chapterList" id="chapters"}
+                    {volist name="book.chapters" id="vo"}
                     <li>
-                        {volist name="chapters" id="vo"}
                         <a target="_blank" href="/{$chapter_ctrl}/{$vo.id}">
                             <span class="chapter_name">{$vo.chapter_name}</span>
                             <span class="chapter_date">{$vo.create_time|date='m-d'}</span>
                         </a>
-                        {/volist}
                     </li>
                     {/volist}
                 </ul>

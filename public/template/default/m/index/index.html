@@ -1,8 +1,7 @@
 {extend name="./template/default/m/pub/base.html" /}
 {block name="seo"}
 <title>{$site_name}-免费的无弹窗小说阅读网</title>
-<meta name="description"
-      content="{$site_name}是广大书友最值得收藏的网络小说阅读网，{$site_name}收录了当前最火热的网络小说，{$site_name}免费提供高质量的小说最新章节，{$site_name}是广大网络小说爱好者必备的小说阅读网。">
+<meta name="description" content="{$site_name}是广大书友最值得收藏的网络小说阅读网，{$site_name}收录了当前最火热的网络小说，{$site_name}免费提供高质量的小说最新章节，{$site_name}是广大网络小说爱好者必备的小说阅读网。">
 {/block}
 {block name="main"}
 <div class="x-city__banner">
@@ -31,7 +30,7 @@
         <div class="x-part__books--cover">
             {volist name="newest" id="vo" length="6"}
             <div class="x-book">
-                <a href="/{$book_ctrl}/{$vo.param}">
+                <a href="/{$book_ctrl}/{$vo.param}/">
                     <div class="x-book__coverbox">
                         <img class="x-book__cover" src="{$vo.cover_url}">
                     </div>

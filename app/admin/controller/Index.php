@@ -5,6 +5,7 @@ namespace app\admin\controller;
 
 
 use DirectoryIterator;
+use GuzzleHttp\Client;
 use think\facade\App;
 use think\facade\Cache;
 use think\facade\Db;
@@ -195,11 +196,9 @@ INFO;
         } else {
             $book_end_point = config('seo.book_end_point');
             $name_format = config('seo.name_format');
-            $conn_str = config('seo.conn_str');
             View::assign([
                 'book_end_point' => $book_end_point,
                 'name_format' => $name_format,
-                'conn_str' => $conn_str
             ]);
             return view();
         }

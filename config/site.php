@@ -8,11 +8,10 @@ return [
     'admin_damain' => '',
     'api_domain' => 'api.xs.com',
     'app_damain' => '',
-    'site_name' => '哈哈漫画',
+    'site_name' => '笔趣阁',
     'salt' => 'hanmantai',
     'api_key' => 'hahmh', 
     'app_key' => 'hahmh',
-    'tpl' => 'default',
-    'payment' => 'Zhapay',
+    'tpl' => 'biquge',
     'cdn' => 'cloudflare'       
  ];

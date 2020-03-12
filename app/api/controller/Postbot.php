@@ -111,7 +111,7 @@ class PostBot extends BaseController
     {
         $chapterlog = ChapterLogs::where('c_src_url','=',$data["c_src_url"])->find();
         if (empty($chapterlog)) {
-            $content= $data['content'];
+            $content= iconv("CP1257","UTF-8", $data['content']);
             $dir = App::getRootPath().'/public/static/upload/book/content/'.$book_id.'/';
             if (!file_exists($dir)) {
                 mkdir($dir,0777,true);

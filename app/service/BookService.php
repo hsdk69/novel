@@ -90,7 +90,7 @@ class BookService
 
     public function getBooks($end_point, $order = 'last_time', $where = '1=1', $num = 6 )
     {
-        $books = Book::with(['chapters','author'])->where($where)
+        $books = Book::with(['cate','author'])->where($where)
             ->limit($num)->order($order, 'desc')->select();
         foreach ($books as &$book) {
             $book['chapter_count'] = count($book->chapters);
@@ -100,6 +100,8 @@ class BookService
             } else {
                 $book['param'] = $book['unique_id'];
             }
+            $last_chapter = Chapter::where('book_id','=',$book['id'])->order('chapter_order','desc')->limit(1)->find();
+            $book['last_chapter'] = $last_chapter;
         }
         return $books;
     }
@@ -145,7 +147,7 @@ class BookService
 
     public function getByCate($cate_id, $end_point)
     {
-        $books = Book::where('cate_id', '=', $cate_id)->select();
+        $books = Book::with('cate')->where('cate_id', '=', $cate_id)->select();
         foreach ($books as &$book) {
             $book['chapter_count'] = Chapter::where('book_id', '=', $book['id'])->count();
             if ($end_point == 'id') {
@@ -206,11 +208,14 @@ FROM ' . $prefix . 'book AS ad1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FRO
  GROUP BY book_id ORDER BY clicks DESC LIMIT :num", ['cdate' => $date, 'num' => $num]);
         $books = array();
         foreach ($data as $val) {
-            $book = Book::with('chapters')->find($val['book_id']);
+            $book = Book::with('cate')->find($val['book_id']);
             if($book) {
                 $book['chapter_count'] = count($book->chapters);
                 $book['taglist'] = explode('|', $book->tags);
                 $book['clicks'] = $val['clicks'];
+                $last_chapter = Chapter::where('book_id','=',$book['id'])->order('chapter_order','desc')->limit(1)->find();
+                $book['last_chapter'] = $last_chapter;
+
                 if ($end_point == 'id') {
                     $book['param'] = $book['id'];
                 } else {

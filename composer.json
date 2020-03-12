@@ -28,7 +28,8 @@
         "guzzlehttp/guzzle": "^6.5",
         "topthink/think-captcha": "^3.0",
         "overtrue/pinyin": "^4.0",
-         "ext-mysql_xdevapi": "*"
+         "ext-mysql_xdevapi": "*",
+        "ext-iconv": "*"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2",
