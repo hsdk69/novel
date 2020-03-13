@@ -36,10 +36,12 @@
                                     {$vo.summary}
                                 </p>
                                 <p>
+                                    {notempty name="vo.last_chapter"}
                                     <a href="/{$chapter_ctrl}/{$vo.last_chapter.id}/" target="_blank" class="red">
                                         最近更新 {$vo.last_chapter.chapter_name}
                                     </a>
                                     <span>| {$vo.last_time|date='Y-m-d'}更新</span>
+                                    {/notempty}
                                 </p>
                             </dd>
                         </dl>

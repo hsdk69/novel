@@ -67,12 +67,14 @@
                 <span class="x-catalog__update">更新于：{$last_chapter.create_time|date='Y-m-d'}</span>
             </div>
             <div class="x-part__content">
+                {notempty name="last_chapter"}
                 <a href="/{$chapter_ctrl}/{$last_chapter.id}">
                     <div class="x-catalog__new">
                         {$last_chapter.chapter_name}
                         <span>最新</span>
                     </div>
                 </a>
+                {/notempty}
                 <div class="x-catalog__list van-hairline--bottom">
                     {volist name="book.chapters" id="vo" length="3"}
                     <a href="/{$chapter_ctrl}/{$vo.id}">

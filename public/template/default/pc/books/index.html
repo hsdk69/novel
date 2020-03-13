@@ -81,9 +81,16 @@
                     <div class="title clearfixer">
 							<span class="chaptername fl">
 								最新章节&nbsp;:&nbsp;&nbsp;
+                                {notempty name="last_chapter"}
 								<a target="_blank" href="/{$chapter_ctrl}/{$last_chapter.id}">{$last_chapter.chapter_name}</a>
+                                {/notempty}
 							</span>
-                        <span class="updatetime fr">更新时间&nbsp;:&nbsp;{$last_chapter.create_time|date='Y-m-d'}</span>
+                        <span class="updatetime fr">
+                            更新时间&nbsp;:&nbsp;
+                            {notempty name="last_chapter"}
+                            {$last_chapter.create_time|date='Y-m-d'}
+                            {/notempty}
+                        </span>
                     </div>
                 </div>
                 <div class="reader_comments" id="comment-tab">
