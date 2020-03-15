@@ -4,6 +4,7 @@
 namespace app\index\controller;
 
 
+use app\model\Chapter;
 use think\facade\View;
 
 class Rank extends Base
@@ -33,7 +34,7 @@ class Rank extends Base
         } elseif ($op == 'new') {
             $books = cache('newest_homepage');
             if (!$books) {
-                $books = $this->bookService->getBooks( $this->end_point, 'last_time', '1=1', 30);
+                $books = $this->bookService->getBooks($this->end_point, 'last_time', '1=1', 30);
                 cache('newest_homepage', $books, null, 'redis');
             }
         } elseif ($op == 'end') {
@@ -46,6 +47,8 @@ class Rank extends Base
 
         foreach ($books as &$book) {
             $book['date'] = date('Y-m-d H:i:s', $book['last_time']);
+            $last_chapter = Chapter::where('book_id', '=', $book['id'])->order('chapter_order', 'desc')->limit(1)->find();
+            $book['last_chapter'] = $last_chapter;
         }
         return json(['books' => $books, 'success' => 1]);
     }

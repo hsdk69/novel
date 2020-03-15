@@ -35,8 +35,8 @@ CREATE TABLE `xwx_user` (
   `reg_ip` varchar(32) DEFAULT '' COMMENT '用户注册ip',
   PRIMARY KEY (`id`) USING BTREE,
   unique key `username` (`username`) ,
-  unique key `mobile` (`mobile`),
-  unique key `email` (`email`),
+  key `mobile` (`mobile`),
+  key `email` (`email`),
   key `pid` (`pid`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 

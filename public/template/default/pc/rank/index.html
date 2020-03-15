@@ -63,7 +63,7 @@
                                     <p class="big-book-info">{{item.summary}}</p>
                                     <p>
                                         <a :href="'/{$search_ctrl}/' + item.author_name" target="_blank" class="red">
-                                            共{{item.chapter_count}}章
+                                            最近更新 {{item.last_chapter.chapter_name}}
                                         </a>
                                         <span>| {{item.date}}</span>
                                     </p>

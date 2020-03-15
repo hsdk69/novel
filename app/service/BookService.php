@@ -15,7 +15,7 @@ use think\facade\Db;
 
 class BookService
 {
-    public function getPagedBooksAdmin($status, $where = '1=1')
+    public function getPagedBooksAdmin($status, $order = 'id', $where = '1=1')
     {
         if ($status == 1) {
             $data = Book::with('cate')->where($where);
@@ -23,7 +23,7 @@ class BookService
             $data = Book::onlyTrashed()->with('cate')->where($where);
         }
         $page = config('page.back_end_page');
-        $books = $data->order('id', 'desc')
+        $books = $data->order($order, 'desc')
             ->paginate(
                 [
                     'list_rows'=> $page,
@@ -39,36 +39,36 @@ class BookService
         ];
     }
 
-    public function getBooksById($ids)
-    {
-        if (empty($ids) || strlen($ids) <= 0) {
-            return [];
-        }
-        $exp = new Expression('field(id,' . $ids . ')');
-        try {
-            $books = Book::where('id', 'in', $ids)->with(['author,chapters'])->order($exp)->selectOrFail();
-            foreach ($books as &$book) {
-                $book['chapter_count'] = count($book->chapters);
-            }
-            return $books;
-        } catch (DataNotFoundException $e) {
-            return [];
-        } catch (ModelNotFoundException $e) {
-            return [];
-        } catch (DbException $e) {
-            return [];
-        }
-    }
+//    public function getBooksById($ids)
+//    {
+//        if (empty($ids) || strlen($ids) <= 0) {
+//            return [];
+//        }
+//        $exp = new Expression('field(id,' . $ids . ')');
+//        try {
+//            $books = Book::where('id', 'in', $ids)->with(['author,chapters'])->order($exp)->selectOrFail();
+//            foreach ($books as &$book) {
+//                $book['chapter_count'] = count($book->chapters);
+//            }
+//            return $books;
+//        } catch (DataNotFoundException $e) {
+//            return [];
+//        } catch (ModelNotFoundException $e) {
+//            return [];
+//        } catch (DbException $e) {
+//            return [];
+//        }
+//    }
 
     public function getPagedBooks($num, $end_point, $order = 'id', $where = '1=1')
     {
-        $data = Book::where($where)->with(['chapters', 'cate'])->order($order, 'desc')
+        $data = Book::where($where)->with('cate')->order($order, 'desc')
             ->paginate([
                 'list_rows'=> $num,
                 'query' => request()->param(),
             ]);
         foreach ($data as &$book) {
-            $book['chapter_count'] = count($book->chapters);
+            //$book['chapter_count'] = Chapter::where('book_id','=',$book->id)->count();
             if ($end_point == 'id') {
                 $book['param'] = $book['id'];
             } else {
@@ -93,15 +93,15 @@ class BookService
         $books = Book::with(['cate','author'])->where($where)
             ->limit($num)->order($order, 'desc')->select();
         foreach ($books as &$book) {
-            $book['chapter_count'] = count($book->chapters);
+            //$book['chapter_count'] = Chapter::where('book_id','=',$book->id)->count();
             $book['taglist'] = explode('|', $book->tags);
             if ($end_point == 'id') {
                 $book['param'] = $book['id'];
             } else {
                 $book['param'] = $book['unique_id'];
             }
-            $last_chapter = Chapter::where('book_id','=',$book['id'])->order('chapter_order','desc')->limit(1)->find();
-            $book['last_chapter'] = $last_chapter;
+//            $last_chapter = Chapter::where('book_id','=',$book['id'])->order('chapter_order','desc')->limit(1)->find();
+//            $book['last_chapter'] = $last_chapter;
         }
         return $books;
     }
@@ -112,9 +112,8 @@ class BookService
             ->group('book_id')->select();
         if (count($data) > 0) {
             foreach ($data as &$item) {
-                $chapters = Chapter::where('book_id', '=', $item['book_id'])->select();
                 $book = $item['book'];
-                $book['chapter_count'] = count($chapters);
+                //$book['chapter_count'] = Chapter::where('book_id','=',$book->id)->count();
                 $book['taglist'] = explode('|', $item['book']['tags']);
                 $item['book'] = $book;
                 if ($end_point == 'id') {
@@ -135,7 +134,7 @@ class BookService
     {
         $books = Book::whereOr('cate_id','=',$cate_id)->limit($num)->select();
         foreach ($books as &$book) {
-            $book['chapter_count'] = Chapter::where('book_id', '=', $book['id'])->count();
+            //$book['chapter_count'] = Chapter::where('book_id', '=', $book['id'])->count();
             if ($end_point == 'id') {
                 $book['param'] = $book['id'];
             } else {
@@ -149,7 +148,7 @@ class BookService
     {
         $books = Book::with('cate')->where('cate_id', '=', $cate_id)->select();
         foreach ($books as &$book) {
-            $book['chapter_count'] = Chapter::where('book_id', '=', $book['id'])->count();
+            //$book['chapter_count'] = Chapter::where('book_id', '=', $book['id'])->count();
             if ($end_point == 'id') {
                 $book['param'] = $book['id'];
             } else {
@@ -162,7 +161,7 @@ class BookService
     public function getByAuthor($id, $end_point) {
         $books = Book::where('author_id', '=', $id)->select();
         foreach ($books as &$book) {
-            $book['chapter_count'] = Chapter::where('book_id', '=', $book['id'])->count();
+            //$book['chapter_count'] = Chapter::where('book_id', '=', $book['id'])->count();
             if ($end_point == 'id') {
                 $book['param'] = $book['id'];
             } else {
@@ -180,7 +179,7 @@ FROM ' . $prefix . 'book AS ad1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FRO
  AS t2 WHERE ad1.id >= t2.id ORDER BY ad1.id LIMIT ' . $num . ') as a
  INNER JOIN author as b on a.author_id = b.id');
         foreach ($books as &$book) {
-            $book['chapter_count'] = Chapter::where('book_id', '=', $book['id'])->count();
+            //$book['chapter_count'] = Chapter::where('book_id', '=', $book['id'])->count();
             if ($end_point == 'id') {
                 $book['param'] = $book['id'];
             } else {
@@ -210,12 +209,9 @@ FROM ' . $prefix . 'book AS ad1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FRO
         foreach ($data as $val) {
             $book = Book::with('cate')->find($val['book_id']);
             if($book) {
-                $book['chapter_count'] = count($book->chapters);
+                $book['chapter_count'] = Chapter::where('book_id','=',$book->id)->count();
                 $book['taglist'] = explode('|', $book->tags);
                 $book['clicks'] = $val['clicks'];
-                $last_chapter = Chapter::where('book_id','=',$book['id'])->order('chapter_order','desc')->limit(1)->find();
-                $book['last_chapter'] = $last_chapter;
-
                 if ($end_point == 'id') {
                     $book['param'] = $book['id'];
                 } else {
