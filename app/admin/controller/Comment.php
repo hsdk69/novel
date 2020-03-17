@@ -23,9 +23,10 @@ class Comment extends Base
         if ($book_id){
             $map[] = ['book_id','=',$book_id];
         }
-        $data = Comments::where($map)->with('book,user');
-        $comments = $data->order('id', 'desc')->paginate(5, false,
+        $data = Comments::where($map)->with(['book,user']);
+        $comments = $data->order('id', 'desc')->paginate(
             [
+                'list_rows'=> 5,
                 'query' => request()->param(),
                 'var_page' => 'page',
             ]);
