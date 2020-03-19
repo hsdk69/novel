@@ -5,13 +5,13 @@ return [
     'img_domain' => '',
     'mobile_domain' => 'm.xs.com',
     'mip_domain' => 'mip.xs.com',
-    'admin_damain' => '',
+    'admin_domain' => 'admin.llekan.com',
     'api_domain' => 'api.xs.com',
-    'app_damain' => '',
+    'app_domain' => '',
     'site_name' => '笔趣阁',
     'salt' => 'hanmantai',
     'api_key' => 'hahmh', 
     'app_key' => 'hahmh',
-    'tpl' => 'biquge',
+    'tpl' => 'default',
     'cdn' => 'cloudflare'       
  ];

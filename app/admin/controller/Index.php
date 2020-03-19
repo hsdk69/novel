@@ -71,9 +71,9 @@ class Index extends Base
             $img_domain = input('img_domain');
             $mobile_domain = input('mobile_domain');
             $mip_domain = input('mip_domain');
-            $admin_damain = input('admin_damain');
+            $admin_domain = input('admin_domain');
             $api_domain = input('api_domain');
-            $app_damain = input('app_damain');
+            $app_domain = input('app_domain');
             $salt = input('salt');
             $api_key = input('api_key');
             $app_key = input('app_key');
@@ -87,9 +87,9 @@ return [
     'img_domain' => '{$img_domain}',
     'mobile_domain' => '{$mobile_domain}',
     'mip_domain' => '{$mip_domain}',
-    'admin_damain' => '{$admin_damain}',
+    'admin_domain' => '{$admin_domain}',
     'api_domain' => '{$api_domain}',
-    'app_damain' => '{$app_damain}',
+    'app_domain' => '{$app_domain}',
     'site_name' => '{$site_name}',
     'salt' => '{$salt}',
     'api_key' => '{$api_key}', 
