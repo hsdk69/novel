@@ -201,7 +201,7 @@
                 <div class="rank-list">
                     <span class="titmenu">点击榜</span>
                     <ul class="rank-1">
-                        {volist name="hot" id="vo" key="k"}
+                        {volist name="hot" id="vo" key="k" length="10"}
                         {if $k == 1}
                         <li class="top topred">
                             <span class="num">{$k}</span>
@@ -229,7 +229,7 @@
                 <div class="rank-list">
                     <span class="titmenu">完结榜</span>
                     <ul class="rank-1">
-                        {volist name="ends" id="vo" key="k"}
+                        {volist name="ends" id="vo" key="k" length="10"}
                         {if $k == 1}
                         <li class="top topred">
                             <span class="num">{$k}</span>

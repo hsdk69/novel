@@ -44,13 +44,13 @@ class Index extends Base
 
         $newest = cache('newestHomepage');
         if (!$newest) {
-            $newest = $this->bookService->getBooks($this->end_point, 'last_time', '1=1', 30);
-            foreach ($newest as &$book) {
+            $newest = $this->bookService->getBooks($this->end_point, 'last_time', '1=1', 30);          
+            cache('newestHomepage', $newest, null, 'redis');
+        }
+         foreach ($newest as &$book) {
                 $chapters = Chapter::where('book_id', '=', $book['id']);
                 $book['last_chapter'] = $chapters->where('id','=', (int)$chapters->max('id'))->find();
             }
-            cache('newestHomepage', $newest, null, 'redis');
-        }
 
         $ends = cache('endsHomepage');
         if (!$ends) {
