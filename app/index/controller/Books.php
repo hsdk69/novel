@@ -57,7 +57,14 @@ class Books extends Base
         }
         $last_chapter = cache('last_chapter:'.$book->id);
         if (!$last_chapter) {
-            $last_chapter = Chapter::where('book_id','=',$book->id)->order('chapter_order','desc')->find();
+            $query = Db::query('SELECT * FROM '.$this->prefix.
+                'chapter WHERE id = (SELECT MAX(id) FROM (SELECT id FROM xwx_chapter WHERE book_id=?) as a)',
+                [$book['id']]);
+            if (count($query) > 0) {
+                $last_chapter = $query[0];
+            } else {
+                $last_chapter = array();
+            }
             cache('last_chapter:'.$book->id, $last_chapter, 'null', 'redis');
         }
 

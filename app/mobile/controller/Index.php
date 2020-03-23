@@ -46,9 +46,12 @@ class Index extends Base
         if (!$newest) {
             $newest = $this->bookService->getBooks( $this->end_point, 'last_time', '1=1', 10);
             foreach ($newest as $book) {
-                $book['last_chapter'] = Db::query('SELECT * FROM '.$this->prefix.
-                        'chapter WHERE id = (SELECT MAX(id) FROM (SELECT id FROM xwx_chapter WHERE book_id=?) as a)',
-                        [$book['id']])[0];
+                $query = Db::query('SELECT * FROM '.$this->prefix.
+                    'chapter WHERE id = (SELECT MAX(id) FROM (SELECT id FROM xwx_chapter WHERE book_id=?) as a)',
+                    [$book['id']]);
+                if (count($query) > 0) {
+                    $book['last_chapter'] = $query[0];
+                }
             }
             cache('newestHomepage', $newest, null, 'redis');
         }
@@ -125,9 +128,12 @@ class Index extends Base
                     $cate = Cate::findOrFail($book['cate_id']);
                     $book['author'] = $author;
                     $book['cate'] = $cate;
-                    $book['last_chapter'] = Db::query('SELECT * FROM '.$this->prefix.
+                    $query = Db::query('SELECT * FROM '.$this->prefix.
                         'chapter WHERE id = (SELECT MAX(id) FROM (SELECT id FROM xwx_chapter WHERE book_id=?) as a)',
-                        [$book['id']])[0];
+                        [$book['id']]);
+                    if (count($query) > 0) {
+                        $book['last_chapter'] = $query[0];
+                    }
                     if ($this->end_point == 'id') {
                         $book['param'] = $book['id'];
                     } else {
