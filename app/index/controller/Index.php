@@ -12,6 +12,7 @@ use app\model\Chapter;
 use app\service\BookService;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
+use think\facade\Db;
 use think\facade\View;
 
 class Index extends Base
@@ -48,9 +49,10 @@ class Index extends Base
             cache('newestHomepage', $newest, null, 'redis');
         }
          foreach ($newest as &$book) {
-                $chapters = Chapter::where('book_id', '=', $book['id']);
-                $book['last_chapter'] = $chapters->where('id','=', (int)$chapters->max('id'))->find();
-            }
+             $book['last_chapter'] =
+                 Db::query('SELECT * FROM xwx_chapter WHERE id = (SELECT MAX(id) FROM (SELECT id FROM xwx_chapter WHERE book_id=1) as a)')[0];
+
+         }
 
         $ends = cache('endsHomepage');
         if (!$ends) {
@@ -124,8 +126,9 @@ class Index extends Base
                     $cate = Cate::findOrFail($book['cate_id']);
                     $book['author'] = $author;
                     $book['cate'] = $cate;
-                    $chapters = Chapter::where('book_id', '=', $book['id']);
-                    $book['last_chapter'] = $chapters->where('id','=', (int)$chapters->max('id'))->find();
+                    $book['last_chapter'] = Db::query('SELECT * FROM '.$this->prefix.
+                        'chapter WHERE id = (SELECT MAX(id) FROM (SELECT id FROM xwx_chapter WHERE book_id=?) as a)',
+                        [$book['id']])[0];
 
                     if ($this->end_point == 'id') {
                         $book['param'] = $book['id'];

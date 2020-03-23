@@ -69,7 +69,7 @@
 <section class="x-city__part hr-top">
     <div class="x-part__title">最受欢迎</div>
     <div class="x-part__books">
-        {volist name="hot" id="vo"}
+        {volist name="newest" id="vo"}
         <div class="x-city__swiper--item">
             <div class="x-book">
                 <div class="x-book__nocover">
@@ -82,8 +82,7 @@
                             <span class="x-book__tag">{$vo.author_name}</span>
                         </p>
                         <p class="x-book__intro">
-                            <a href="/{$book_ctrl}/{$vo.param}">{$vo.clicks}次点击</a>|
-                            <a href="/{$book_ctrl}/{$vo.param}">{$vo.last_time|date='Y-m-d H:i:s'}</a>
+                            <a href="/{$chapter_ctrl}/{$vo.last_chapter.id}">{$vo.last_chapter.chapter_name}</a>
                         </p>
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\mobile\controller;
+namespace app\mip\controller;
 
 
 use app\common\RedisHelper;
@@ -12,7 +12,6 @@ use app\model\Chapter;
 use app\service\BookService;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
-use think\facade\Db;
 use think\facade\View;
 
 class Index extends Base
@@ -45,11 +44,6 @@ class Index extends Base
         $newest = cache('newestHomepage');
         if (!$newest) {
             $newest = $this->bookService->getBooks( $this->end_point, 'last_time', '1=1', 10);
-            foreach ($newest as $book) {
-                $book['last_chapter'] = Db::query('SELECT * FROM '.$this->prefix.
-                        'chapter WHERE id = (SELECT MAX(id) FROM (SELECT id FROM xwx_chapter WHERE book_id=?) as a)',
-                        [$book['id']])[0];
-            }
             cache('newestHomepage', $newest, null, 'redis');
         }
 
@@ -125,8 +119,7 @@ class Index extends Base
                     $cate = Cate::findOrFail($book['cate_id']);
                     $book['author'] = $author;
                     $book['cate'] = $cate;
-                    $book['last_chapter'] =
-                        Db::query('SELECT * FROM xwx_chapter WHERE id = (SELECT MAX(id) FROM (SELECT id FROM xwx_chapter WHERE book_id=1) as a)')[0];
+                    $book['last_chapter'] = Chapter::where('book_id','=',$book['id'])->order('chapter_order','desc')->limit(1)->find();
 
                     if ($this->end_point == 'id') {
                         $book['param'] = $book['id'];

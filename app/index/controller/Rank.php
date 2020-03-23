@@ -5,6 +5,7 @@ namespace app\index\controller;
 
 
 use app\model\Chapter;
+use think\facade\Db;
 use think\facade\View;
 
 class Rank extends Base
@@ -47,8 +48,9 @@ class Rank extends Base
 
         foreach ($books as &$book) {
             $book['date'] = date('Y-m-d H:i:s', $book['last_time']);
-            $last_chapter = Chapter::where('book_id', '=', $book['id'])->order('chapter_order', 'desc')->limit(1)->find();
-            $book['last_chapter'] = $last_chapter;
+            Db::query('SELECT * FROM '.$this->prefix.
+                'chapter WHERE id = (SELECT MAX(id) FROM (SELECT id FROM xwx_chapter WHERE book_id=?) as a)',
+                [$book['id']])[0];
         }
         return json(['books' => $books, 'success' => 1]);
     }
