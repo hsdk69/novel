@@ -12,6 +12,7 @@ use app\model\Chapter;
 use app\service\BookService;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
+use think\facade\Db;
 use think\facade\View;
 
 class Index extends Base
@@ -119,8 +120,9 @@ class Index extends Base
                     $cate = Cate::findOrFail($book['cate_id']);
                     $book['author'] = $author;
                     $book['cate'] = $cate;
-                    $book['last_chapter'] = Chapter::where('book_id','=',$book['id'])->order('chapter_order','desc')->limit(1)->find();
-
+                    $book['last_chapter'] = Db::query('SELECT * FROM '.$this->prefix.
+                        'chapter WHERE id = (SELECT MAX(id) FROM (SELECT id FROM xwx_chapter WHERE book_id=?) as a)',
+                        [$book['id']])[0];
                     if ($this->end_point == 'id') {
                         $book['param'] = $book['id'];
                     } else {

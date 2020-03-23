@@ -49,8 +49,9 @@ class Index extends Base
             cache('newestHomepage', $newest, null, 'redis');
         }
          foreach ($newest as &$book) {
-             $book['last_chapter'] =
-                 Db::query('SELECT * FROM xwx_chapter WHERE id = (SELECT MAX(id) FROM (SELECT id FROM xwx_chapter WHERE book_id=1) as a)')[0];
+             $book['last_chapter'] = Db::query('SELECT * FROM '.$this->prefix.
+                 'chapter WHERE id = (SELECT MAX(id) FROM (SELECT id FROM xwx_chapter WHERE book_id=?) as a)',
+                 [$book['id']])[0];
 
          }
 
