@@ -54,18 +54,6 @@ class Index extends Base
             cache('endsHomepage', $ends, null, 'redis');
         }
 
-        $most_charged = cache('mostCharged');
-        if (!$most_charged) {
-            $arr = $this->bookService->getMostChargedBook($this->end_point);
-            if (count($arr) > 0) {
-                foreach ($arr as $item) {
-                    $most_charged[] = $item['book'];
-                }
-            } else {
-                $arr = [];
-            }
-            cache('mostCharged', $most_charged, null, 'redis');
-        }
 
         $cates = cache('cates');
         if (!$cates) {
@@ -86,6 +74,12 @@ class Index extends Base
             $catelist[] = $cateItem;
         }
 
+        $redis = RedisHelper::GetInstance();
+        $hot_search_json = $redis->zRevRange($this->redis_prefix . 'hot_search', 0, 4, true);
+        $hot_search = array();
+        foreach ($hot_search_json as $k => $v) {
+            $hot_search[] = $k;
+        }
 
         View::assign([
             'banners' => $banners,
@@ -93,9 +87,9 @@ class Index extends Base
             'newest' => $newest,
             'hot' => $hot_books,
             'ends' => $ends,
-            'most_charged' => $most_charged,
             'cates' => $cates,
-            'catelist' => $catelist
+            'catelist' => $catelist,
+            'hot_search' => $hot_search,
         ]);
         return view($this->tpl);
     }

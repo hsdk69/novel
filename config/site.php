@@ -12,6 +12,6 @@ return [
     'salt' => 'hanmantai',
     'api_key' => 'hahmh', 
     'app_key' => 'hahmh',
-    'tpl' => 'biquge',
+    'tpl' => 'default',
     'cdn' => 'cloudflare'       
  ];

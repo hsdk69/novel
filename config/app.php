@@ -22,7 +22,7 @@ return [
     // 域名绑定（自动多应用模式有效）
     'domain_bind'      => [
         'm'  => 'mobile',
-        'ad' => 'admin',
+        'admin' => 'admin',
         'mip' => 'mip',
         'api' => 'api',
         'app' => 'app',
