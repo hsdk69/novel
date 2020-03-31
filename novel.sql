@@ -320,7 +320,7 @@ CREATE TABLE `xwx_book_logs`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `book_id` int(10) UNSIGNED NOT NULL DEFAULT 0,
   `book_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '',
-  `src_url` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `src_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
   `log_time` int(10) DEFAULT 0,
   `src` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`id`) USING BTREE,
@@ -339,12 +339,14 @@ CREATE TABLE `xwx_chapter_logs`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `chapter_id` int(10) UNSIGNED NOT NULL DEFAULT 0,
   `chapter_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '',
-  `src_url` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `src_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `chapter_order` int(10) UNSIGNED NOT NULL DEFAULT 0,
   `log_time` int(10) UNSIGNED DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `src_url`(`src_url`) USING BTREE,
   INDEX `chapter_id`(`chapter_id`) USING BTREE,
   INDEX `chapter_name`(`chapter_name`) USING BTREE,
+  INDEX `chapter_order`(`chapter_order`) USING BTREE,
   INDEX `log_time`(`log_time`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 ROW_FORMAT = Dynamic;
 

@@ -21,7 +21,7 @@ class Books extends Base
     public function initialize()
     {
         parent::initialize();
-        $this->bookService = new BookService();
+        $this->bookService = app('bookService');
     }
 
     public function index()

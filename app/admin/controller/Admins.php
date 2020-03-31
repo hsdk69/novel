@@ -12,7 +12,7 @@ use app\model\Admin;
 class Admins extends Base
 {
     public function index(){
-        $adminService = new AdminService();
+        $adminService = app('adminService');
         $data = $adminService->GetAll();
         View::assign([
             'admins' => $data['admins'],
