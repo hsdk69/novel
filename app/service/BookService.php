@@ -192,7 +192,7 @@ FROM ' . $prefix . 'book AS ad1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FRO
     public function search($keyword, $num, $prefix)
     {
         return Db::query(
-            "select * from " . $prefix . "book where delete_time=0 and match(book_name,summary,author_name,nick_name) 
+            "select * from " . $prefix . "book where delete_time=0 and match(book_name,summary,author_name,nick_name,role_name) 
             against ('" . $keyword . "' IN NATURAL LANGUAGE MODE) LIMIT " . $num
         );
 
