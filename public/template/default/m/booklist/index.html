@@ -22,11 +22,11 @@
                 <div class="x-category__box--title">分类</div>
                 <div class="x-category__box--list">
                     <span class="x-category__item" :class="{'is-active' : cate == -1}">
-                        <a @click="cateChange(-1)">全部</a>
+                        <a @click="cateChange(-1, 1)">全部</a>
                     </span>
                     {volist name="boys" id="vo"}
                     <span class="x-category__item" :class="{'is-active' : cate == {$vo.id}}">
-                        <a @click="cateChange({$vo.id})">{$vo.cate_name}</a>
+                        <a @click="cateChange({$vo.id}, 1)">{$vo.cate_name}</a>
                     </span>
                     {/volist}
                 </div>
@@ -36,11 +36,11 @@
                 <div class="x-category__box--title">分类</div>
                 <div class="x-category__box--list">
                     <span class="x-category__item" :class="{'is-active' : cate == -1}">
-                        <a @click="cateChange(-1)">全部</a>
+                        <a @click="cateChange(-1, 2)">全部</a>
                     </span>
                     {volist name="girls" id="vo"}
                     <span class="x-category__item" :class="{'is-active' : cate == {$vo.id}}">
-                        <a @click="cateChange({$vo.id})">{$vo.cate_name}</a>
+                        <a @click="cateChange({$vo.id}, 2)">{$vo.cate_name}</a>
                     </span>
                     {/volist}
                 </div>
