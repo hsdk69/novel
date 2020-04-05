@@ -19,7 +19,8 @@ class Rank extends Base
     public function index()
     {
         View::assign([
-            'header' => '排行'
+            'header' => '排行',
+            'c_url' => $this->c_url
         ]);
         return view($this->tpl);
     }

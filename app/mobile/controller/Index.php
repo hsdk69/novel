@@ -103,7 +103,8 @@ class Index extends Base
             'ends' => $ends,
             'most_charged' => $most_charged,
             'cates' => $cates,
-            'catelist' => $catelist
+            'catelist' => $catelist,
+            'c_url' => $this->c_url
         ]);
         return view($this->tpl);
     }

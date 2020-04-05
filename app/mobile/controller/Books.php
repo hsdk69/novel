@@ -128,7 +128,8 @@ class Books extends Base
             'start_pay' => $start_pay,
             'clicks' => $clicks,
             'last_chapter' => $last_chapter,
-            'header' => $book->book_name
+            'header' => $book->book_name,
+            'c_url' => $this->c_url.'/'.$book->id
         ]);
         return view($this->tpl);
     }

@@ -90,6 +90,7 @@ class Index extends Base
             'cates' => $cates,
             'catelist' => $catelist,
             'hot_search' => $hot_search,
+            'c_url' => $this->c_url
         ]);
         return view($this->tpl);
     }
@@ -139,7 +140,8 @@ class Index extends Base
             'count' => count($books),
             'hot_search' => $hot_search,
             'keyword' => $keyword,
-            'header' => '搜索'
+            'header' => '搜索',
+            'c_url' => $this->c_url
         ]);
         return view($this->tpl);
     }

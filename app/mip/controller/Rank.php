@@ -38,7 +38,8 @@ class Rank extends Base
             'newest' => $newest,
             'hot' => $hot_books,
             'ends' => $ends,
-            'header' => '排行榜'
+            'header' => '排行榜',
+            'c_url' => $this->c_url
         ]);
         return view($this->tpl);
     }

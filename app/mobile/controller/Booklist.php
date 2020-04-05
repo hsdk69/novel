@@ -86,7 +86,8 @@ class Booklist extends Base
             'gender_selector' => $gender_selector,
             'page' => $data['page'],
             'param' => $param,
-            'header' => '小说书库'
+            'header' => '小说书库',
+            'c_url' => $this->c_url.'/'.BOOKLISTACT
         ]);
         return view($this->tpl);
     }

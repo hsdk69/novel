@@ -116,7 +116,8 @@ class Books extends Base
             'clicks' => $clicks,
             'chapters' => $chapters,
             'mobile_url' => $this->mobile_url,
-            'header' => $book->book_name
+            'header' => $book->book_name,
+            'c_url' => $this->c_url.'/'.$book->id
         ]);
         return view($this->tpl);
     }
