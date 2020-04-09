@@ -15,7 +15,7 @@ use think\facade\Db;
 
 class BookService
 {
-    public function getPagedBooksAdmin($status, $order = 'id', $where = '1=1')
+    public function getPagedBooksAdmin($status, $where = '1=1')
     {
         if ($status == 1) {
             $data = Book::with('cate')->where($where);
@@ -23,7 +23,7 @@ class BookService
             $data = Book::onlyTrashed()->with('cate')->where($where);
         }
         $page = config('page.back_end_page');
-        $books = $data->order($order, 'desc')
+        $books = $data->order('id', 'desc')
             ->paginate(
                 [
                     'list_rows'=> $page,

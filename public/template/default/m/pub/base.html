@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=no">
     <link rel="stylesheet" href="/static/css/mstyle.css">
     <link href="https://lib.baomitu.com/layer/3.1.1/mobile/need/layer.css" rel="stylesheet">
-    <link rel="miphtml" href="{$c_url}">
     {block name="seo"}{/block}
 </head>
 <body>
@@ -13,9 +12,11 @@
     <div class="x-home">
         <div class="x-city__header">
             <img src="/static/images/logo.png" alt="" class="x-city__logo">
-            <div class="x-city__search" url="/search">
+            <div class="x-city__search">
+                <form action="/{search_ctrl}" style="width: 85%;">
                 <input type="text" placeholder="请输入搜索关键字" class="x-city__search--input" disabled>
                 <img src="static/images/search.png" alt="">
+                </form>
             </div>
             <a class="account" href="/ucenter">帐户</a>
         </div>

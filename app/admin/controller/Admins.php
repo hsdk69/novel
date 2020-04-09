@@ -67,6 +67,7 @@ class Admins extends Base
         } catch (ModelNotFoundException $e) {
             abort(404, $e->getMessage());
         }
+        return view();
     }
 
     public function delete(){

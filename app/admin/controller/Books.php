@@ -30,7 +30,7 @@ class Books extends Base
 
     public function index()
     {
-        $data = $this->bookService->getPagedBooksAdmin(1, 'last_time');
+        $data = $this->bookService->getPagedBooksAdmin(1);
         $books = $data['books'];
         $count = $data['count'];
         View::assign([

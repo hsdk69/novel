@@ -22,6 +22,11 @@ class Booklist extends Base
         $cate_selector = -1;
         $map = array();
         $cate = (int)input('cate');
+        $cate_name = '全部';
+        $cate_model = Cate::where('id',$cate)->find();
+        if (!is_null($cate_model)) {
+            $cate_name = $cate_model->cate_name;
+        }
         $gender = (int)input('gender');
         if ($gender == 0) $gender = 1;
         if ($gender == 1) {
@@ -62,6 +67,7 @@ class Booklist extends Base
             'page' => $data['page'],
             'param' => $param,
             'header' => '分类',
+            'cate' => $cate_name,
             'c_url' => $this->c_url.'/'.BOOKLISTACT
         ]);
         return view($this->tpl);
