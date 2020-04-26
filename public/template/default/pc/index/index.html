@@ -17,7 +17,7 @@
                             <p class="clearfixer">
                                 {volist name="cates" id="vo"}
                                 {if $vo.gender == 1}
-                                <a class="gray" href="/{$booklist_act}?cate_id={$vo.id}" target="_blank">{$vo.cate_name}</a>
+                                <a class="gray" href="/{$booklist_act}?cate_id={$vo.id}&gender=1" target="_blank">{$vo.cate_name}</a>
                                 {/if}
                                 {/volist}
                             </p>
@@ -27,7 +27,7 @@
                             <p class="clearfixer">
                                 {volist name="cates" id="vo"}
                                 {if $vo.gender == 2}
-                                <a class="gray" href="/{$booklist_act}?cate_id={$vo.id}" target="_blank">{$vo.cate_name}</a>
+                                <a class="gray" href="/{$booklist_act}?cate_id={$vo.id}&gender=2" target="_blank">{$vo.cate_name}</a>
                                 {/if}
                                 {/volist}
                             </p>

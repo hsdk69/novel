@@ -323,6 +323,8 @@ CREATE TABLE `xwx_book_logs`  (
   `src_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
   `log_time` int(10) DEFAULT 0,
   `src` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `last_chapter` varchar(100) DEFAULT NULL,
+  `last_chapter_order` int(10) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `src_url`(`src_url`) USING BTREE,
   INDEX `book_id`(`book_id`) USING BTREE,

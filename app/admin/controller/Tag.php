@@ -9,6 +9,7 @@ use app\service\TagsService;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\exception\ValidateException;
+use think\facade\Db;
 use think\facade\View;
 
 class Tag extends Base
@@ -34,6 +35,10 @@ class Tag extends Base
         if (request()->isPost()) {
             $tag = new Tags();
             $tag->tag_name = input('tag_name');
+            $tag->pinyin = input('pinyin');
+            $tag->jianpin = input('jianpin');
+            $tag->similar = input('similar');
+            $tag->group = input('group');
             $result = $tag->save();
             if ($result) {
                 return json(['err' =>0,'msg'=>'添加成功']);
@@ -50,7 +55,10 @@ class Tag extends Base
             $tag = Tags::findOrFail($id);
             if (request()->isPost()) {
                 $tag->tag_name = input('tag_name');
-                $dir = 'tags';
+                $tag->pinyin = input('pinyin');
+                $tag->jianpin = input('jianpin');
+                $tag->similar = input('similar');
+                $tag->group = input('group');
                 $result = $tag->save();
                 if ($result) {
                     return json(['err' =>0,'msg'=>'修改成功']);
