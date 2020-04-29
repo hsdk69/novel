@@ -13,6 +13,7 @@ Route::rule('/'.RANKCTRL, 'mobile/rank/index');
 Route::rule('/'.UPDATEACT, 'mobile/update/index');
 Route::rule('/getUpdate', 'mobile/update/getBooks');
 Route::rule('/'.AUTHORCTRL.'/:id', 'mobile/authors/index');
+Route::rule('/'.TAGCTRL.'/:id', 'index/tag/index');
 Route::rule('/addfavor', 'mobile/books/addfavor');
 Route::rule('/commentadd', 'mobile/books/commentadd');
 Route::rule('/login', 'mobile/account/login');

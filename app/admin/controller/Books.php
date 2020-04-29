@@ -275,18 +275,7 @@ class Books extends Base
 
     protected function convert($str){
         $pinyin = new Pinyin();
-        $name_format = config('seo.name_format');
-        switch ($name_format) {
-            case 'pure':
-                $str = $pinyin->permalink($str, '');
-                //$str = implode($arr,'');
-                break;
-            case 'abbr':
-                $str = $pinyin->abbr($str);break;
-            default:
-                $str = $pinyin->permalink($str, '');break;
-        }
-        return $str;
+        return  $pinyin->permalink($str, '');
     }
 
 }

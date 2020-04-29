@@ -4,6 +4,8 @@
 namespace app\service;
 
 use app\model\Tags;
+use think\facade\Db;
+
 class TagsService
 {
     public function getPagedAdmin($where = '1=1'){

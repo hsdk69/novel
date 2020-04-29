@@ -197,13 +197,17 @@ CREATE TABLE `xwx_cate` (
 -- Table structure for tags
 -- ----------------------------
 DROP TABLE IF EXISTS `xwx_tags`;
-CREATE TABLE `xwx_tags` (
+CREATE TABLE `xwx_tags`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `tag_name` varchar(20) NOT NULL COMMENT '标签名',
-  `create_time` int(11) DEFAULT '0',
-  `update_time` int(11) DEFAULT '0',
+  `tag_name` varchar(50) NOT NULL COMMENT '标签名',
+  `create_time` int(11) DEFAULT 0,
+  `update_time` int(11) DEFAULT 0,
+  `pinyin` varchar(255) NOT NULL COMMENT '拼音',
+  `jianpin` varchar(50) NOT NULL COMMENT '简拼',
   PRIMARY KEY (`id`) USING BTREE,
-  unique KEY `tag_name` (`tag_name`)
+  FULLTEXT INDEX fidx (tag_name) WITH PARSER ngram,
+  INDEX `pinyin`(`pinyin`) USING BTREE,
+  INDEX `jianpin`(`jianpin`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------

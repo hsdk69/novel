@@ -51,6 +51,7 @@ class Base extends BaseController
             'rank_ctrl' => RANKCTRL,
             'update_act' => UPDATEACT,
             'author_ctrl' => AUTHORCTRL,
+            'tag_ctrl' => TAGCTRL,
             'end_point' => config('seo.book_end_point'),
             'xwx_user_id' => $this->uid,
             'xwx_user' => cookie('xwx_user'),

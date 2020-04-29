@@ -16,7 +16,7 @@
         <article class="clearfix pd-20">
             <form  class="form form-horizontal">
                 <div class="row clearfix">
-                    <label class="form-label col-xs-4 col-sm-3">URL端点形式：</label>
+                    <label class="form-label col-xs-4 col-sm-3">小说URL端点形式：</label>
                     <div class="formControls col-xs-8 col-sm-9">
                         <select name="book_end_point" class="select">
                             <option value="id"
@@ -34,19 +34,24 @@
                 </div>
 
                 <div class="row clearfix">
-                    <label class="form-label col-xs-4 col-sm-3">URL端点格式：</label>
+                    <label class="form-label col-xs-4 col-sm-3">标签URL端点形式：</label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <select name="name_format" class="select">
-                            <option value="pure"
-                                    {if $name_format == 'pure'}
+                        <select name="tag_end_point" class="select">
+                            <option value="id"
+                                    {if $tag_end_point == 'id'}
                             selected
                             {/if}
-                            >全拼</option>
-                            <option value="abbr"
-                                    {if $name_format == 'abbr'}
+                            >id</option>
+                            <option value="pinyin"
+                                    {if $tag_end_point == 'pinyin'}
                             selected
                             {/if}
-                            >首字母</option>
+                            >拼音</option>
+                            <option value="jianpin"
+                                    {if $tag_end_point == 'jianpin'}
+                            selected
+                            {/if}
+                            >简拼</option>
                         </select>
                     </div>
                 </div>

@@ -7,3 +7,4 @@ define('SEARCHCTRL','search');    //search路由
 define('RANKCTRL', 'rank');    //rank路由
 define('UPDATEACT','update');    //update路由
 define('AUTHORCTRL','author');    //author路由
+define('TAGCTRL','tag');    //tag路由

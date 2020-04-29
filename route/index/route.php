@@ -12,6 +12,7 @@ Route::rule('/'.SEARCHCTRL.'/[:keyword]', 'index/index/search');
 Route::rule('/'.RANKCTRL, 'index/rank/index');
 Route::rule('/'.UPDATEACT, 'index/update/index');
 Route::rule('/'.AUTHORCTRL.'/:id', 'index/authors/index');
+Route::rule('/'.TAGCTRL.'/:id', 'index/tag/index');
 Route::rule('/addfavor', 'index/books/addfavor');
 Route::rule('/commentadd', 'index/books/commentadd');
 Route::rule('/login', 'index/account/login');

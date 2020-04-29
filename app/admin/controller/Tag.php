@@ -37,8 +37,6 @@ class Tag extends Base
             $tag->tag_name = input('tag_name');
             $tag->pinyin = input('pinyin');
             $tag->jianpin = input('jianpin');
-            $tag->similar = input('similar');
-            $tag->group = input('group');
             $result = $tag->save();
             if ($result) {
                 return json(['err' =>0,'msg'=>'添加成功']);
@@ -57,8 +55,6 @@ class Tag extends Base
                 $tag->tag_name = input('tag_name');
                 $tag->pinyin = input('pinyin');
                 $tag->jianpin = input('jianpin');
-                $tag->similar = input('similar');
-                $tag->group = input('group');
                 $result = $tag->save();
                 if ($result) {
                     return json(['err' =>0,'msg'=>'修改成功']);

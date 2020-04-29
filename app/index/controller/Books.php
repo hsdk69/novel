@@ -30,7 +30,6 @@ class Books extends Base
     {
         $id = input('id');
         $book = cache('book:' . $id);
-        $tags = cache('tags:book:' . $id);
         if ($book == false) {
             try {
                 $book_end_point = config('seo.book_end_point');
@@ -48,13 +47,12 @@ class Books extends Base
             } catch (ModelNotFoundException $e) {
                 abort(404, $e->getMessage());
             }
-            $tags = [];
-            if (!empty($book->tags) || is_null($book->tags)) {
-                $tags = explode('|', $book->tags);
-            }
             cache('book:' . $id, $book, null, 'redis');
-            cache('tags:book:' . $id, $tags, null, 'redis');
         }
+//        $tags = [];
+//        if (!empty($book->tags) || is_null($book->tags)) {
+//            $tags = explode('|', $book->tags);
+//        }
         $last_chapter = cache('last_chapter:'.$book->id);
         if (!$last_chapter) {
             $query = Db::query('SELECT * FROM '.$this->prefix.
@@ -91,6 +89,25 @@ class Books extends Base
         if (!$recommand) {
             $recommand = $this->bookService->getRecommand($book->cate_id, $this->end_point);
             cache('randBooks:' . $book->tags, $recommand, null, 'redis');
+        }
+
+        $param = config('seo.tag_end_point');
+        $tags = cache('tags:'.$id);
+        if (!$tags) {
+            //$tags = Tags::where('id', 'in', $tag->similar)->select();
+            $tags = Db::query(
+                "select * from " . $this->prefix . "tags where match(tag_name) 
+            against ('" . $book->book_name. "') LIMIT 10");
+            foreach ($tags as &$t) {
+                if ($param == 'id') {
+                    $t['param'] = $t['id'];
+                } else if ($param == 'pinyin') {
+                    $t['param'] = $t['pinyin'];
+                } else {
+                    $t['param'] = $t['jianpin'];
+                }
+            }
+            cache('tags:'.$id, $tags, null, 'redis');
         }
 
         $authors = cache('booksForAuthor:'.$book->author_id);
