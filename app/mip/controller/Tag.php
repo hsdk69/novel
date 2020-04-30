@@ -80,7 +80,9 @@ class Tag extends Base
             View::assign([
                 'books' => $books,
                 'tag' => $tag,
-                'tags' => $tags
+                'tags' => $tags,
+                'header' => $tag->tag_name,
+                'c_url' => $this->c_url
             ]);
             return view($this->tpl);
         } catch (DataNotFoundException $e) {
