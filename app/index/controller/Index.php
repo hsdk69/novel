@@ -45,7 +45,7 @@ class Index extends Base
 
         $newest = cache('newestHomepage');
         if (!$newest) {
-            $newest = $this->bookService->getBooks($this->end_point, 'last_time', '1=1', 30);          
+            $newest = $this->bookService->getBooks($this->end_point, 'last_time', '1=1', 30);
             cache('newestHomepage', $newest, null, 'redis');
         }
          foreach ($newest as &$book) {
@@ -57,24 +57,30 @@ class Index extends Base
              }
          }
 
+         $newbie = cache('newbieHomepage');
+         if (!$newbie) {
+             $newest = $this->bookService->getBooks($this->end_point, 'create_time', '1=1', 30);
+             cache('newestHomepage', $newbie, null, 'redis');
+         }
+
         $ends = cache('endsHomepage');
         if (!$ends) {
             $ends = $this->bookService->getBooks($this->end_point, 'last_time', [['end', '=', '2']], 30);
             cache('endsHomepage', $ends, null, 'redis');
         }
-
-        $most_charged = cache('mostCharged');
-        if (!$most_charged) {
-            $arr = $this->bookService->getMostChargedBook($this->end_point);
-            if (count($arr) > 0) {
-                foreach ($arr as $item) {
-                    $most_charged[] = $item['book'];
-                }
-            } else {
-                $arr = [];
-            }
-            cache('mostCharged', $most_charged, null, 'redis');
-        }
+//
+//        $most_charged = cache('mostCharged');
+//        if (!$most_charged) {
+//            $arr = $this->bookService->getMostChargedBook($this->end_point);
+//            if (count($arr) > 0) {
+//                foreach ($arr as $item) {
+//                    $most_charged[] = $item['book'];
+//                }
+//            } else {
+//                $arr = [];
+//            }
+//            cache('mostCharged', $most_charged, null, 'redis');
+//        }
 
         $cates = cache('cates');
         if (!$cates) {
@@ -102,7 +108,7 @@ class Index extends Base
             'newest' => $newest,
             'hot' => $hot_books,
             'ends' => $ends,
-            'most_charged' => $most_charged,
+            'newbie' => $newbie,
             'cates' => $cates,
             'catelist' => $catelist
         ]);

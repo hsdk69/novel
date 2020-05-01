@@ -48,6 +48,12 @@ class Index extends Base
             cache('newestHomepage', $newest, null, 'redis');
         }
 
+        $newbie = cache('newbieHomepage');
+        if (!$newbie) {
+            $newest = $this->bookService->getBooks($this->end_point, 'create_time', '1=1', 30);
+            cache('newestHomepage', $newbie, null, 'redis');
+        }
+
         $ends = cache('endsHomepage');
         if (!$ends) {
             $ends = $this->bookService->getBooks( $this->end_point, 'last_time', [['end', '=', '2']], 10);
@@ -86,6 +92,7 @@ class Index extends Base
             'banners_count' => count($banners),
             'newest' => $newest,
             'hot' => $hot_books,
+            'newbie' => $newbie,
             'ends' => $ends,
             'cates' => $cates,
             'catelist' => $catelist,
