@@ -59,7 +59,7 @@ class Index extends Base
 
          $newbie = cache('newbieHomepage');
          if (!$newbie) {
-             $newest = $this->bookService->getBooks($this->end_point, 'create_time', '1=1', 30);
+             $newbie = $this->bookService->getBooks($this->end_point, 'create_time', '1=1', 30);
              cache('newestHomepage', $newbie, null, 'redis');
          }
 
@@ -100,7 +100,6 @@ class Index extends Base
             $cateItem['cate'] = ['id' => $cate->id, 'cate_name' => $cate->cate_name];
             $catelist[] = $cateItem;
         }
-
 
         View::assign([
             'banners' => $banners,
