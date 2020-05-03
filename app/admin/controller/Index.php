@@ -210,7 +210,7 @@ INFO;
 
     public function upgrade(){
         $client = new Client();
-        $srcUrl = App::getRootPath() . "/ver.txt";
+        $srcUrl = App::getRootPath() . "/public/ver.txt";
         $localVersion = (int)str_replace('.', '', file_get_contents($srcUrl));
         $server = "http://xs.xhxup.top/";
         $serverFileUrl = $server . "/ver.txt";
