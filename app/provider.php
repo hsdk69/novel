@@ -15,5 +15,6 @@ return [
     'financeService' => \app\service\FinanceService::class,
     'promotionService' => \app\service\PromotionService::class,
     'tagsService' => \app\service\TagsService::class,
-    'userService' => \app\service\UserService::class
+    'userService' => \app\service\UserService::class,
+    'booklogService' => \app\service\BookLogService::class
 ];

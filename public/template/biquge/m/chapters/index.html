@@ -1,0 +1,57 @@
+{extend name="./template/biquge/m/pub/base.html" /}
+{block name="seo"}
+<title>{$chapter.chapter_name}-{$site_name}</title>
+<meta name="description" content="{$chapter.book.book_name}{$chapter.chapter_name}在线阅读">
+{/block}
+{block name="css"}
+<style>
+    #nr1 p {line-height: 2rem}
+</style>
+{/block}
+{block name="head"}
+<div class="header" id="_head">
+    <a href="javascript:history.go(-1);" class="back">返回</a>
+    <h1 id="_h1" style="width: 200px;">{$chapter.book.book_name}</h1>
+    <a href="/" class="back_r">首页</a>
+</div>
+{/block}
+{block name="main"}
+<div id="nr_content">
+    <div class="nr_title" id="nr_title">{$chapter.chapter_name}</div>
+    <div class="nr_page">
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="prev"><a href="/">返回首页</a></td>
+                <td class="prev"><a href="/{$book_ctrl}/{$chapter.book.param}/" rel="index">返回目录</a></td>
+                <td class="mulu"><a href="javascript:;">投推荐票</a></td>
+                <td class="next"><a href="javascript:;">加入书签</a></td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="nr" class="nr_nr">
+        <div id="nr1">{$content|raw}</div>
+    </div>
+    <div class="nr_page">
+        <table cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                {if $prev == "null"}
+                <td class="prev"><a style="color: lightgrey">上一章</a></td>
+                {else/}
+                <td class="prev"><a href="/{$chapter_ctrl}/{$prev.id}" rel="prev">上一章</a></td>
+                {/if}
+
+                <td class="mulu"><a href="/{$book_ctrl}/{$chapter.book.param}/" rel="index">目录</a></td>
+
+                {if $next == "null"}
+                <td class="next"><a style="color: lightgrey">下一章</a></td>
+                {else/}
+                <td class="next"><a href="/{$chapter_ctrl}/{$next.id}" rel="next">下一章</a></td>
+                {/if}
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{/block}

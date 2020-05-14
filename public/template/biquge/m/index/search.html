@@ -1,0 +1,53 @@
+{extend name="./template/biquge/m/pub/base.html" /}
+{block name="seo"}
+<title>{$site_name}-小说搜索</title>
+<meta name="description" content="您正在搜索关键词为{$keyword}的小说">
+{/block}
+{block name="head"}
+<div class="header" id="_head">
+    <a href="javascript:history.go(-1);" class="back">返回</a>
+    <h1 id="_h1" style="width: 200px;">{$keyword}</h1>
+    <a href="/" class="back_r">首页</a>
+</div>
+{/block}
+{block name="main"}
+<div class="search">
+    <form method="get" action="/{$search_ctrl}/">
+        <table cellpadding="0" cellspacing="0" style="width:100%;">
+            <tbody>
+            <tr>
+                <td style="border:1px solid #4baacd;">
+                    <input name="keyword" type="text" class="key" placeholder="输入书名，作者或简介搜索" required="">
+                </td>
+                <td style="width:35px;background-color:#4baacd; background-image:url('/template/biquge/images/search.png'); background-repeat:no-repeat; background-position:center">
+                    <input name="submit" type="submit" value="" class="go">
+                </td>
+            </tr>
+            </tbody></table>
+    </form>
+</div>
+<div class="article">
+    <h2 class="title"><span>“{$keyword}”的相关小说</span></h2>
+    {volist name="books" id="vo"}
+    <div class="block">
+        <div class="block_img">
+            <a href="/{$book_ctrl}/{$vo.param}/">
+                <img src="{$vo.cover_url}">
+            </a>
+        </div>
+        <div class="block_txt">
+            <h2><a href="/{$book_ctrl}/{$vo.param}/">{$vo.book_name}</a></h2>
+            <p>
+                <span class="author">
+                    <a href="/{$search_ctrl}?keyword={$vo.author_name}">{$vo.author_name}</a>
+                </span>
+                <span class="size">{$vo.cate.cate_name}</span>
+                <span class="visit">{$vo.words}万字</span>
+            </p>
+            <p></p>
+        </div>
+        <div style="clear:both"></div>
+    </div>
+    {/volist}
+</div>
+{/block}

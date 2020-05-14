@@ -257,28 +257,7 @@
                 <div class="rank-list">
                     <span class="titmenu">充值榜</span>
                     <ul class="rank-1">
-                        {volist name="most_charged" id="vo" key="k" length=10}
-                        {if $k == 1}
-                        <li class="top topred">
-                            <span class="num">{$k}</span>
-                            <dl class="book-block">
-                                <dt>
-                                    <a href="/{$book_ctrl}/{$vo.param}" target="_blank">
-                                        <img class="lazyimg" data-original="{$vo.cover_url}" src="https://s1.ax1x.com/2018/12/13/FN8WLQ.jpg">
-                                    </a>
-                                </dt>
-                                <dd>
-                                    <a href="/{$book_ctrl}/{$vo.param}" target="_blank" class="book-name">{$vo.book_name}</a>
-                                </dd>
-                            </dl>
-                        </li>
-                        {else /}
-                        <li>
-                            <span class="num">{$k}</span>
-                            <a class="book-list-f" href="/{$book_ctrl}/{$vo.param}" target="_blank">{$vo.book_name}</a>
-                        </li>
-                        {/if}
-                        {/volist}
+
                     </ul>
                     <a href="{$booklist_act}" target="_blank" class="more">查看更多&gt;&gt;</a>
                 </div>

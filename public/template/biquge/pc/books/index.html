@@ -1,0 +1,89 @@
+{extend name="./template/biquge/pc/pub/base.html" /}
+{block name="seo"}
+<title>{$book.book_name}全本免费阅读-{$site_name}</title>
+<meta name="description" content="{$book.book_name}又名{$book.nick_name},是一本地区为{$book.area.area_name}，类型为{$book.tags}的高人气漫画，漫画简介：{$book.summary}">
+{/block}
+{block name="main"}
+<div class="box_con white">
+    <div class="con_top">
+        <a href="/">{$site_name}</a> &gt; <a href="/{$booklist_act}?cate={$book.cate_id}">{$book.cate.cate_name}</a> &gt; {$book.book_name}
+        <div id="bdshare">【<a href="#footer">直达底部 ↓</a>】</div>
+    </div>
+    <div id="sidebar">
+        <div id="fmimg"><img alt="{$book.book_name}" src="{$book.cover_url}" width="148" height="185" /><span class="fullflag0"></span></div>
+    </div>
+    <div id="maininfo">
+        <div id="info">
+            <h1>{$book.book_name}</h1>
+            <p>更新时间：{$book.last_time|date='Y-m-d H:i:s'}</p>
+            <p>作&nbsp;&nbsp;&nbsp;&nbsp;者：{$book.author_name}</p>
+            <p>最新章节：
+                {notempty name="$last_chapter"}
+                <a href="/{$chapter_ctrl}/{$last_chapter.id}/" rel="chapter">{$last_chapter.chapter_name}</a>
+                {/notempty}
+            </p>
+            <p>操&nbsp;&nbsp;&nbsp;&nbsp;作：【<a href="javascript:;" id="addshelf">加入书架</a>】</p>
+        </div>
+        <div id="intro">
+            <p>{$book.book_name}简介：{$book.summary}</p>
+        </div>
+    </div>
+    <div id="listtj">
+        推荐阅读：
+        {volist name="recommand" id="vo"}
+        <a href="/{$book_ctrl}/{$vo.param}/">{$vo.book_name}</a>
+        {/volist}
+    </div>
+    <div>
+        推荐专题：
+        {volist name="tags" id="vo"}
+        <a href="/{$tag_ctrl}/{$vo.param}/">{$vo.tag_name}</a>
+        {/volist}
+    </div>
+    <div class="clear"></div>
+</div>
+<div class="box_con white">
+    <div id="list">
+        <dl>
+            <dt><b>《{$book.book_name}》最近更新章节</b>（提示：已启用缓存技术，最新章节可能会延时显示，登录书架即可实时查看。）</dt>
+
+            <dd>
+                {notempty name="last_chapter"}
+                <a href="/{$chapter_ctrl}/{$last_chapter.id}/" rel="chapter">{$last_chapter.chapter_name}</a>           
+                {/notempty}
+            </dd>
+
+            <dt><b>《{$book.book_name}》全部章节列表</b></dt>
+            {volist name="book.chapters" id="vo"}
+            <dd>
+                <a href="/{$chapter_ctrl}/{$vo.id}" rel="chapter">{$vo.chapter_name}</a>
+            </dd>
+            {/volist}
+        </dl>
+    </div>
+    <div class="clear"></div>
+</div>
+<div class="clear"></div>
+{/block}
+{block name="js"}
+<script>
+    $('#addshelf').click(function () {
+        var val = $(this).attr('data-val');
+        $.post({
+            url:`/addfavor`,
+            data:{'book_id' : {$book.id}, 'val' : val },
+            success: function (res) {
+                if (res.err == 1) {
+                    layer.msg(res.msg,{icon: 0,shade: 0.3})
+                } else {
+                    layer.msg(res.msg,{icon: 1,shade: 0.3})
+                }
+
+            },
+            error: function (data) {
+                layer.msg(data,{icon: 0,shade: 0.3})
+            }
+        })
+    })
+</script>
+{/block}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+     <link rel="canonical" href="{$url}" />
+    {block name="seo"}{/block}
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit"/>
+    <meta name="applicable-device" content="mobile">
+    <meta http-equiv="Cache-Control" content="no-transform"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"/>
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="screen-orientation" content="portrait">
+    <meta name="x5-orientation" content="portrait">
+    <link rel="stylesheet" type="text/css" href="/template/biquge/css/css.css" />
+    {block name="css"}{/block}
+    <script src="https://lib.baomitu.com/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://lib.baomitu.com/cookie.js/1.2.3/cookie.min.js"></script>
+</head>
+<body>
+{block name="head"}{/block}
+<div class="nav">
+    <ul>
+        <li><a href="/">首页</a></li>
+        <li><a href="/{$booklist_act}/">书库</a></li>
+        <li><a href="/{$rank_ctrl}/">排行</a></li>
+        <li><a href="#">书单</a></li>
+        <li><a href="/history/">书架</a></li>
+        <div class="cc"></div>
+    </ul>
+</div>
+{block name="main"}{/block}
+<div class="footer">
+    <ul>
+        <li><a href="/">首页</a></li>
+        <li><a href="/{$booklist_act}/">书库</a></li>
+        <li><a href="/{$rank_ctrl}/">排行</a></li>
+        <li><a href="#">书单</a></li>
+        <li><a href="/history/">书架</a></li>
+    </ul>
+    <p style="font-size:14px;">基于搜索引擎技术为您提供检索服务</p>
+</div>
+<script src="https://lib.baomitu.com/layer/3.1.1/layer.js"></script>
+{block name="js"}{/block}
+</body>
+</html>

@@ -1,0 +1,79 @@
+{extend name="./template/biquge/m/pub/uc.html" /}
+{block name="seo"}
+<title>{$site_name}-我的书架</title>
+{/block}
+{block name="main"}
+<div class="app_body">
+    <div class="app_topTabBlock">
+        <span class="public_AddFloatRight rightButton" id="success" style="display: none;">完成</span>
+        <span class="public_AddFloatRight rightButton" id="administration">管理</span>
+    </div>
+    <div class="app_listBlock app_deleteMargin" id="content">
+        <div class="app_listBlock_con">
+            <ul class="app_deletePaddingBottom" id="list">
+                {volist name="books" id="vo"}
+                <li class="li2">
+                    <a href="/{$book_ctrl}/{$vo.param}">
+                        <div class="leftImage2">
+                            <img src="{$vo.cover_url}">
+                        </div>
+                        <div class="rightBlock">
+                            <span class="rightBlock_title">{$vo.book_name}</span>
+                            <span class="rightBlock_name">{$vo.cate.cate_name}</span>
+                            <span class="rightBlock_con  rightBlock_con2">
+                                <span class="con">
+                                    <span class="spanLi">{$vo.author_name}</span>
+                                </span>
+                                <span class="spanLi Time">{$vo.last_time|date='Y-m-d H:i:s'}</span>
+                                <span class="rightJustTime"
+                                    onclick="javascript:window.location.href='/{$book_ctrl}/{$vo.param}'">继续阅读</span>
+                            </span>
+                        </div>
+                    </a>
+                    <span class="deleteBlock" onclick="delfavor({$vo.id})"></span>
+                </li>
+                {/volist}
+            </ul>
+        </div>
+    </div>
+    <div class="app_pageBlock">
+        <ul class="pager">
+            {if $page.last_page > 1}
+            {if $page.current_page == 1}
+            <li class="disabled"><span>«</span></li>
+            {else/}
+            <li><a href="/bookshelf?page={$page.current_page-1}{$param}">«</a></li>
+            {/if}
+
+            {if $page.current_page == $page.last_page}
+            <li class="disabled"><span>»</span></li>
+            {else/}
+            <li><a href="/bookshelf?page={$page.current_page+1}{$param}">»</a></li>
+            {/if}
+            {/if}
+        </ul>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script>
+    function delfavor(id) {
+        $.ajax({
+            url:'/delfavors',
+            type:'post',
+            data: {
+                id: id
+            },
+            success:function (res) {
+                if (res.err == 0) {
+                    layer.msg(res.msg, {icon: 1,time: 1000,shade:0.3}, function () {
+                        location.reload()
+                    })
+                } else {
+                    layer.msg(res.msg, {icon: 1,time: 1000,shade:0.3})
+                }
+            }
+        })
+    }
+</script>
+{/block}

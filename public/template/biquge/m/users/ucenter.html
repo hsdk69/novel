@@ -1,0 +1,64 @@
+{extend name="./template/biquge/m/pub/uc.html" /}
+{block name="seo"}
+<title>{$site_name}-用户中心</title>
+{/block}
+{block name="main"}
+<div class="app_body">
+    <div class="app_accountBlock">
+        <div class="app_accountBlock_headerBg">
+            <img src="/static/images/m-user-bg.png" class="background">
+            <div class="app_accountBlock_headerCon">
+                <img src="/static/images/mrtx.gif">
+            </div>
+            <div class="app_accountBlock_edit">
+                <a href="/userinfo"></a>
+            </div>
+            <div class="app_accountBlock_name">
+                <span class="name">{$user.username}</span>
+            </div>
+        </div>
+        <div class="app_accountBlock_lis">
+            <ul>
+                <li><i class="iconfont"></i>推广<span id="copy-btns">{$promotion_url}</span></li>
+                <li><i class="iconfont"></i>余额<span>{$balance}</span></li>
+                <li><i class="iconfont"></i>vip<span>剩余{$day}天</span></li>
+            </ul>
+        </div>
+        <input type="text" value="{$promotion_url}" id="copy-text" style="visibility: hidden;">
+        <div class="app_accountBlock_lis2">
+            <ul>
+                <li>
+                    <a href="/bookshelf"><i class="iconfont"></i>我的书架</a>
+                </li>
+                <li>
+                    <a href="/history"><i class="iconfont"></i>最近阅读</a>
+                </li>
+                <li>
+                    <a href="/userinfo"><i class="iconfont"></i>个人信息</a>
+                </li>
+                <li>
+                    <a href="/resetpwd"><i class="iconfont"></i>修改密码</a>
+                </li>
+
+            </ul>
+        </div>
+
+        <div class="app_changeUser">
+            <button onclick="javascript:window.location.href='/logout'">退出登录</button>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script src="https://lib.baomitu.com/clipboard-polyfill/2.8.6/clipboard-polyfill.js"></script>
+<script>
+    $('#copy-btns').click(function () {
+        var text = $('#copy-text').val();
+        clipboard.writeText(text).then(function(){
+            layer.msg('复制成功', {icon: 1,time: 1000,shade:0.3});
+        }, function(err){
+            layer.msg('复制失败', {icon: 0,time: 1000,shade:0.3});
+        });
+    })
+</script>
+{/block}

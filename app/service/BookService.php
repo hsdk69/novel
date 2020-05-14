@@ -193,7 +193,7 @@ FROM ' . $prefix . 'book AS ad1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FRO
     {
         return Db::query(
             "select * from " . $prefix . "book where delete_time=0 and match(book_name,summary,author_name,nick_name,role_name) 
-            against ('" . $keyword . "' IN NATURAL LANGUAGE MODE)"
+            against ('" . $keyword . "' IN NATURAL LANGUAGE MODE) LIMIT 20"
         );
 
 //        $map[] = ['delete_time','=',0];

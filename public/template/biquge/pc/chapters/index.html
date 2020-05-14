@@ -1,0 +1,62 @@
+{extend name="./template/biquge/pc/pub/base.html" /}
+{block name="seo"}
+<title>{$chapter.chapter_name}-{$site_name}</title>
+<meta name="description" content="{$chapter.book.book_name}{$chapter.chapter_name}在线阅读">
+{if $next != "null"}
+<link rel="prefetch" href="/{$chapter_ctrl}/{$next.id}" />
+{/if}
+{/block}
+{block name="css"}
+<style>
+    #content p {line-height: 45px}
+</style>
+{/block}
+{block name="main"}
+<div class="content_read">
+    <div class="box_con">
+        <div class="con_top">
+            <a href="/">{$chapter.book.book_name}</a> &gt;
+            <a href="/{$booklist_act}?cate_id={$chapter.book.cate_id}">{$chapter.book.cate.cate_name}</a> &gt;
+            <a href="/{$book_ctrl}/{$chapter.book.param}/">{$chapter.book.book_name}</a> &gt; {$chapter.chapter_name}
+        </div>
+        <div class="bookname">
+            <h1>{$chapter.chapter_name}</h1>
+            <div class="bottem1">
+                <a href="javascript:;">投推荐票</a>
+                {if $prev == "null"}
+                <a style="color: lightgrey">上一章</a>
+                {else/}
+                <a href="/{$chapter_ctrl}/{$prev.id}" rel="prev" title="{$prev.chapter_name}">上一章</a>
+                {/if}
+                <a href="/{$book_ctrl}/{$chapter.book.param}/" rel="index">章节列表</a>
+                {if $next == "null"}
+                <a style="color: lightgrey">下一章</a>
+                {else/}
+                <a href="/{$chapter_ctrl}/{$next.id}" rel="next" title="{$next.chapter_name}">下一章</a>
+                {/if}
+                <a href="javascript:;">加入书签</a>
+            </div>
+        </div>
+        <div id="content">
+            {$content|raw}
+        </div>
+        <div class="bottem2">
+            <a href="javascript:;">投推荐票</a>
+            {if $prev == "null"}
+            <a style="color: lightgrey">上一章</a>
+            {else/}
+            <a href="/{$chapter_ctrl}/{$prev.id}" rel="prev" title="{$prev.chapter_name}">上一章</a>
+            {/if}
+
+            <a href="/{$book_ctrl}/{$chapter.book.param}/" rel="index">章节列表</a>
+
+            {if $next == "null"}
+            <a style="color: lightgrey">下一章</a>
+            {else/}
+            <a href="/{$chapter_ctrl}/{$next.id}" rel="next" title="{$next.chapter_name}">下一章</a>
+            {/if}
+            <a href="javascript:;">加入书签</a>
+        </div>
+    </div>
+</div>
+{/block}

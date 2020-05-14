@@ -208,6 +208,19 @@ INFO;
         }
     }
 
+    public function sql() {
+        if (request()->isPost()) {
+            $sql = input('sql');
+            $result = Db::execute(trim($sql));
+            if ($result) {
+                return json(['err' => 0,'msg'=>'sql执行成功']);
+            } else {
+                return json(['err' => 1,'msg'=>'sql执行失败']);
+            }
+        }
+        return view();
+    }
+
     public function upgrade(){
         $client = new Client();
         $srcUrl = App::getRootPath() . "/public/ver.txt";

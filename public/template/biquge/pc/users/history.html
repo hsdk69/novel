@@ -1,0 +1,90 @@
+{extend name="./template/biquge/pc/pub/uc.html" /}
+{block name="seo"}
+<title>{$site_name}-阅读历史</title>
+{/block}
+{block name="main"}
+<div class="i-right" id="app">
+    <div class="i-title" style="padding-left:30px;">
+        阅读历史
+    </div>
+    <div class="bookshelfMod">
+        <table>
+            <tbody>
+            <tr class="head">
+                <td>封面</td>
+                <td class="t2">书名</td>
+                <td class="t3">作者</td>
+                <td class="t5">最后阅读</td>
+                <td class="t6">状态</td>
+                <td class="t7">操作</td>
+            </tr>
+            <tr v-for="(item, index) in books" :key="index">
+                <td>
+                    <a :href="'/{$book_ctrl}/' + item.param" target="_blank">
+                        <img :src="item.cover_url">
+                    </a>
+                </td>
+                <td class="t3">
+                    <a :href="'/{$book_ctrl}/' + item.param" target="_blank">{{item.book_name}}</a>
+                </td>
+                <td class="t5">
+                    <a>{{item.author_name}}</a>
+                </td>
+                <td class="t3">{{item.chapter_name}}</td>
+
+                <td class="t6">{{item.end}}</td>
+                <td class="t7">
+                    <a :href="'/{$chapter_ctrl}/' + item.chapter_id" class="goon" target="_blank">阅读</a>
+                    <i><span class="Collection" @click="delHistory(item.book_id)">删除</span></i>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                books: [],
+            }
+        },
+        methods: {
+            delHistory(id) {
+                localStorage.removeItem('manhua_' + id);
+                console.log(id)
+                let value = localStorage.getItem('xwx_historys');
+                if (value != undefined && value != null) {
+                    let history = JSON.parse(value);
+                    for (let i = 0; i < history.length; i++) {
+                        if (history[i] == 'manhua_' + id){
+                            history.slice(i, 1);
+                        }
+                    }
+                    localStorage.setItem('xwx_historys', JSON.stringify(history));
+                }
+                layer.msg('删除历史', {icon: 1,shade: 0.3})
+                setTimeout(function () {
+                    location.reload();
+                },1000)
+            }
+        },
+        created: function () {
+            let value = localStorage.getItem('xwx_historys');
+            if (value != undefined && value != null) {
+                let history = JSON.parse(value);
+                for (let i = 0; i < history.length; i++) {
+                    let item = localStorage.getItem(history[i]);
+                    if (item != undefined && item != null ) {
+                        let bookInfo = JSON.parse(item); //拿到缓存对象
+                        this.books.push(bookInfo);
+                    }
+                }
+            }
+        }
+    })
+</script>
+{/block}

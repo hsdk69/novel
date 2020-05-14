@@ -1,0 +1,63 @@
+{extend name="./template/biquge/m/pub/uc.html" /}
+{block name="seo"}
+<title>{$site_name}-用户注册</title>
+<meta name="description" content="注册一个账号">
+{/block}
+{block name="main"}
+<div class="app_body">
+    <div class="app_bindPhoneBlock">
+        <div class="app_lisLoinSpan app_addPaddingStyle">
+            <ul>
+                <li class="username">
+                    <input type="text" id="username" placeholder="请输入用户名" autocomplete="off">
+                </li>
+                <li class="email">
+                    <input type="text" id="email" placeholder="请输入邮箱地址">
+                </li>
+                <li class="password">
+                    <input type="password" id="password" placeholder="请输入密码">
+                </li>
+                <li class="password">
+                    <input type="password" id="repassword" placeholder="再次输入密码">
+                </li>
+            </ul>
+        </div>
+        <div class="app_listBlockButton" style="padding-top: 0.36rem">
+            <button id="loginbtn">立即注册</button>
+        </div>
+        <div class="app_dengLu_bottom">注册即表示您同意<a href="#" class="blue">《服务条款和隐私政策》</a>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script>
+    $('#loginbtn').click(function () {
+        var password = $('#password').val();
+        var repassword = $('#repassword').val();
+        if (password != repassword) {
+            layer.msg('两次输入密码不一致', {icon: 1,time: 2000,shade:0.3})
+        } else {
+            $.ajax({
+                url:'/register',
+                type:'post',
+                data: {
+                    username: $('#username').val(),
+                    password: $('#password').val(),
+                    email:$('#email').val()
+                },
+                success:function (res) {
+                    if (res.err == 0) {
+                        layer.msg(res.msg, {icon: 1,time: 1000,shade:0.3}, function () {
+                            location.href = '/login'
+                        })
+                    } else {
+                        layer.msg(res.msg, {icon: 1,time: 1000,shade:0.3})
+                    }
+                }
+            })
+        }
+
+    })
+</script>
+{/block}

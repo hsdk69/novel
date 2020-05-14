@@ -1,0 +1,91 @@
+{extend name="./template/biquge/m/pub/base.html" /}
+{block name="seo"}
+<title>小说分类-{$site_name}</title>
+<meta name="description" content="{$site_name}男频、女频分类">
+{/block}
+{block name="head"}
+<div class="header" id="_head">
+    <a href="javascript:history.go(-1);" class="back">返回</a>
+    <h1 id="_h1" style="width: 200px;">小说排行</h1>
+    <a href="/" class="back_r">首页</a>
+</div>
+{/block}
+{block name="main"}
+<div id="main">
+    <div class="content">
+        <ul>
+            <li class="prev"><a :class="{'active' : op1 == 'new'}" @click="opfirst('new', '')">最近更新</a></li>
+            <li class="prev"><a :class="{'active' : op1 == 'end'}" @click="opfirst('end', '')">最新完结</a></li>
+            <li class="prev"><a>最多充值</a></li>
+        </ul>
+        <ul>
+            <li class="prev"><a :class="{'active' : op2 == 'year'}" @click="opsecond('year')">总点击榜</a></li>
+            <li class="prev"><a :class="{'active' : op2 == 'month'}" @click="opsecond('month')">月点击榜</a></li>
+            <li class="prev"><a :class="{'active' : op2 == 'week'}" @click="opsecond('week')">周点击榜</a></li>
+        </ul>
+    </div>
+    <div class="article">
+        <h2 class="title"><span>最近更新</span></h2>
+        <div class="block" v-for="(item, index) in books" :key="index">
+            <div class="block_img">
+                <a :href="'/{$book_ctrl}/'+item.param">
+                    <img :src="item.cover_url">
+                </a>
+            </div>
+            <div class="block_txt">
+                <h2><a :href="'/{$book_ctrl}/'+item.param">{{item.book_name}}</a></h2>
+                <p>
+                <span class="author">
+                    <a :href="'/{$search_ctrl}?keyword='+item.author_name">{{item.author_name}}</a>
+                </span>
+                    <span class="size">{{item.words}}万字</span>
+                    <span class="visit">{{item.cate.cate_name}}</span>
+                </p>
+                <p> {{item.summary}}</p>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+
+    </div>
+</div>
+
+{/block}
+{block name="js"}
+<script src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+<script src="https://lib.baomitu.com/axios/0.19.2/axios.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#main',
+        data: {
+            op1: 'new',
+            op2: '',
+            books: []
+        },
+        methods: {
+            opfirst(op, opp) {
+                this.op1 = op
+                this.op2 = opp
+                this.getBooks(op, 'year')
+            },
+            opsecond(date) {
+                this.op1 = 'click'
+                this.op2 = date
+                this.getBooks(this.op1, date)
+            },
+            getBooks(op, date) {
+                axios.get("/getRanks", {
+                    params: {
+                        op: op,
+                        date: date
+                    }
+                }).then(response => {
+                    this.books = response.data.books
+                })
+            }
+        },
+        mounted() {
+            this.getBooks(this.op1, '')
+        },
+    })
+</script>
+{/block}
