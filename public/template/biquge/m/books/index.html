@@ -1,8 +1,7 @@
 {extend name="./template/biquge/m/pub/base.html" /}
 {block name="seo"}
 <title>{$book.book_name}全本免费阅读-{$site_name}</title>
-<meta name="description"
-      content="{$book.book_name}又名{$book.nick_name},是一本地区为{$book.area.area_name}，类型为{$book.tags}的高人气漫画，漫画简介：{$book.summary}">
+<meta name="description" content="{$book.book_name}是一本{$book.cate.cate_name}小说，主角是{$book.role_name}，小说简介：{$book.summary}">
 {/block}
 {block name="head"}
 <div class="header" id="_head">
@@ -18,7 +17,7 @@
             <img src="{$book.cover_url}" border="0" width='100' height='120'/>
         </div>
         <div class="block_txt2">
-            <h2><a href="/{$book_ctrl}/{$book.param}/">{$book.book_name}</a></h2>
+            <h2><a href="javascript:void(0);">{$book.book_name}</a></h2>
             <p>作者：<a href="/{$search_ctrl}?keyword={$book.author_name}">{$book.author_name}</a></p>
             <p>分类：<a href="/{$booklist_act}?cate_id={$book.cate_id}">{$book.cate.cate_name}</a></p>
             <p>状态：{$book.end == 1 ? '已完结' : '连载中'}</p>
@@ -70,7 +69,7 @@
     <h2 class="title"><span><a href="/{$booklist_act}/">推荐小说</a></span><a href="/{$booklist_act}/">更多...</a></h2>
     <div class="block">
         <ul>
-            {volist name="recommand" id="vo"}
+            {volist name="recommand" id="vo" length="10"}
             {if $i == 1}
             <div class="block_img">
                 <a href="/{$book_ctrl}/{$vo.param}/">

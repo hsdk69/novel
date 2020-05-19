@@ -128,5 +128,10 @@
         <div style="clear:both"></div>
     </div>
     {/volist}
+    {volist name="hot" id="vo"}
+    <a class="home-row-line" href="/{$book_ctrl}/{$vo.param}/">
+        <span>[{$vo.cate.cate_name}] {$vo.summary}</span><i class="home-icon-arrow"></i>
+    </a>
+    {/volist}
 </div>
 {/block}

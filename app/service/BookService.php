@@ -130,7 +130,7 @@ class BookService
         }
     }
 
-    public function getRecommand($cate_id, $end_point, $num = 10)
+    public function getRecommand($cate_id, $end_point, $num = 30)
     {
         $books = Book::whereOr('cate_id','=',$cate_id)->limit($num)->select();
         foreach ($books as &$book) {

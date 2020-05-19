@@ -1,7 +1,7 @@
 {extend name="./template/biquge/pc/pub/base.html" /}
 {block name="seo"}
 <title>{$book.book_name}全本免费阅读-{$site_name}</title>
-<meta name="description" content="{$book.book_name}又名{$book.nick_name},是一本地区为{$book.area.area_name}，类型为{$book.tags}的高人气漫画，漫画简介：{$book.summary}">
+<meta name="description" content="{$book.book_name}是一本{$book.cate.cate_name}小说，主角是{$book.role_name}，小说简介：{$book.summary}">
 {/block}
 {block name="main"}
 <div class="box_con white">
@@ -30,7 +30,7 @@
     </div>
     <div id="listtj">
         推荐阅读：
-        {volist name="recommand" id="vo"}
+        {volist name="recommand" id="vo" length="10"}
         <a href="/{$book_ctrl}/{$vo.param}/">{$vo.book_name}</a>
         {/volist}
     </div>

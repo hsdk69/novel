@@ -1,7 +1,7 @@
 {extend name="./template/default/m/pub/base2.html" /}
 {block name="seo"}
 <title>{$book.book_name}小说全文在线免费阅读-{$book.author_name}-{$site_name}</title>
-<meta name="description" content="{$book.book_name}是一本{$book.cate.cate_name}小说，作者是{$book.author_name}，简介：{$book.summary}">
+<meta name="description" content="{$book.book_name}是一本{$book.cate.cate_name}小说，主角是{$book.role_name}，小说简介：{$book.summary}">
 {/block}
 {block name="main"}
 <div class="x-page__content">
@@ -117,7 +117,7 @@
             <div class="x-part__title">同类作品</div>
             <div class="x-part__content">
                 <div class="x-detail__part--book">
-                    {volist name="recommand" id="vo"}
+                    {volist name="recommand" id="vo" length="10"}
                     <div class="x-book" style="width: 2rem;">
                         <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.book_name}">
                             <div class="x-book__coverbox">

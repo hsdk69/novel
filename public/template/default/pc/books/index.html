@@ -2,7 +2,7 @@
 {block name="seo"}
 <title>{$book.book_name}全本免费阅读-{$site_name}</title>
 <meta name="description"
-      content="{$book.book_name}又名{$book.nick_name},是一本地区为{$book.area.area_name}，类型为{$book.tags}的高人气漫画，漫画简介：{$book.summary}">
+      content="{$book.book_name}是一本{$book.cate.cate_name}小说，主角是{$book.role_name}，小说简介：{$book.summary}">
 {/block}
 {block name="main"}
 <div class="path ">
@@ -31,9 +31,9 @@
                 <a href="{$booklist_act}?end={$book.end}">
                     <span class="fl isfinish">{$book.end == 2 ? '连载中' : '已完结'}</span>
                 </a>
-                {volist name="tags" id="tag"}
+                {volist name="tags" id="tag" length="4"}
                 <a href="#">
-                    <span class="fl">{$tag}</span>
+                    <span class="fl">{$tag.tag_name}</span>
                 </a>
                 {/volist}
             </div>
@@ -126,7 +126,7 @@
                 <div class="same-recomend">
                     <div class="rec-title">同类推荐</div>
                     <ul class="rec-content ">
-                        {volist name="recommand" id="vo"}
+                        {volist name="recommand" id="vo" length="10"}
                         <li class="clearfixer">
                             <a href="/{$book_ctrl}/{$vo.param}" class="rec-pic fl" target="_blank">
                                 <img data-original="{$vo.cover_url}" class="lazyimg" src="https://s1.ax1x.com/2018/12/13/FN8WLQ.jpg"
