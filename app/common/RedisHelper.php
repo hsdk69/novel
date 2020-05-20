@@ -12,8 +12,7 @@ class RedisHelper extends Redis
     public function __construct()
     {
         $options = Config::get('cache.stores.redis');
-        $this->options = array_merge($this->options, $options);
-        parent::__construct();
+        parent::__construct($options);
     }
 
     private function __clone()
