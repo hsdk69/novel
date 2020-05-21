@@ -65,7 +65,7 @@ class Index extends Base
 
         $ends = cache('endsHomepage');
         if (!$ends) {
-            $ends = $this->bookService->getBooks($this->end_point, 'last_time', [['end', '=', '2']], 30);
+            $ends = $this->bookService->getBooks($this->end_point, 'last_time', [['end', '=', '1']], 30);
             cache('endsHomepage', $ends, null, 'redis');
         }
 //

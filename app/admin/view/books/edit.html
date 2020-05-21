@@ -89,8 +89,8 @@
             <label class="form-label col-xs-4 col-sm-3">状态：</label>
             <div class="formControls col-xs-8 col-sm-9"> <span class="select-box" style="width:150px;">
 				<select class="select" name="end" size="1">
-					<option value="2" {$book.end?"":"selected"}>连载中</option>
-                    <option value="1" {$book.end?"selected":""}>已完结</option>
+					<option value="2" {$book.end == 2?"":"selected"}>连载中</option>
+                    <option value="1" {$book.end == 1?"selected":""}>已完结</option>
 				</select>
 				</span>
             </div>
