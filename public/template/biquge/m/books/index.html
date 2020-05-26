@@ -110,10 +110,9 @@
 <script src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
 <script>
     function addshelf() {
-        var val = $(this).attr('data-val');
         $.post({
             url: `/addfavor`,
-            data: {'book_id': {$book.id}, 'val': val},
+            data: {'book_id': {$book.id}},
             success: function (res) {
                 if (res.err == 1) {
                     layer.msg(res.msg, {icon: 0, shade: 0.3})

@@ -181,34 +181,20 @@ class Books extends Base
                 return json(['err' => 1, 'msg' => '操作太频繁']);
             } else {
                 $redis->set('favor_lock:' . $this->uid, 1, 3); //写入锁
-                $val = input('val');
                 $book_id = input('book_id');
 
-                if ($val == 0) { //未收藏
-                    $where[] = ['book_id', '=', $book_id];
-                    $where[] = ['user_id', '=', $this->uid];
-                    try {
-                        UserFavor::where($where)->findOrFail();
-                        return json(['err' => 1, 'msg' => '已加入书架']); //isfavor表示已收藏
-                    } catch (DataNotFoundException $e) {
-                    } catch (ModelNotFoundException $e) {
-                        $userFaver = new UserFavor();
-                        $userFaver->book_id = $book_id;
-                        $userFaver->user_id = $this->uid;
-                        $userFaver->save();
-                        return json(['err' => 0, 'msg' => '成功加入书架']); //isfavor表示已收藏
-                    }
-                } else {
-                    $where[] = ['book_id', '=', $book_id];
-                    $where[] = ['user_id', '=', $this->uid];
-                    try {
-                        $userFaver = UserFavor::where($where)->findOrFail();
-                        $userFaver->delete();
-                        return json(['err' => 0, 'isfavor' => 0]); //isfavor为0表示未收藏
-                    } catch (DataNotFoundException $e) {
-                    } catch (ModelNotFoundException $e) {
-                        return json(['err' => 1, 'msg' => '取消收藏出错']); //isfavor为0表示未收藏
-                    }
+                $where[] = ['book_id', '=', $book_id];
+                $where[] = ['user_id', '=', $this->uid];
+                try {
+                    UserFavor::where($where)->findOrFail();
+                    return json(['err' => 1, 'msg' => '已加入书架']); //isfavor表示已收藏
+                } catch (DataNotFoundException $e) {
+                } catch (ModelNotFoundException $e) {
+                    $userFaver = new UserFavor();
+                    $userFaver->book_id = $book_id;
+                    $userFaver->user_id = $this->uid;
+                    $userFaver->save();
+                    return json(['err' => 0, 'msg' => '成功加入书架']); //isfavor表示已收藏
                 }
             }
         }
