@@ -6,6 +6,7 @@ namespace app\admin\controller;
 
 use app\model\Tags;
 use app\service\TagsService;
+use Overtrue\Pinyin\Pinyin;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\exception\ValidateException;
@@ -70,6 +71,35 @@ class Tag extends Base
             abort(404, $e->getMessage());
         } catch (ModelNotFoundException $e) {
             abort(404, $e->getMessage());
+        }
+    }
+
+    public function import() {
+        if (request()->isPost()) {
+            $pinyin = new Pinyin();
+            $file = request()->file('txt');
+            $handle = fopen($file, "rb");
+            if ($handle) {
+                while (($line = fgets($handle)) !== false) {
+                    $tag = Tags::where('tag_name','=',trim($line))->find();
+                    if (is_null($tag)) {
+                        $tag = new Tags();
+                        $tag->tag_name = trim($line);
+                        $tag->pinyin = $pinyin->permalink($line,'');
+                        $tag->jianpin = $pinyin->abbr($line,'');
+                        $tag->save();
+                        echo '成功导入关键词'.$line;
+                        ob_flush(); //将 php buffer 数据强制输出到 tcp buffer
+                        flush(); // 将 tcp buffer 数据强制输出到浏览器
+                    }
+                }
+                fclose($handle);
+                echo '导入完成';
+            } else {
+                echo '导入失败';
+            }
+        } else {
+            return view();
         }
     }
 }
