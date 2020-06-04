@@ -154,7 +154,7 @@ CREATE TABLE `xwx_book` (
   KEY `cate_id` (`cate_id`) USING BTREE,
   KEY `words` (`words`) USING BTREE,
   -- KEY `book_name` (`book_name`) USING BTREE
-  FULLTEXT KEY `fidx` (`book_name`,`summary`,`nick_name`,`author_name`,`role_name`) with parser ngram,
+  FULLTEXT KEY `book_name` (`book_name`) with parser ngram,
   unique KEY `unique_id`(`unique_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
