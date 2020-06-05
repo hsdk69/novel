@@ -68,7 +68,6 @@ class BookService
                 'query' => request()->param(),
             ]);
         foreach ($data as &$book) {
-            //$book['chapter_count'] = Chapter::where('book_id','=',$book->id)->count();
             if ($end_point == 'id') {
                 $book['param'] = $book['id'];
             } else {

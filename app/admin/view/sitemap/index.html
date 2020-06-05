@@ -1,0 +1,67 @@
+{extend name="pub/base" /}
+{block name="title"}
+<title>生成地图</title>
+{/block}
+{block name="body"}
+<div class="Hui-admin-article">
+    <div class="Hui-article">
+        <article class="clearfix pd-20">
+            <form class="form form-horizontal" method="post" action="index">
+                <div class="row clearfix">
+                    <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>端选择：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                         <span class="select-box">
+                            <select class="select" name="end" size="1">
+                                <option value="pc">PC</option>
+                                <option value="m">移动端</option>
+                                <option value="mip">MIP</option>
+                            </select>
+				         </span>
+                    </div>
+                </div>
+
+                <div class="row clearfix">
+                    <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>内容选择：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <span class="select-box">
+                            <select class="select" name="part" size="1">
+                                <option value="book">生成小说详情页地图</option>
+                                <option value="chapter">生成章节地图</option>
+                            </select>
+				         </span>
+                    </div>
+                </div>
+
+                <div class="row clearfix">
+                    <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>分页数目：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" name="pagesize" value="1000" class="input-text">
+                    </div>
+                </div>
+
+                <div class="row clearfix">
+                    <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                        <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+                        <a href="{:url('sitemap/index')}" class="btn btn-success radius">返回</a>
+                    </div>
+                </div>
+            </form>
+        </article>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("form").validate({
+            rules: {
+                pagesize: {
+                    required: true,
+                    digits: true
+                }
+            },
+            onkeyup: false,
+            focusCleanup: false,
+            success:"valid"
+        });
+    });
+</script>
+{/block}
