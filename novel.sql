@@ -206,8 +206,8 @@ CREATE TABLE `xwx_tags`  (
   `jianpin` varchar(50) NOT NULL COMMENT '简拼',
   PRIMARY KEY (`id`) USING BTREE,
   FULLTEXT INDEX fidx (tag_name) WITH PARSER ngram,
-  INDEX `pinyin`(`pinyin`) USING BTREE,
-  INDEX `jianpin`(`jianpin`) USING BTREE
+  KEY `pinyin`(`pinyin`) USING BTREE,
+  KEY `jianpin`(`jianpin`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
