@@ -143,9 +143,9 @@ class BookService
         return $books;
     }
 
-    public function getByCate($cate_id, $end_point)
+    public function getByCate($cate_id, $end_point, $limit)
     {
-        $books = Book::with('cate')->where('cate_id', '=', $cate_id)->select();
+        $books = Book::with('cate')->where('cate_id', '=', $cate_id)->limit($limit)->select();
         foreach ($books as &$book) {
             //$book['chapter_count'] = Chapter::where('book_id', '=', $book['id'])->count();
             if ($end_point == 'id') {

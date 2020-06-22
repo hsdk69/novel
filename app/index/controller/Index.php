@@ -93,7 +93,7 @@ class Index extends Base
         foreach ($cates as $cate) {
             $books = cache('booksFilterByCate' . $cate);
             if (!$books) {
-                $books = $this->bookService->getByCate($cate->id, $this->end_point);
+                $books = $this->bookService->getByCate($cate->id, $this->end_point, 15);
                 cache('booksFilterByCate:' . $cate, $books, null, 'redis');
             }
             $cateItem['books'] = $books->toArray();
