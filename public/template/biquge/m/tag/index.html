@@ -1,0 +1,59 @@
+{extend name="./template/biquge/m/pub/base.html" /}
+{block name="seo"}
+<title>{$tag.tag_name}小说专题</title>
+<meta name="description" content="{$tag.tag_name}的小说专题">
+{/block}
+{block name="head"}
+<div class="header" id="_head">
+    <a href="javascript:history.go(-1);" class="back">返回</a>
+    <h1 id="_h1" style="width: 200px;">小说书库</h1>
+    <a href="/" class="back_r">首页</a>
+</div>
+{/block}
+{block name="main"}
+<div id="main">
+    <div class="search">
+        <div style="margin-left: 40%; width: 30%">
+            <span class="type active">{$tag.tag_name}专题</span>
+        </div>
+    </div>
+</div>
+<div class="article">
+    <h2 class="title"><span>{$tag.tag_name}</span></h2>
+    {volist name="books" id="vo"}
+    <div class="block">
+        <div class="block_img">
+            <a href="/{$book_ctrl}/{$vo.param}/">
+                <img src="{$vo.cover_url}">
+            </a>
+        </div>
+        <div class="block_txt">
+            <h2><a href="/{$book_ctrl}/{$vo.param}/">{$vo.book_name}</a></h2>
+            <p>
+                <span class="author">
+                    <a href="/{$search_ctrl}?keyword={$vo.author_name}">{$vo.author_name}</a>
+                </span>
+                <span class="size">{$vo.words}万字</span>
+                <span class="visit">{$vo.cate.cate_name}</span>
+            </p>
+            <p> {$vo.summary} </p>
+        </div>
+        <div style="clear:both"></div>
+    </div>
+    {/volist}
+</div>
+<div class="article">
+    <h2 class="title"><span>推荐专题</span></h2>
+
+    <div class="block">
+        <ul>
+            {volist name="tags" id="vo"}
+            <li>
+                <a href="/{$tag_ctrl}/{$vo.param}">{$vo.tag_name}</a>
+            </li>
+            {/volist}
+        </ul>
+    </div>
+
+</div>
+{/block}

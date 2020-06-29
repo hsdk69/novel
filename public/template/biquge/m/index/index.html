@@ -1,0 +1,137 @@
+{extend name="./template/biquge/m/pub/base.html" /}
+{block name="seo"}
+<title>{$site_name}-免费的无弹窗小说阅读网</title>
+<meta name="description" content="{$site_name}是广大书友最值得收藏的网络小说阅读网，{$site_name}收录了当前最火热的网络小说，{$site_name}免费提供高质量的小说最新章节，{$site_name}是广大网络小说爱好者必备的小说阅读网。">
+{/block}
+{block name="head"}
+<div class="header">
+    <div class="logo"><a href="/">{$site_name}</a></div>
+    <div class="reg">
+        <div id="login_top">
+            {empty name="xwx_user"}
+            <a class="login_topbtn c_index_login" href="/login">登录</a>
+            <a href="/register" class="login_topbtn c_index_login">注册</a>
+            {else /}
+            <a class="login_topbtn c_index_login" href="/ucenter" target="_top">{$xwx_user}</a>
+            <a class="login_topbtn c_index_login" href="/history" target="_top">书架</a>
+            <a class="login_topbtn c_index_login" href="/logout" target="_self">退出</a>
+            {/empty}
+        </div>
+    </div>
+</div>
+{/block}
+{block name="main"}
+<div class="search">
+    <form method="get" action="/{$search_ctrl}/">
+        <table cellpadding="0" cellspacing="0" style="width:100%;">
+            <tbody>
+            <tr>
+                <td style="border:1px solid #4baacd;">
+                    <input name="keyword" type="text" class="key" placeholder="输入书名，作者或简介搜索" required="">
+                </td>
+                <td style="width:35px;background-color:#4baacd; background-image:url('/template/biquge/images/search.png'); background-repeat:no-repeat; background-position:center">
+                    <input name="submit" type="submit" value="" class="go">
+                </td>
+            </tr>
+            </tbody></table>
+    </form>
+</div>
+<div class="article">
+    <h2 class="title"><span><a href="/{$rank_ctrl}/">万众追更</a></span><a href="/{$rank_ctrl}/">更多...</a></h2>
+    {volist name="newest" id="vo" length="5"}
+    <div class="block">
+        <div class="block_img">
+            <a href="/{$book_ctrl}/{$vo.param}/">
+                <img src="{$vo.cover_url}">
+            </a>
+        </div>
+        <div class="block_txt">
+            <h2><a href="/{$book_ctrl}/{$vo.param}/">{$vo.book_name}</a></h2>
+            <p>
+                <span class="author">
+                    <a href="/{$search_ctrl}?keyword={$vo.author_name}">{$vo.author_name}</a>
+                </span>
+                <span class="size">{$vo.words}万字</span>
+                <span class="visit">{$vo.cate.cate_name}</span>
+            </p>
+            <p> {$vo.summary}
+            </p>
+        </div>
+        <div style="clear:both"></div>
+    </div>
+    {/volist}
+</div>
+{volist name="catelist" id="cateItem" key="k"}
+{in name="$cateItem.cate.id" value="1,2,3"}
+<div class="article">
+    <h2 class="title">
+        <span><a href="/{$booklist_act}?cate_id={$cateItem.cate.id}">{$cateItem.cate.cate_name}</a></span>
+        <a href="/{$booklist_act}?cate_id={$cateItem.cate.id}">更多...</a>
+    </h2>
+    {volist name="cateItem.books" id="vo" length="5"}
+    <div class="block">
+        <ul>
+            {if $i == 1}
+            <div class="block_img">
+                <a href="/{$book_ctrl}/{$vo.param}/">
+                    <img src="{$vo.cover_url}">
+                </a>
+            </div>
+            <div class="block_txt">
+                <h2><a href="/{$book_ctrl}/{$vo.param}/">{$vo.book_name}</a></h2>
+                <p>
+                <span class="author">
+                    <a href="/{$search_ctrl}?keyword={$vo.author_name}">{$vo.author_name}</a>
+                </span>
+                    <span class="size">{$vo.words}万字</span>
+                    <span class="visit">{$vo.cate.cate_name}</span>
+                </p>
+                <p> {$vo.summary}
+                </p>
+            </div>
+            <div style="clear:both"></div>
+            {else /}
+            <li>
+                <a>[{$vo.last_time|date='m-d'}]</a>
+                <a href="/{$book_ctrl}/{$vo.param}/">{$vo.book_name}</a>
+                {$vo.author_name}
+            </li>
+            {/if}
+        </ul>
+
+    </div>
+    {/volist}
+</div>
+{/in}
+{/volist}
+<div class="article">
+    <h2 class="title"><span><a href="/{$rank_ctrl}/">最受欢迎</a></span><a href="/{$rank_ctrl}/">更多...</a></h2>
+    {volist name="hot" id="vo" length="5"}
+    <div class="block">
+        <div class="block_img">
+            <a href="/{$book_ctrl}/{$vo.param}/">
+                <img src="{$vo.cover_url}">
+            </a>
+        </div>
+        <div class="block_txt">
+            <h2><a href="/{$book_ctrl}/{$vo.param}/">{$vo.book_name}</a></h2>
+            <p>
+                <span class="author">
+                    <a href="/{$search_ctrl}?keyword={$vo.author_name}">{$vo.author_name}</a>
+                </span>
+                <span class="size">{$vo.words}万字</span>
+                <span class="visit">{$vo.cate.cate_name}</span>
+            </p>
+            <p> {$vo.summary}
+            </p>
+        </div>
+        <div style="clear:both"></div>
+    </div>
+    {/volist}
+    {volist name="hot" id="vo"}
+    <a class="home-row-line" href="/{$book_ctrl}/{$vo.param}/">
+        <span>[{$vo.cate.cate_name}] {$vo.summary}</span><i class="home-icon-arrow"></i>
+    </a>
+    {/volist}
+</div>
+{/block}

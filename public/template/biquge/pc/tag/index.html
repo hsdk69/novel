@@ -1,0 +1,51 @@
+{extend name="./template/biquge/pc/pub/base.html" /}
+{block name="seo"}
+<title>{$tag.tag_name}小说专题</title>
+<meta name="description" content="{$tag.tag_name}的小说专题">
+{/block}
+{block name="main"}
+<div id="main">
+    <!-- 筛选开始 -->
+    <div class="filter">
+        <dl class="az">
+            <dt>专题：</dt>
+            <dd><a href="/{$tag_ctrl}/{$tag.param}">{$tag.tag_name}</a></dd>
+        </dl>
+        <dl class="sort">
+            <dt>推荐：</dt>
+            {volist name="tags" id="vo"}
+            <dd><a href="/{$tag_ctrl}/{$vo.param}">{$vo.tag_name}</a></dd>
+            {/volist}
+        </dl>
+    </div>
+    <div class="filterlist">
+        <div class="filterbook">
+            {volist name="books" id="vo"}
+            <dl>
+                <dt>
+                    <a href="/{$book_ctrl}/{$vo.param}" target="_blank" class="pic">
+                        <img src="{$vo.cover_url}" alt="{$vo.book_name}" />
+                    </a>
+                </dt>
+                <div class="ct">
+                    <dd class="bookname">
+                        <a href="/{$book_ctrl}/{$vo.param}" target="_blank">{$vo.book_name}</a>
+                        <span>作者：{$vo.author_name} | 更新时间：{$vo.last_time|date='m-d H:i'}</span>
+                    </dd>
+                    <dd class="bookintro">
+                        {$vo.summary|subtext=200}...
+                    </dd>
+                </div>
+                <div class="cr">
+                    <dd><a href="/{$book_ctrl}/{$vo.param}/" target="_blank">开始阅读</a></dd>
+                    <dd><a href="javascript:;">投推荐票</a></dd>
+                    <dd><a href="javascript:;" class="sc">加入书架</a></dd>
+                </div>
+            </dl>
+            {/volist}
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+{/block}

@@ -134,6 +134,8 @@ CREATE TABLE `xwx_book` (
   `nick_name` varchar(50) DEFAULT '' COMMENT '别名',
   `create_time` int(11) DEFAULT '0',
   `update_time` int(11) DEFAULT '0',
+  `last_chapter_id` int(10) unsigned DEFAULT '0',
+  `last_chapter` varchar(255) DEFAULT '无章节',
   `last_time` int(11) DEFAULT '0' COMMENT '最后更新时间',
   `delete_time` int(11) DEFAULT '0',
   `tags` varchar(100) DEFAULT '' COMMENT '分类',

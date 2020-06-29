@@ -44,18 +44,6 @@ class Books extends Base
             cache('mip:book:' . $id, $book, null, 'redis');
         }
 
-//        $last_chapter = cache('last_chapter:' . $book->id);
-//        if (!$last_chapter) {
-//            $query = Db::query('SELECT * FROM ' . $this->prefix .
-//                'chapter WHERE id = (SELECT MAX(id) FROM (SELECT id FROM xwx_chapter WHERE book_id=?) as a)',
-//                [$book['id']]);
-//            if (count($query) > 0) {
-//                $last_chapter = $query[0];
-//            } else {
-//                $last_chapter = array();
-//            }
-//            cache('last_chapter:' . $book->id, $last_chapter, 'null', 'redis');
-//        }
 
         $chapters = cache('mip:chapters:' . $book->id);
         if (!$chapters) {

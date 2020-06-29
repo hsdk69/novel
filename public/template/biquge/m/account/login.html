@@ -1,0 +1,65 @@
+{extend name="./template/biquge/m/pub/uc.html" /}
+{block name="seo"}
+<title>{$site_name}-用户登录</title>
+<meta name="description" content="请在这里登录">
+{/block}
+{block name="main"}
+<div class="app_body">
+    <div class="app_bindPhoneBlock">
+        <div class="app_bindPhoneBlock_header">
+					<span class="app_header">
+						<img src="/static/images/userlogin.png">
+                    </span>
+        </div>
+        <div class="app_lisLoinSpan">
+            <ul>
+                <li class="username">
+                    <input id="username" type="text" name="username" placeholder="请输入用户名" autocomplete="off">
+                </li>
+                <li class="password">
+                    <input id="password" type="password" name="password" placeholder="请输入密码" autocomplete="off">
+                </li>
+            </ul>
+        </div>
+        <div class="app_listBlockButton" style="padding-top: 0.36rem">
+            <button id="loginbtn">立即登录</button>
+        </div>
+        <div class="app_registerList">
+					<span class="public_AddFloatLeft">
+						<a href="/register">我要注册</a>
+					</span>
+            <span class="public_AddFloatRight">
+						<a href="/login">忘记密码</a>
+					</span>
+        </div>
+        <div class="app_dengLu_title"> <i>以下账号直接登录</i></div>
+        <div class="app_iconList app_iconList2">
+            <ul>
+            </ul>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script>
+    $('#loginbtn').click(function () {
+        $.ajax({
+            url:'/login',
+            type:'post',
+            data: {
+                username: $('#username').val(),
+                password: $('#password').val(),
+            },
+            success:function (res) {
+                if (res.err == 0) {
+                    layer.msg(res.msg, {icon: 1,time: 1000,shade:0.3}, function () {
+                        location.href = '/ucenter'
+                    })
+                } else {
+                    layer.msg(res.msg, {icon: 1,time: 1000,shade:0.3})
+                }
+            }
+        })
+    })
+</script>
+{/block}

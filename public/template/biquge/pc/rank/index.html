@@ -1,0 +1,54 @@
+{extend name="./template/biquge/pc/pub/base.html" /}
+{block name="seo"}
+<title>小说排行榜-{$site_name}</title>
+{/block}
+{block name="main"}
+<div id="main">
+    <div id="content">
+        <div id="topcontent">
+            <div class="left">
+                <ul>
+                    <li></li>
+                    <a href="/{$rank_ctrl}?cate=new" class="{$op == 'new' ? 'active' : ''}">
+                        <li>新书榜</li>
+                    </a>
+                    <a class="{$op == 'click' ? 'active' : ''}" href="/{$rank_ctrl}?cate=click">
+                        <li>点击榜</li>
+                    </a>
+                    <a class="{$op == 'end' ? 'active' : ''}" href="/{$rank_ctrl}?cate=end">
+                        <li>完结榜</li>
+                    </a>
+                </ul>
+            </div>
+            <div class="right">
+                <h2>新书榜</h2>
+                <ul>
+                    <li class="li_header">
+                        <span class="s1">文章名称</span>
+                        <span class="s2">简介</span>
+                        <span class="s3">作者</span>
+                        <span class="s4">字数</span>
+                        <span class="s5">分类</span>
+                        <span class="s6">状态</span>
+                    </li>
+                    {volist name="books" id="vo" length="10"}
+                    <li>
+                        <span class="s1">
+                            <a href="/{$book_ctrl}/{$vo.param}" target="_blank">{$vo.book_name}</a>
+                        </span>
+                        <span class="s2">
+                            {$vo.summary}
+                        </span>
+                        <span class="s3">{$vo.author_name}</span>
+                        <span class="s4">{$vo.words}万字</span>
+                        <span class="s5">{$vo.cate.cate_name}</span>
+                        <span class="s6">{$vo.end == 1 ? '已完结' : '连载中'}</span>
+                    </li>
+                    {/volist}
+                </ul>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+{/block}
