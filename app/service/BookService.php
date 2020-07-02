@@ -3,14 +3,9 @@
 
 namespace app\service;
 
-use app\admin\controller\Base;
 use app\model\Book;
 use app\model\Chapter;
 use app\model\UserBuy;
-use mysql_xdevapi\Expression;
-use think\db\exception\DataNotFoundException;
-use think\db\exception\DbException;
-use think\db\exception\ModelNotFoundException;
 use think\facade\Db;
 
 class BookService
@@ -92,15 +87,12 @@ class BookService
         $books = Book::with(['cate','author'])->where($where)
             ->limit($num)->order($order, 'desc')->select();
         foreach ($books as &$book) {
-            //$book['chapter_count'] = Chapter::where('book_id','=',$book->id)->count();
             $book['taglist'] = explode('|', $book->tags);
             if ($end_point == 'id') {
                 $book['param'] = $book['id'];
             } else {
                 $book['param'] = $book['unique_id'];
             }
-//            $last_chapter = Chapter::where('book_id','=',$book['id'])->order('chapter_order','desc')->limit(1)->find();
-//            $book['last_chapter'] = $last_chapter;
         }
         return $books;
     }
@@ -112,7 +104,6 @@ class BookService
         if (count($data) > 0) {
             foreach ($data as &$item) {
                 $book = $item['book'];
-                //$book['chapter_count'] = Chapter::where('book_id','=',$book->id)->count();
                 $book['taglist'] = explode('|', $item['book']['tags']);
                 $item['book'] = $book;
                 if ($end_point == 'id') {
@@ -133,7 +124,6 @@ class BookService
     {
         $books = Book::whereOr('cate_id','=',$cate_id)->limit($num)->select();
         foreach ($books as &$book) {
-            //$book['chapter_count'] = Chapter::where('book_id', '=', $book['id'])->count();
             if ($end_point == 'id') {
                 $book['param'] = $book['id'];
             } else {
@@ -143,11 +133,10 @@ class BookService
         return $books;
     }
 
-    public function getByCate($cate_id, $end_point, $limit)
+    public function getByCate($cate_id, $end_point)
     {
-        $books = Book::with('cate')->where('cate_id', '=', $cate_id)->limit($limit)->select();
+        $books = Book::with('cate')->where('cate_id', '=', $cate_id)->select();
         foreach ($books as &$book) {
-            //$book['chapter_count'] = Chapter::where('book_id', '=', $book['id'])->count();
             if ($end_point == 'id') {
                 $book['param'] = $book['id'];
             } else {
@@ -160,7 +149,6 @@ class BookService
     public function getByAuthor($id, $end_point) {
         $books = Book::where('author_id', '=', $id)->select();
         foreach ($books as &$book) {
-            //$book['chapter_count'] = Chapter::where('book_id', '=', $book['id'])->count();
             if ($end_point == 'id') {
                 $book['param'] = $book['id'];
             } else {
@@ -178,7 +166,6 @@ FROM ' . $prefix . 'book AS ad1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FRO
  AS t2 WHERE ad1.id >= t2.id ORDER BY ad1.id LIMIT ' . $num . ') as a
  INNER JOIN author as b on a.author_id = b.id');
         foreach ($books as &$book) {
-            //$book['chapter_count'] = Chapter::where('book_id', '=', $book['id'])->count();
             if ($end_point == 'id') {
                 $book['param'] = $book['id'];
             } else {
@@ -194,10 +181,6 @@ FROM ' . $prefix . 'book AS ad1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FRO
             "select * from " . $prefix . "book where delete_time=0 and match(book_name) 
             against ('" . $keyword . "' IN NATURAL LANGUAGE MODE) LIMIT 20"
         );
-
-//        $map[] = ['delete_time','=',0];
-//        $map[] = ['book_name','like','%'.$keyword.'%'];
-//        return Book::where($map)->select();
     }
 
     public function getHotBooks($prefix, $end_point, $date = '1900-01-01', $num = 10)

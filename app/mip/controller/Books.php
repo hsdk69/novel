@@ -44,7 +44,6 @@ class Books extends Base
             cache('mip:book:' . $id, $book, null, 'redis');
         }
 
-
         $chapters = cache('mip:chapters:' . $book->id);
         if (!$chapters) {
             $chapters = Chapter::where('book_id', '=', $book->id)

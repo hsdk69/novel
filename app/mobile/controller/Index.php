@@ -60,6 +60,19 @@ class Index extends Base
             cache('endsHomepage', $ends, null, 'redis');
         }
 
+//        $most_charged = cache('mostCharged');
+//        if (!$most_charged) {
+//            $arr = $this->bookService->getMostChargedBook($this->end_point);
+//            if (count($arr) > 0) {
+//                foreach ($arr as $item) {
+//                    $most_charged[] = $item['book'];
+//                }
+//            } else {
+//                $arr = [];
+//            }
+//            cache('mostCharged', $most_charged, null, 'redis');
+//        }
+
         $cates = cache('cates');
         if (!$cates) {
             $cates = Cate::select();
@@ -71,7 +84,7 @@ class Index extends Base
         foreach ($cates as $cate) {
             $books = cache('booksFilterByCate'.$cate);
             if (!$books) {
-                $books = $this->bookService->getByCate($cate->id, $this->end_point, 15);
+                $books = $this->bookService->getByCate($cate->id, $this->end_point);
                 cache('booksFilterByCate:'.$cate, $books, null, 'redis');
             }
             $cateItem['books'] = $books->toArray();

@@ -1,0 +1,174 @@
+{extend name="./template/default/m/pub/base2.html" /}
+{block name="seo"}
+<title>{$site_name}-{$cate}分类</title>
+<meta name="description" content="{$site_name}{$cate}分类">
+{/block}
+{block name="main"}
+<div class="x-page__content">
+    <div class="x-book__library">
+        <div class="x-library__category">
+            <div class="x-category__box">
+                <div class="x-category__box--title">频道</div>
+                <div class="x-category__box--list">
+                    <span class="x-category__item" :class="{'is-active' : gender == 1}">
+                        <a @click="genderChange(1)">男生</a>
+                    </span>
+                    <span class="x-category__item" :class="{'is-active' : gender == 2}">
+                        <a @click="genderChange(2)">女生</a>
+                    </span>
+                </div>
+            </div>
+            <div class="x-category__box" v-show="gender == 1">
+                <div class="x-category__box--title">分类</div>
+                <div class="x-category__box--list">
+                    <span class="x-category__item" :class="{'is-active' : cate == -1}">
+                        <a @click="cateChange(-1, 1)">全部</a>
+                    </span>
+                    {volist name="boys" id="vo"}
+                    <span class="x-category__item" :class="{'is-active' : cate == {$vo.id}}">
+                        <a @click="cateChange({$vo.id}, 1)">{$vo.cate_name}</a>
+                    </span>
+                    {/volist}
+                </div>
+
+            </div>
+            <div class="x-category__box" v-show="gender == 2">
+                <div class="x-category__box--title">分类</div>
+                <div class="x-category__box--list">
+                    <span class="x-category__item" :class="{'is-active' : cate == -1}">
+                        <a @click="cateChange(-1, 2)">全部</a>
+                    </span>
+                    {volist name="girls" id="vo"}
+                    <span class="x-category__item" :class="{'is-active' : cate == {$vo.id}}">
+                        <a @click="cateChange({$vo.id}, 2)">{$vo.cate_name}</a>
+                    </span>
+                    {/volist}
+                </div>
+            </div>
+            <div class="x-category__box">
+                <div class="x-category__box--title">状态</div>
+                <div class="x-category__box--list">
+                    <span class="x-category__item" :class="{'is-active' : end == -1}">
+                        <a @click="statusChange(-1)">全部</a>
+                    </span>
+                    <span class="x-category__item" :class="{'is-active' : end == 2}">
+                        <a @click="statusChange(2)">连载</a>
+                    </span>
+                    <span class="x-category__item" :class="{'is-active' : end == 1}">
+                        <a @click="statusChange(1)">完本</a>
+                    </span>
+                </div>
+            </div>
+
+            <div class="x-category__box" style="display:none;">
+                <div class="x-category__box--title">字数</div>
+                <div class="x-category__box--list">
+                    <span class="x-category__item" :class="{'is-active' : words == 9999}">
+                        <a @click="wordsChange(9999)">全部</a>
+                    </span>
+                    <span class="x-category__item" :class="{'is-active' : words == 30}">
+                        <a @click="wordsChange(30)">30万字以内</a>
+                    </span>
+                    <span class="x-category__item" :class="{'is-active' : words == 50}">
+                        <a @click="wordsChange(50)">50万字以内</a>
+                    </span>
+                    <span class="x-category__item" :class="{'is-active' : words == 100}">
+                        <a @click="wordsChange(100)">100万字以内</a>
+                    </span>
+                    <span class="x-category__item" :class="{'is-active' : words == 200}">
+                        <a @click="wordsChange(200)">200万字以内</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="x-library__category--more">展开更多筛选项</div>
+        <div class="x-library__books">
+            <div class="van-list">
+                <span>
+                    {volist name="books" id="vo"}
+                    <div class="x-book">
+                        <div class="x-book__multi">
+                            <div class="x-book__coverbox">
+                                <a href="/{$book_ctrl}/{$vo.param}/" title="{$vo.book_name}">
+                                    <img class="x-book__cover" src="{$vo.cover_url}" style="width: 1.6rem; height: 2.13333rem;">
+                                </a>
+                            </div>
+                            <div class="x-book__text--multi" style="width: calc(100% - 1.6rem); height: 2.13333rem;">
+                                <a href="/{$book_ctrl}/{$vo.param}/">
+                                    <div class="x-book__info">
+                                        <p class="x-book__info--name">{$vo.book_name}</p>
+                                        <p class="x-book__info--chapter">
+                                            {$vo.summary}
+                                        </p>
+                                        <p class="x-book__info--update">{$vo.cate.cate_name}</p>
+                                        <p class="x-book__info--author">
+                                            {$vo.author_name} <span>{$vo.words}万字</span>
+                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {/volist}
+                </span>
+            </div>
+            <div class="pages_bottom" style="display: block;">
+                <ul class="pager">
+                    {if $page.last_page > 1}
+                    {if $page.current_page == 1}
+                    <li class="disabled"><span>«</span></li>
+                    {else/}
+                    <li><a href="/{$booklist_act}?page={$page.current_page-1}{$param}" title="上一页">«</a></li>
+                    {/if}
+
+                    {if $page.current_page == $page.last_page}
+                    <li class="disabled"><span>»</span></li>
+                    {else/}
+                    <li><a href="/{$booklist_act}?page={$page.current_page+1}{$param}" title="下一页">»</a></li>
+                    {/if}
+                    {/if}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+<script src="https://lib.baomitu.com/axios/0.19.2/axios.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            gender: {$gender_selector},
+            cate: {$cate_selector},
+            boys: [],
+            girls: [],
+            words: {$words_selector},
+            end: {$end_selector},
+        },
+        methods: {
+            genderChange(index) {
+                this.gender = index
+                this.cate = -1
+                window.location.href = '/{$booklist_act}?cate_id='+this.cate+'&words='+this.words+'&end='+this.end+'&gender='+this.gender;
+            },
+            wordsChange(words) {
+                this.words = words
+                window.location.href = '/{$booklist_act}?cate_id='+this.cate+'&words='+this.words+'&end='+this.end+'&gender='+this.gender;
+            },
+            cateChange(cate, gender) {
+                this.cate = cate
+                this.gender = gender
+
+                window.location.href = '/{$booklist_act}?cate_id='+this.cate+'&words='+this.words+'&end='+this.end+'&gender='+gender;
+            },
+            statusChange(end) {
+                this.end = end
+                window.location.href = '/{$booklist_act}?cate_id='+this.cate+'&words='+this.words+'&end='+this.end+'&gender='+this.gender;
+            }
+        },
+    })
+</script>
+
+{/block}

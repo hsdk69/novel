@@ -1,0 +1,202 @@
+{extend name="./template/default/pc/pub/base.html" /}
+{block name="seo"}
+<title>{$cate}分类-{$site_name}</title>
+<meta name="description" content="{$site_name}{$cate}分类">
+{/block}
+{block name="main"}
+<div class="body-bg" id="app">
+    <div class="wrap">
+        <div class="containerbox">
+            <div class="block10"></div>
+            <div class="wrap1200 ranklist">
+                <div class="leftbar fl">
+                    <div class="selectlist">
+                        <div class="select selchannel">
+                            <span class="tname">频道</span>
+                            <ul class="textlist">
+                                <li :class="{'on' : gender == 1}">
+                                    <a @click="genderChange(1)">男频</a>
+                                </li>
+                                <li :class="{'on' : gender == 2}">
+                                    <a @click="genderChange(2)">女频</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="select selstyle">
+                            <span class="tname">分类</span>
+                            <ul class="textlist" v-show="gender == 1">
+                                <li :class="{'on' : cate == -1}">
+                                    <a @click="cateChange(-1, 1)">全部</a>
+                                </li>
+                                {volist name="boys" id="vo"}
+                                <li :class="{'on' : cate == {$vo.id}}">
+                                    <a @click="cateChange({$vo.id}, 1)">{$vo.cate_name}</a>
+                                </li>
+                                {/volist}
+                            </ul>
+                            <ul class="textlist" v-show="gender == 2">
+                                <li :class="{'on' : cate == -1}">
+                                    <a @click="cateChange(-1, 2)">全部</a>
+                                </li>
+                                {volist name="girls" id="vo"}
+                                <li :class="{'on' : cate == {$vo.id}}">
+                                    <a @click="cateChange({$vo.id}, 2)">{$vo.cate_name}</a>
+                                </li>
+                                {/volist}
+                            </ul>
+                        </div>
+                        <div class="select selnum">
+                            <span class="tname">字数</span>
+                            <ul class="textlist">
+                                <li :class="{'on' : words == 9999}">
+                                    <a @click="wordsChange(9999)">全部</a>
+                                </li>
+                                <li :class="{'on' : words == 30}">
+                                    <a @click="wordsChange(30)">30万字以内</a>
+                                </li>
+                                <li :class="{'on' : words == 50}">
+                                    <a @click="wordsChange(50)">50万字以内</a>
+                                </li>
+                                <li :class="{'on' : words == 100}">
+                                    <a @click="wordsChange(100)">100万字以内</a>
+                                </li>
+                                <li :class="{'on' : words == 200}">
+                                    <a @click="wordsChange(200)">200万字以内</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="select selstatus">
+                            <span class="tname">状态</span>
+                            <ul class="textlist">
+                                <li :class="{'on' : end == -1}">
+                                    <a @click="statusChange(-1)">全部</a>
+                                </li>
+                                <li :class="{'on' : end == 2}">
+                                    <a @click="statusChange(2)">连载</a>
+                                </li>
+                                <li :class="{'on' : end == 1}">
+                                    <a @click="statusChange(1)">完本</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="right-cont-box fr rankdata">
+                    <div class="rankdatacont">
+                        <div class="tabsbox1">
+                            <div class="rankday">
+                                <div class="tabsday-cont">
+                                    <div class="tab-cont-1 secd-rank-list">
+                                        <div class="listboxw">
+                                            {volist name="books" id="vo"}
+                                            <dl>
+                                                <dt>
+                                                    <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.book_name}">
+                                                        <img class="lazyimg" src="{$vo.cover_url}" style="display: block;">
+                                                    </a>
+                                                </dt>
+                                                <dd>
+                                                    <a href="/{$book_ctrl}/{$vo.param}" class="bigpic-book-name" title="{$vo.book_name}">
+                                                        {$vo.book_name}
+                                                    </a>
+                                                    <p>
+                                                        <a href="/{$search_ctrl}/{$vo.author_name}" target="_blank">
+                                                            {$vo.author_name}
+                                                        </a>|
+                                                        <a href="/{$booklist_act}?cate={$vo.cate_id}" target="_blank">
+                                                            {$vo.cate.cate_name}
+                                                        </a>|
+                                                        {$vo.end == 1 ? '已完结' : '连载中'}
+                                                    </p>
+                                                    <p class="big-book-info">
+                                                        {$vo.summary}
+                                                    </p>
+                                                    <p>
+                                                        <span href="javascript:;">{$vo.words}万字 |</span>
+                                                        <span class="red">{$vo.last_time|date='Y-m-d H:i'}</span>
+                                                    </p>
+                                                </dd>
+                                            </dl>
+                                            {/volist}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pages_bottom" style="display: block;">
+                            <ul>
+                                <ul class="pagination">
+                                    {if $page.last_page > 1}
+                                    {if $page.current_page == 1}
+                                    <li class="disabled"><span>«</span></li>
+                                    {else/}
+                                    <li><a href="/{$booklist_act}?page={$page.current_page-1}{$param}" title="上一页">«</a></li>
+                                    {/if}
+
+                                    {for start="1" end="$page.last_page + 1"}
+                                    {if ($i != 1 && $i != $page.last_page)
+                                    and ($i < $page.current_page - 2 || $i > $page.current_page + 2)}
+                                    <li>
+                                        .
+                                    </li>
+                                    {else/}
+                                    {if $i == $page.current_page }
+                                    <li class="active"><span>{$i}</span></li>
+                                    {else/}
+                                    <li><a href="/{$booklist_act}?page={$i}{$param}" title="第{$i}页">{$i}</a></li>
+                                    {/if}
+                                    {/if}
+                                    {/for}
+
+                                    {if $page.current_page == $page.last_page}
+                                    <li><a>»</a></li>
+                                    {else/}
+                                    <li><a href="/{$booklist_act}?page={$page.current_page+1}{$param}" title="下一页">»</a></li>
+                                    {/if}
+                                    {/if}
+                                </ul>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            gender: {$gender_selector},
+            cate: {$cate_selector},
+            boys: [],
+            girls: [],
+            words: {$words_selector},
+            end: {$end_selector},
+        },
+        methods: {
+            genderChange(index) {
+                this.gender = index
+                this.cate = -1
+                window.location.href = '/{$booklist_act}?cate_id='+this.cate+'&words='+this.words+'&end='+this.end+'&gender='+this.gender;
+            },
+            wordsChange(words) {
+                this.words = words
+                window.location.href = '/{$booklist_act}?cate_id='+this.cate+'&words='+this.words+'&end='+this.end+'&gender='+this.gender;
+            },
+            cateChange(cate, gender) {
+                this.cate = cate
+                this.gender = gender
+
+                window.location.href = '/{$booklist_act}?cate_id='+this.cate+'&words='+this.words+'&end='+this.end+'&gender='+gender;
+            },
+            statusChange(end) {
+                this.end = end
+                window.location.href = '/{$booklist_act}?cate_id='+this.cate+'&words='+this.words+'&end='+this.end+'&gender='+this.gender;
+            }
+        }
+    })
+</script>
+{/block}

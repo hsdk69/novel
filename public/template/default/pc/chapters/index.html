@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>{$chapter.chapter_name}-{$site_name}</title>
+    <meta name="description" content="{$chapter.book.book_name}{$chapter.chapter_name}在线阅读">
+    <link rel="stylesheet" href="/static/css/chapter.css" type="text/css"/>
+    {if $next != "null"}
+    <link rel="prefetch" href="/{$chapter_ctrl}/{$next.id}" />
+    {/if}
+    <script src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+    <!---识别手机或电脑的js开始--->
+    <script>
+        function is_mobile() {
+            var regex_match = /(nokia|iphone|android|motorola|^mot-|softbank|foma|docomo|kddi|up.browser|up.link|htc|dopod|blazer|netfront|helio|hosin|huawei|novarra|CoolPad|webos|techfaith|palmsource|blackberry|alcatel|amoi|ktouch|nexian|samsung|^sam-|s[cg]h|^lge|ericsson|philips|sagem|wellcom|bunjalloo|maui|symbian|smartphone|midp|wap|phone|windows ce|iemobile|^spice|^bird|^zte-|longcos|pantech|gionee|^sie-|portalmmm|jigs browser|hiptop|^benq|haier|^lct|operas*mobi|opera*mini|320x320|240x320|176x220)/i;
+            var u = navigator.userAgent;
+            if (null == u) {
+                return true;
+            }
+            var result = regex_match.exec(u);
+            if (null == result) {
+                return false
+            } else {
+                return true
+            }
+        }
+        if (is_mobile()) {
+            var pathname = window.location.pathname;
+            var url = window.location.search; //获取url中"?"符后的字串
+            window.location.href= '{$mobile_url}' + pathname + url;
+        }
+    </script>
+    <!---识别手机或电脑的js结束--->
+</head>
+<body>
+<div :class="'theme-' + theme + ' w' + width" id="app">
+    <div class="wrap">
+        <div class="read-header" id="readHeader">
+            <div class="wrap-center cf">
+                <div class="left-nav fl">
+                    <div class="logo">
+                        <a class="logo-ico" href="/"><img src="/static/images/logo.png"></a>
+                    </div>
+                    <ul>
+                        <li>
+                            <cite><a href="/">首页</a></cite>
+                        </li>
+                    </ul>
+                </div>
+                <div class="read-login fr">
+                    <ul>
+                        <li id="min-search">
+                            <form action="http://demo.kyxscms.com/search.html" method="post" target="_blank">
+                                <input class="submit-input" type="submit" id="searchSubmit">
+                                <input id="pin-input" class="pin-input hide" name="keyword" type="text" placeholder="">
+                                <label id="pin-search" for="searchSubmit">
+                                    <em class="iconfont"></em>
+                                </label>
+                            </form>
+                        </li>
+                        <li class="line"></li>
+                        {empty name="user"}
+                        <li class="sign-out">
+                            <a id="pin-login" href="/login">登录</a>
+                            <a class="reg" href="/register" target="_blank">注册</a>
+                        </li>
+                        {else /}
+                        <li class="sign-in">
+                            <img src="/static/images/mrtx.gif" class="headPortrait">
+                            <a href="/ucenter">{$user}</a>
+                            <div class="dropdown">
+                                <a href="/ucenter">个人中心</a>
+                                <a href="/bookshelf">我的书架</a>
+                                <a href="/history">阅读记录</a>
+                                <a href="/logout" class="exit">退出</a>
+                            </div>
+                        </li>
+                        {/empty}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="crumbs-nav">
+            <a href="/" target="_blank">首页</a>
+            <em class="iconfont"></em>
+            <a href="/{$booklist_act}" target="_blank">{$chapter.book.cate.gender == 1 ? '男频' : '女频'}</a>
+            <em class="iconfont"></em>
+            <a href="/{$booklist_act}?cate={$chapter.book.cate_id}" target="_blank">{$chapter.book.cate.cate_name}</a>
+            <em class="iconfont"></em>
+            <a href="/{$book_ctrl}/{$chapter.book.param}" target="_blank">{$chapter.book.book_name}</a>
+        </div>
+        <div :class="'read-main-wrap font-family0' + font" :style="{'font-size': fontsize + 'px'}" id="j_readMainWrap">
+            <div id="j_chapterBox">
+                <div class="text-wrap">
+                    <div class="main-text-wrap">
+                        <div class="text-head">
+                            <h3 class="j_chapterName">{$chapter.chapter_name}</h3>
+                            <div class="text-info cf">
+                                <div class="info fl">
+                                    <a href="/{$book_ctrl}/{$chapter.book.param}" target="_blank">
+                                        <em class="iconfont"></em> {$chapter.book.book_name}
+                                    </a>
+                                    <a href="/{$search_ctrl}?keyword={$chapter.book.author_name}" target="_blank">
+                                        <em class="iconfont"></em> {$chapter.book.author_name}
+                                    </a>
+                                    <i><em class="iconfont"></em><span
+                                            class="j_chapterWordCut">{$words}</span>字</i>
+                                    <i><em class="iconfont"></em><span class="j_updateTime">{$chapter.create_time|date='Y-m-d'}</span></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="read-content j_readContent">
+                            {$content|raw}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="la-ball-pulse j_chapterLoad hidden" style="display: none;">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="chapter-control dib-wrap">
+                {if $prev == "null"}
+                <a class="block" style="color: lightgrey">上一章</a>
+                {else/}
+                <a href="/{$chapter_ctrl}/{$prev.id}" class="block" title="{$prev.chapter_name}">上一章</a>
+                {/if}
+                <span>|</span>
+                {if $next == "null"}
+                <a class="block" style="color: lightgrey">下一章</a>
+                {else/}
+                <a href="/{$chapter_ctrl}/{$next.id}" class="block" title="{$next.chapter_name}">下一章</a>
+                {/if}
+            </div>
+        </div>
+    </div>
+    <div class="float-wrap fix-float-wrap" id="j_floatWrap">
+        <div class="left-bar-list" id="j_leftBarList" style="top: 119px;">
+            <dl>
+                <dd id="j_navCatalogBtn">
+                    <a href="javascript:" @click="catelog()">
+                        <i><em class="iconfont"></em><span>目录</span></i>
+                    </a>
+                </dd>
+                <dd id="j_navSettingBtn" class="">
+                    <a href="javascript:" @click="setting()">
+                        <i><em class="iconfont"></em><span>设置</span></i>
+                    </a>
+                </dd>
+                <dd>
+                    <a href="/{$book_ctrl}/{$chapter.book.param}/" target="_blank">
+                        <i><em class="iconfont"></em><span>书页</span></i>
+                    </a>
+                </dd>
+            </dl>
+            <!-- start 目录面板浮层 -->
+            <div class="panel-wrap catalog" id="j_catalog" v-show="catalogShow">
+                <a class="iconfont close-panel" href="javascript:" @click="catelog()"></a>
+                <div class="panel-box">
+                    <div class="catalog-tab dib-wrap">
+                        <span class="lang act">目录</span>
+                    </div>
+                    <div>
+                        <!-- start 目录列表 -->
+                        <div class="panel-list-wrap catalog-scroll-wrap" style="max-height: 253px;">
+                            <div class="catalog-list-wrap">
+                                <div class="volume-list">
+                                    <ul>
+                                        {volist name="chapters" id="vo"}
+                                        <li>
+                                            <a href="/{$chapter_ctrl}/{$vo.id}">{$vo.chapter_name}</a>
+                                        </li>
+                                        {/volist}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end 目录面板浮层 -->
+            <!-- start 设置面板浮层 -->
+            <div class="panel-wrap setting" id="j_setting" v-show="settingShow">
+                <a class="iconfont close-panel setting-close" href="javascript:" @click="setting()"></a>
+                <div class="panel-box">
+                    <h4 class="lang">设置</h4>
+                    <div class="setting-list-wrap">
+                        <ul>
+                            <li class="theme-list" id="j_themeList">
+                                <i>阅读主题</i>
+                                <span title="默认" class="theme-0" :class="{'act' : theme == 0}" @click="themeChange(0)">
+										<em class="iconfont"></em>
+									</span>
+                                <span title="牛皮纸" class="theme-1" :class="{'act' : theme == 1}" @click="themeChange(1)">
+										<em class="iconfont"></em>
+									</span>
+                                <span title="淡绿色" class="theme-2" :class="{'act' : theme == 2}" @click="themeChange(2)">
+										<em class="iconfont"></em>
+									</span>
+                                <span title="淡蓝色" class="theme-3" :class="{'act' : theme == 3}" @click="themeChange(3)">
+										<em class="iconfont"></em>
+									</span>
+                                <span title="淡粉色" class="theme-4" :class="{'act' : theme == 4}" @click="themeChange(4)">
+										<em class="iconfont"></em>
+									</span>
+                                <span title="灰色" class="theme-5" :class="{'act' : theme == 5}" @click="themeChange(5)">
+										<em class="iconfont"></em>
+									</span>
+                                <span title="黑色" class="theme-6" :class="{'act' : theme == 6}" @click="themeChange(6)">
+										<em class="iconfont"></em>
+										<cite class="iconfont"></cite>
+									</span>
+
+                            </li>
+                            <li class="font-family" id="j_fontFamily">
+                                <i>正文字体</i>
+                                <span class="yahei" :class="{'act' : font == 1}" @click="fontChange(1)">雅黑</span>
+                                <span class="yahei" :class="{'act' : font == 2}" @click="fontChange(2)">宋体</span>
+                                <span class="yahei" :class="{'act' : font == 3}" @click="fontChange(3)">楷书</span>
+                            </li>
+                            <li class="font-size" id="j_fontSize">
+                                <i>字体大小</i>
+                                <cite>
+										<span class="prev" @click="fontSizeChange(-2)">
+											<em class="iconfont"></em>
+										</span> <b></b>
+                                    <span class="lang">{{fontsize}}</span> <b></b>
+                                    <span class="next" @click="fontSizeChange(2)">
+											<em class="iconfont"></em>
+										</span>
+                                </cite>
+                            </li>
+                            <li class="page-width" id="j_pageWidth">
+                                <i>页面宽度</i>
+                                <cite>
+                                    <span class="prev" @click="widthChange(-200)">
+                                        <em class="iconfont"></em>
+                                    </span>
+                                    <b></b>
+                                    <span class="lang">
+											{{width}}
+                                    </span>
+                                    <b></b>
+                                    <span class="next" @click="widthChange(200)">
+                                        <em class="iconfont"></em>
+                                    </span>
+                                </cite>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- end 设置面板浮层 -->
+        </div>
+        <div class="right-bar-list" id="j_rightBarList" style="bottom: 0px;">
+            <dl>
+                <dd class="go-top" id="j_goTop" title="返回顶部" style="display: none;">
+                    <a href="javascript:">
+                        <i>
+                            <em class="iconfont"></em>
+                        </i>
+                    </a>
+                </dd>
+
+            </dl>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.bootcss.com/js-cookie/2.2.1/js.cookie.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            catalogShow: false,
+            settingShow: false,
+            theme: 0,
+            width: 800,
+            font: 1,
+            fontsize: 18
+        },
+        methods: {
+            catelog() {
+                this.catalogShow = !this.catalogShow
+            },
+            setting() {
+                this.settingShow = !this.settingShow
+            },
+            themeChange(theme) {
+                this.theme = theme
+                Cookies.set('pc_theme', theme)
+            },
+            widthChange(width) {
+                this.width = parseInt(this.width) + parseInt(width)
+                if (this.width < 600) {
+                    this.width = 600
+                }
+                if (this.width > 1200) {
+                    this.width = 1200
+                }
+                Cookies.set('pc_width', this.width)
+            },
+            fontChange(font) {
+                this.font = font
+                Cookies.set('pc_font', this.font)
+            },
+            fontSizeChange(size) {
+                this.fontsize = parseInt(this.fontsize) + parseInt(size)
+                Cookies.set('pc_fontsize', this.fontsize)
+            }
+        },
+        mounted() {
+            this.theme = Cookies.get('pc_theme')
+            if(this.theme == undefined) {
+                this.theme = 0
+            }
+            this.width = Cookies.get('pc_width')
+            if (this.width == undefined) {
+                this.width = 800
+            }
+            this.font = Cookies.get('pc_font')
+            if (this.font == undefined) {
+                this.font = 1
+            }
+            this.fontsize = Cookies.get('pc_fontsize')
+            if (this.fontsize == undefined) {
+                this.fontsize = 18
+            }
+        }
+    })
+
+    //--本地缓存代码开始--
+    let bookInfo = {
+        chapter_id: '{$chapter.id}',
+        end: "{$chapter.book.end == 1 ? '完结' : '连载'}",
+        chapter_name: '{$chapter.chapter_name}',
+        author_name : '{$chapter.book.author_name}',
+        cover_url:'{$chapter.book.cover_url}',
+        book_id: '{$chapter.book_id}',
+        last_time: "{$chapter.book.last_time|date='Y-m-d'}",
+        book_name:'{$chapter.book.book_name}',
+        param: '{$chapter.book.param}'
+    };
+    localStorage.setItem('manhua_{$chapter.book_id}', JSON.stringify(bookInfo));//id为键，设置缓存
+    let history = [];
+    let value = localStorage.getItem('xwx_historys'); //读取参照数组
+    if (value != undefined && value != null) {
+        history = JSON.parse(value);
+    }
+    if (history.indexOf('manhua_{$chapter.book_id}') === -1) {
+        history.push('manhua_{$chapter.book_id}'); //把id为值存入参照数组
+    }
+
+    console.log(history)
+    localStorage.setItem('xwx_historys', JSON.stringify(history));
+    //--本地缓存代码结束--
+
+    document.body.oncopy = function () {
+        return false;
+    }; //阻止复制
+    document.body.onselectstart = function () {
+        return false;
+    }; //阻止选中
+    document.oncontextmenu = function () {
+        return false;
+    }; //阻止菜单弹出
+    if (document.images) {
+        for (i = 0; i < document.images.length; i++) {
+            document.images[i].onmousedown = function () {
+                return false;
+            };
+        }
+    }
+</script>
+</body>
+</html>

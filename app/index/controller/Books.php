@@ -54,18 +54,6 @@ class Books extends Base
 //            $tags = explode('|', $book->tags);
 //        }
 
-//        if (!$last_chapter) {
-//            $query = Db::query('SELECT * FROM '.$this->prefix.
-//                'chapter WHERE id = (SELECT MAX(id) FROM (SELECT id FROM xwx_chapter WHERE book_id=?) as a)',
-//                [$book['id']]);
-//            if (count($query) > 0) {
-//                $last_chapter = $query[0];
-//            } else {
-//                $last_chapter = array();
-//            }
-//            cache('last_chapter:'.$book->id, $last_chapter, 'null', 'redis');
-//        }
-
         $redis = RedisHelper::GetInstance();
         $day = date("Y-m-d", time());
         //以当前日期为键，增加点击数
@@ -124,18 +112,18 @@ class Books extends Base
             }
         }
 
-//        $start_pay = cache('maxChapterOrder:' . $book->id);
-//        if (!$start_pay) {
-//            if ($book->start_pay >= 0) {
-//                $start_pay = $book->start_pay; //如果是正序，则开始付费章节就是设置的
-//            } else { //如果是倒序付费设置
-//                $abs = abs($book->start_pay) - 1; //取得倒序的绝对值，比如-2，则是倒数第2章开始付费
-//                $max_chapter_order = Db::query("SELECT MAX(chapter_order) as max FROM " . $this->prefix . "chapter WHERE book_id=:id",
-//                    ['id' => $book->id])[0]['max'];
-//                cache('maxChapterOrder:' . $id, $max_chapter_order);
-//                $start_pay = (float)$max_chapter_order - $abs; //计算出起始付费章节
-//            }
-//        }
+        $start_pay = cache('maxChapterOrder:' . $book->id);
+        if (!$start_pay) {
+            if ($book->start_pay >= 0) {
+                $start_pay = $book->start_pay; //如果是正序，则开始付费章节就是设置的
+            } else { //如果是倒序付费设置
+                $abs = abs($book->start_pay) - 1; //取得倒序的绝对值，比如-2，则是倒数第2章开始付费
+                $max_chapter_order = Db::query("SELECT MAX(chapter_order) as max FROM " . $this->prefix . "chapter WHERE book_id=:id",
+                    ['id' => $book->id])[0]['max'];
+                cache('maxChapterOrder:' . $id, $max_chapter_order);
+                $start_pay = (float)$max_chapter_order - $abs; //计算出起始付费章节
+            }
+        }
 
         $clicks = cache('bookClicks:' . $book->id);
         if (!$clicks) {
@@ -150,6 +138,7 @@ class Books extends Base
             'recommand' => $recommand,
             'isfavor' => $isfavor,
             'comments' => $comments,
+            'start_pay' => $start_pay,
             'clicks' => $clicks,
         ]);
         return view($this->tpl);
