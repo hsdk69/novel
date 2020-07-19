@@ -82,9 +82,8 @@
                             <span class="x-book__tag">{$vo.author_name}</span>
                         </p>
                         <p class="x-book__intro">
-                            {notempty name="vo.last_chapter"}
-                            <a href="/{$chapter_ctrl}/{$vo.last_chapter.id}">
-                                {$vo.last_chapter.chapter_name}
+                            <a href="/{$chapter_ctrl}/{$vo.last_chapter_id}">
+                                {$vo.last_chapter}
                             </a>
                             {/notempty}
                         </p>
