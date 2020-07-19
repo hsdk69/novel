@@ -8,9 +8,11 @@
 - 章节预加载，在阅读下一章时不需要再等待载入
 
 # 关于
-- 官方博客：http://xhxcms.com
+- 官方博客：https://www.xiaohuanxiong.net/
 - 文档地址：https://www.kancloud.cn/hiliqi/xhxxscms
 - 官方QQ群：1067970473
+- 交流论坛：https://support.qq.com/products/176371
+- 小浣熊系列软件官网：http://soft.xiaohuanxiong.net/
 
 # 开源协议
 本程序采用MIT协议开源
