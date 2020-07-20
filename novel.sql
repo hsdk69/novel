@@ -36,6 +36,22 @@ CREATE TABLE `xwx_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
+-- Table structure for banner
+-- ----------------------------
+DROP TABLE IF EXISTS `xwx_banner`;
+CREATE TABLE `xwx_banner` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `pic_name` varchar(255) DEFAULT '' COMMENT '轮播图完整路径名',
+  `create_time` int(11) DEFAULT '0',
+  `update_time` int(11) DEFAULT '0',
+  `book_id` int(11) NOT NULL COMMENT '所属漫画ID',
+  `title` varchar(50) NOT NULL COMMENT '轮播图标题',
+    `banner_order` INT(11) DEFAULT 0,
+  PRIMARY KEY (`id`) USING BTREE,
+    KEY `banner_order` (`banner_order`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
 -- Table structure for author
 -- ----------------------------
 DROP TABLE IF EXISTS `xwx_author`;
