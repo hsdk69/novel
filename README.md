@@ -10,7 +10,7 @@
 # 关于
 - 官方博客：https://www.xiaohuanxiong.net/
 - 文档地址：https://www.kancloud.cn/hiliqi/xhxxscms
-- 官方QQ群：1067970473
+- 官方QQ群：780362399
 - 交流论坛：https://support.qq.com/products/176371
 - 小浣熊系列软件官网：http://soft.xiaohuanxiong.net/
 
