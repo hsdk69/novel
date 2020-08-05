@@ -13,5 +13,5 @@ return [
     'api_key' => 'hahmh', 
     'app_key' => 'hahmh',
     'tpl' => 'default',
-    'cdn' => 'cloudflare'       
+    'cdn' => 'bootcdn'       
  ];

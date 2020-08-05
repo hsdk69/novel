@@ -3,11 +3,7 @@
 
 namespace app\index\controller;
 
-
-use app\model\Book;
 use app\model\Cate;
-use think\db\exception\DataNotFoundException;
-use think\db\exception\ModelNotFoundException;
 use think\facade\View;
 
 class Booklist extends Base

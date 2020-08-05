@@ -28,6 +28,7 @@ CREATE TABLE `xwx_user` (
   `update_time` int(11) DEFAULT '0',
   `delete_time` int(11) DEFAULT '0',
   `last_login_time` int(11) DEFAULT '0',
+  `vip_expire_time` int(11) DEFAULT '0' COMMENT '会员到期时间',
   `reg_ip` varchar(32) DEFAULT '' COMMENT '用户注册ip',
   PRIMARY KEY (`id`) USING BTREE,
   unique key `username` (`username`) USING BTREE,
@@ -124,6 +125,7 @@ CREATE TABLE `xwx_cate` (
   `cate_name` varchar(20) NOT NULL COMMENT '分类名',
   `create_time` int(11) DEFAULT '0',
   `update_time` int(11) DEFAULT '0',
+  `gender` tinyint(4) DEFAULT '1',
   PRIMARY KEY (`id`) USING BTREE,
   unique KEY `cate_name` (`cate_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
@@ -188,6 +190,21 @@ CREATE TABLE `xwx_clicks`  (
   INDEX `cdate`(`cdate`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- ----------------------------
+-- Table structure for xwx_comments
+-- ----------------------------
+DROP TABLE IF EXISTS `xwx_comments`;
+CREATE TABLE `xwx_comments` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `book_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `content` text,
+  `create_time` int(11) DEFAULT '0',
+  `update_time` int(11) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `book_id` (`book_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for booklogs

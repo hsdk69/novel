@@ -34,13 +34,9 @@ class Books extends Base
             try {
                 $book_end_point = config('seo.book_end_point');
                 if ($book_end_point == 'id') {
-                    $book = Book::with(['chapters' => function ($query) {
-                        $query->order('chapter_order');
-                    }])->findOrFail($id);
+                    $book = Book::with('cate')->findOrFail($id);
                 } else {
-                    $book = Book::with(['chapters' => function ($query) {
-                        $query->order('chapter_order');
-                    }])->where('unique_id', '=', $id)->findOrFail();
+                    $book = Book::with('cate')->where('unique_id', '=', $id)->findOrFail();
                 }
             } catch (DataNotFoundException $e) {
                 abort(404, $e->getMessage());

@@ -102,4 +102,12 @@ class Tag extends Base
             return view();
         }
     }
+
+    public function baidudrop() {
+        if (request()->isPost()) {
+            $pinyin = new Pinyin();
+            $keyword = input('keyword');
+            $cb = 'jQuery110202671218340653174_1523256111824';
+        }
+    }
 }
