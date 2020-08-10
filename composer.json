@@ -29,7 +29,9 @@
         "topthink/think-captcha": "^3.0",
         "overtrue/pinyin": "^4.0",
         "ext-iconv": "*",
-        "firebase/php-jwt": "^5.2"
+        "firebase/php-jwt": "^5.2",
+        "ext-http": "*",
+        "ext-json": "*"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2",

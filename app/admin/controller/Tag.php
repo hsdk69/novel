@@ -5,14 +5,10 @@ namespace app\admin\controller;
 
 
 use app\model\Tags;
-use app\service\TagsService;
 use Overtrue\Pinyin\Pinyin;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
-use think\exception\ValidateException;
-use think\facade\Db;
 use think\facade\View;
-
 class Tag extends Base
 {
     protected $tagsService;
@@ -23,7 +19,8 @@ class Tag extends Base
         $this->tagsService = app('tagsService');
     }
 
-    public function index(){
+    public function index()
+    {
         $data = $this->tagsService->getPagedAdmin();
         View::assign([
             'tags' => $data['tags'],
@@ -32,7 +29,8 @@ class Tag extends Base
         return view();
     }
 
-    public function create(){
+    public function create()
+    {
         if (request()->isPost()) {
             $tag = new Tags();
             $tag->tag_name = input('tag_name');
@@ -40,15 +38,16 @@ class Tag extends Base
             $tag->jianpin = input('jianpin');
             $result = $tag->save();
             if ($result) {
-                return json(['err' =>0,'msg'=>'添加成功']);
-            }else{
-                return json(['err' =>1,'msg'=>'添加失败']);
+                return json(['err' => 0, 'msg' => '添加成功']);
+            } else {
+                return json(['err' => 1, 'msg' => '添加失败']);
             }
         }
         return view();
     }
 
-    public function edit(){
+    public function edit()
+    {
         $id = input('id');
         try {
             $tag = Tags::findOrFail($id);
@@ -58,9 +57,9 @@ class Tag extends Base
                 $tag->jianpin = input('jianpin');
                 $result = $tag->save();
                 if ($result) {
-                    return json(['err' =>0,'msg'=>'修改成功']);
-                }else{
-                    return json(['err' =>1,'msg'=>'修改失败']);
+                    return json(['err' => 0, 'msg' => '修改成功']);
+                } else {
+                    return json(['err' => 1, 'msg' => '修改失败']);
                 }
             }
             View::assign([
@@ -74,21 +73,22 @@ class Tag extends Base
         }
     }
 
-    public function import() {
+    public function import()
+    {
         if (request()->isPost()) {
             $pinyin = new Pinyin();
             $file = request()->file('txt');
             $handle = fopen($file, "rb");
             if ($handle) {
                 while (($line = fgets($handle)) !== false) {
-                    $tag = Tags::where('tag_name','=',trim($line))->find();
+                    $tag = Tags::where('tag_name', '=', trim($line))->find();
                     if (is_null($tag)) {
                         $tag = new Tags();
                         $tag->tag_name = trim($line);
-                        $tag->pinyin = $pinyin->permalink($line,'');
-                        $tag->jianpin = $pinyin->abbr($line,'');
+                        $tag->pinyin = $pinyin->permalink($line, '');
+                        $tag->jianpin = $pinyin->abbr($line, '');
                         $tag->save();
-                        echo '成功导入关键词'.$line;
+                        echo '成功导入关键词' . $line;
                         ob_flush(); //将 php buffer 数据强制输出到 tcp buffer
                         flush(); // 将 tcp buffer 数据强制输出到浏览器
                     }
@@ -103,11 +103,41 @@ class Tag extends Base
         }
     }
 
-    public function baidudrop() {
-        if (request()->isPost()) {
-            $pinyin = new Pinyin();
-            $keyword = input('keyword');
-            $cb = 'jQuery110202671218340653174_1523256111824';
+    public function baidudrop()
+    {
+        return view();
+    }
+
+    public function getkeywords() {
+        $pinyin = new Pinyin();
+        $keyword = input('keyword');
+        $res = file_get_contents('http://suggestion.baidu.com/su?wd=' . $keyword);
+        $data = mb_convert_encoding($res, 'UTF-8', 'UTF-8,GBK,GB2312,BIG5');
+        $data_temp = strpos($data, "x");
+        $data = substr_replace($data, "", $data_temp, 17);
+        $data = trim($data, ");");
+        $data = trim($data, "{");
+        $data = preg_replace("/q:.+?.e,/", '', $data);
+        $data = str_replace("[", "", $data);
+        $data = str_replace("]", "", $data);
+        $data = "[" . $data . "]";
+        $data = str_replace(",", "},s:", $data);
+        $data = str_replace("s:", "{\"s\":", $data);//复杂的处理，以符合json格式
+        $dc=json_decode($data, true);
+        foreach ($dc as $item) {
+            $line = $item['s'];
+            $tag = Tags::where('tag_name', '=', trim($line))->find();
+            if (is_null($tag)) {
+                $tag = new Tags();
+                $tag->tag_name = trim($line);
+                $tag->pinyin = $pinyin->permalink($line, '');
+                $tag->jianpin = $pinyin->abbr($line, '');
+                $tag->save();
+                echo "</br>成功导入关键词" . $line;
+                ob_flush(); //将 php buffer 数据强制输出到 tcp buffer
+                flush(); // 将 tcp buffer 数据强制输出到浏览器
+            }
         }
+        echo '导入完成';
     }
 }
