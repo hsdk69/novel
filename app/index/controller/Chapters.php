@@ -17,7 +17,11 @@ class Chapters extends Base
     public function index($id)
     {
         try {
-            $chapter = Chapter::with('book')->cache('chapter:' . $id, 600, 'redis')->findOrFail($id);
+            $chapter = cache('chapter:' . $id);
+            if ($chapter == false) {
+                $chapter = Chapter::with('book')->findOrFail($id);
+                cache('chapter:' . $id, $chapter, null, 'redis');
+            }
         } catch (DataNotFoundException $e) {
             abort(404, $e->getMessage());
         } catch (ModelNotFoundException $e) {

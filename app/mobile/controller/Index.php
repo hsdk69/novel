@@ -30,35 +30,15 @@ class Index extends Base
         if ($pid) { //如果有推广pid
             cookie('xwx_promotion', $pid); //将pid写入cookie
         }
-        $banners = cache('bannersHomepage');
-        if (!$banners) {
-            $banners = Banner::with('book')->where('banner_order','>', 0)->order('banner_order','desc')->select();
-            cache('bannersHomepage',$banners, null, 'redis');
-        }
+        $banners = Banner::with('book')->where('banner_order','>', 0)->order('banner_order','desc')->select();
 
-        $hot_books = cache('hotBooks');
-        if (!$hot_books) {
-            $hot_books = $this->bookService->getHotBooks($this->prefix, $this->end_point);
-            cache('hotBooks', $hot_books, null, 'redis');
-        }
+        $hot_books = $this->bookService->getHotBooks($this->prefix, $this->end_point);
 
-        $newest = cache('newestHomepage');
-        if (!$newest) {
-            $newest = $this->bookService->getBooks( $this->end_point, 'last_time', '1=1', 10);
-            cache('newestHomepage', $newest, null, 'redis');
-        }
+        $newest = $this->bookService->getBooks( $this->end_point, 'last_time', '1=1', 10);
 
-        $newbie = cache('newbieHomepage');
-        if (!$newbie) {
-            $newbie = $this->bookService->getBooks($this->end_point, 'create_time', '1=1', 30);
-            cache('newestHomepage', $newbie, null, 'redis');
-        }
+        $newbie = $this->bookService->getBooks($this->end_point, 'create_time', '1=1', 30);
 
-        $ends = cache('endsHomepage');
-        if (!$ends) {
-            $ends = $this->bookService->getBooks( $this->end_point, 'last_time', [['end', '=', '1']], 10);
-            cache('endsHomepage', $ends, null, 'redis');
-        }
+        $ends = $this->bookService->getBooks( $this->end_point, 'last_time', [['end', '=', '1']], 10);
 
 //        $most_charged = cache('mostCharged');
 //        if (!$most_charged) {
@@ -82,11 +62,7 @@ class Index extends Base
         $catelist = array(); //分类漫画数组
         $cateItem = array();
         foreach ($cates as $cate) {
-            $books = cache('booksFilterByCate'.$cate);
-            if (!$books) {
-                $books = $this->bookService->getByCate($cate->id, $this->end_point);
-                cache('booksFilterByCate:'.$cate, $books, null, 'redis');
-            }
+            $books = $this->bookService->getByCate($cate->id, $this->end_point);
             $cateItem['books'] = $books->toArray();
             $cateItem['cate'] = ['id' => $cate->id, 'cate_name' => $cate->cate_name];
             $catelist[] = $cateItem;
