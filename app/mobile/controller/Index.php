@@ -8,7 +8,7 @@ use app\common\RedisHelper;
 use app\model\Author;
 use app\model\Banner;
 use app\model\Cate;
-use app\model\Chapter;
+use app\model\ArticleChapter;
 use app\service\BookService;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
@@ -26,32 +26,16 @@ class Index extends Base
 
     public function index()
     {
-        $pid = input('pid');
-        if ($pid) { //如果有推广pid
-            cookie('xwx_promotion', $pid); //将pid写入cookie
+        $banners = cache('banners');
+        if (!$banners) {
+            $banners = Banner::with('book')->order('banner_order', 'desc')->select();
+            cache('banners', $banners, null, 'redis');
         }
-        $banners = Banner::with('book')->where('banner_order','>', 0)->order('banner_order','desc')->select();
 
         $hot_books = $this->bookService->getHotBooks($this->prefix, $this->end_point);
-
-        $newest = $this->bookService->getBooks( $this->end_point, 'last_time', '1=1', 10);
-
-        $newbie = $this->bookService->getBooks($this->end_point, 'create_time', '1=1', 30);
-
-        $ends = $this->bookService->getBooks( $this->end_point, 'last_time', [['end', '=', '1']], 10);
-
-//        $most_charged = cache('mostCharged');
-//        if (!$most_charged) {
-//            $arr = $this->bookService->getMostChargedBook($this->end_point);
-//            if (count($arr) > 0) {
-//                foreach ($arr as $item) {
-//                    $most_charged[] = $item['book'];
-//                }
-//            } else {
-//                $arr = [];
-//            }
-//            cache('mostCharged', $most_charged, null, 'redis');
-//        }
+        $newest = $this->bookService->getBooks($this->end_point, 'lastupdate', '1=1', 30);
+        $newbie = $this->bookService->getBooks($this->end_point, 'postdate', '1=1', 30);
+        $ends = $this->bookService->getBooks($this->end_point, 'lastupdate', [['fullflag', '=', '1']], 30);
 
         $cates = cache('cates');
         if (!$cates) {
@@ -62,12 +46,11 @@ class Index extends Base
         $catelist = array(); //分类漫画数组
         $cateItem = array();
         foreach ($cates as $cate) {
-            $books = $this->bookService->getByCate($cate->id, $this->end_point);
+            $books = $this->bookService->getByCate($cate->typeid, $this->end_point);
             $cateItem['books'] = $books->toArray();
-            $cateItem['cate'] = ['id' => $cate->id, 'cate_name' => $cate->cate_name];
+            $cateItem['cate'] = ['id' => $cate->typeid, 'cate_name' => $cate->cate_name];
             $catelist[] = $cateItem;
         }
-
 
         View::assign([
             'banners' => $banners,
@@ -77,8 +60,7 @@ class Index extends Base
             'ends' => $ends,
             'newbie' => $newbie,
             'cates' => $cates,
-            'catelist' => $catelist,
-            'c_url' => $this->c_url
+            'catelist' => $catelist
         ]);
         return view($this->tpl);
     }

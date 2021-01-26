@@ -7,23 +7,14 @@
 <div class="x-page__content">
     <div class="x-rank">
         <div class="x-rank__menu">
-            <a @click="foo('new', 'new')">
-                <p class="x-rank__menu--item" :class="{'is-active' : op2 == 'new'}">新书榜</p>
+            <a @click="foo('new')">
+                <p class="x-rank__menu--item" :class="{'is-active' : op == 'new'}">新书榜</p>
             </a>
-            <a @click="foo('click', 'year')">
-                <p class="x-rank__menu--item" :class="{'is-active' : op2 == 'year'}">点击总榜</p>
+            <a @click="foo('click')">
+                <p class="x-rank__menu--item" :class="{'is-active' : op == 'click'}">点击榜</p>
             </a>
-            <a @click="foo('click', 'month')">
-                <p class="x-rank__menu--item" :class="{'is-active' : op2 == 'month'}">点击月榜</p>
-            </a>
-            <a @click="foo('click', 'week')">
-                <p class="x-rank__menu--item" :class="{'is-active' : op2 == 'week'}">点击周榜</p>
-            </a>
-            <a @click="foo('click', 'day')">
-                <p class="x-rank__menu--item" :class="{'is-active' : op2 == 'day'}">点击日榜</p>
-            </a>
-            <a @click="foo('end', 'end')">
-                <p class="x-rank__menu--item" :class="{'is-active' : op2 == 'end'}">完结榜</p>
+            <a @click="foo('fullflag')">
+                <p class="x-rank__menu--item" :class="{'is-active' : op == 'end'}">完结榜</p>
             </a>
         </div>
         <div class="x-rank__list" style="height: calc(736px - 1.2rem);">
@@ -31,20 +22,20 @@
                 <a :href="'/{$book_ctrl}/'+ item.param">
                     <div class="x-book__multi">
                         <div class="x-book__coverbox">
-                            <img class="x-book__cover" :src="item.cover_url" style="width: 1.3rem; height: 1.73333rem;">
+                            <img class="x-book__cover" :src="item.cover" style="width: 1.3rem; height: 1.73333rem;">
                             <div class="x-book__coverindex">
                                 <span>{{index + 1}}</span>
                             </div>
                         </div>
                         <div class="x-book__text--multi" style="width: calc(100% - 1.3rem); height: 1.73333rem;">
                             <div class="x-rank__book--info">
-                                <p class="x-info__name">{{item.book_name}}</p>
+                                <p class="x-info__name">{{item.articlename}}</p>
                                 <p class="x-info__author">
                                     {{item.cate_name}}
-                                    <span>{{item.author_name}}</span>
+                                    <span>{{item.author}}</span>
                                 </p>
                                 <p class="x-info__intro">
-                                    {{item.summary}}
+                                    {{item.intro}}
                                 </p>
                             </div>
                         </div>
@@ -63,20 +54,17 @@
         el: '#app',
         data: {
             op: 'new',
-            op2: 'new',
             books: []
         },
         methods: {
-            foo(op, date) {
+            foo(op) {
                 this.op = op
-                this.op2 = date
-                this.getBooks(this.op, date)
+                this.getBooks(this.op)
             },
-            getBooks(op, date) {
+            getBooks(op) {
                 axios.get("/getRanks", {
                     params: {
-                        op: op,
-                        date: date
+                        op: op
                     }
                 }).then(response => {
                     this.books = response.data.books
@@ -84,7 +72,7 @@
             }
         },
         mounted() {
-            this.getBooks(this.op, 'year')
+            this.getBooks(this.op)
         },
     })
 </script>

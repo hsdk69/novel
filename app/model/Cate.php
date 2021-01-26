@@ -8,7 +8,9 @@ use think\Model;
 
 class Cate extends Model
 {
-    public function setTagNameAttr($value){
+    protected $pk = 'typeid';
+
+    public function setCateNameAttr($value){
         return trim($value);
     }
 }

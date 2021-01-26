@@ -14,7 +14,7 @@
         <div class="app_lisLoinSpan">
             <ul>
                 <li class="username">
-                    <input id="username" type="text" name="username" placeholder="请输入用户名" autocomplete="off">
+                    <input id="uname" type="text" name="uname" placeholder="请输入用户名" autocomplete="off">
                 </li>
                 <li class="password">
                     <input id="password" type="password" name="password" placeholder="请输入密码" autocomplete="off">
@@ -47,7 +47,7 @@
             url:'/login',
             type:'post',
             data: {
-                username: $('#username').val(),
+                username: $('#uname').val(),
                 password: $('#password').val(),
             },
             success:function (res) {

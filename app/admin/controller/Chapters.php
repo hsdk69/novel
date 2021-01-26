@@ -4,8 +4,8 @@
 namespace app\admin\controller;
 
 
-use app\model\Book;
-use app\model\Chapter;
+use app\model\ArticleArticle;
+use app\model\ArticleChapter;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\exception\ValidateException;
@@ -25,7 +25,7 @@ class Chapters extends Base
     {
         $book_id = input('book_id');
         try {
-            $book = Book::findOrFail(input('book_id'));
+            $book = ArticleArticle::findOrFail(input('book_id'));
             $data = $this->chapterService->getChapters([
                 ['book_id','=',$book_id]
             ]);
@@ -45,7 +45,7 @@ class Chapters extends Base
     public function create(){
         if (request()->isPost()) {
             $data = request()->param();
-            $chapter = new Chapter();
+            $chapter = new ArticleChapter();
             $dir = 'book/content';
             if (request()->file() != null) {
                 $content= request()->file('content');
@@ -65,9 +65,9 @@ class Chapters extends Base
             if ($result){
                 $param = [
                     "id" => $data["book_id"],
-                    "last_time" => time()
+                    "lastupdate" => time()
                 ];
-                $result2 = Book::update($param);
+                $result2 = ArticleArticle::update($param);
                 if ($result2) {
                     $this->success('添加成功');
                 } else {
@@ -95,7 +95,7 @@ class Chapters extends Base
     {
         $id = input('id');
         try {
-            $chapter = Chapter::findOrFail(input('id'));
+            $chapter = ArticleChapter::findOrFail(input('id'));
             if (request()->isPost()) {
                 $chapter->chapter_name = input('chapter_name');
                 $chapter->chapter_order = input('chapter_order');
@@ -118,9 +118,9 @@ class Chapters extends Base
                 if ($result){
                     $param = [
                         "id" => $chapter["book_id"],
-                        "last_time" => time()
+                        "lastupdate" => time()
                     ];
-                    $result2 = Book::update($param);
+                    $result2 = ArticleArticle::update($param);
                     if ($result2) {
                         $this->success('修改成功');
                     } else {
@@ -146,7 +146,7 @@ class Chapters extends Base
     {
         $id = input('id');
         try {
-            $chapter = Chapter::findOrFail($id);
+            $chapter = ArticleChapter::findOrFail($id);
             $chapter->delete();
             return ['err'=>0,'msg'=>'删除成功'];
         } catch (DataNotFoundException $e) {
@@ -159,7 +159,7 @@ class Chapters extends Base
 
     public function deleteAll(){
         $ids = input('ids');
-        Chapter::destroy($ids);
+        ArticleChapter::destroy($ids);
     }
 
 }

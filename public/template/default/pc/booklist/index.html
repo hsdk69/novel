@@ -11,36 +11,15 @@
             <div class="wrap1200 ranklist">
                 <div class="leftbar fl">
                     <div class="selectlist">
-                        <div class="select selchannel">
-                            <span class="tname">频道</span>
-                            <ul class="textlist">
-                                <li :class="{'on' : gender == 1}">
-                                    <a @click="genderChange(1)">男频</a>
-                                </li>
-                                <li :class="{'on' : gender == 2}">
-                                    <a @click="genderChange(2)">女频</a>
-                                </li>
-                            </ul>
-                        </div>
                         <div class="select selstyle">
                             <span class="tname">分类</span>
-                            <ul class="textlist" v-show="gender == 1">
+                            <ul class="textlist">
                                 <li :class="{'on' : cate == -1}">
-                                    <a @click="cateChange(-1, 1)">全部</a>
+                                    <a @click="cateChange(-1)">全部</a>
                                 </li>
-                                {volist name="boys" id="vo"}
-                                <li :class="{'on' : cate == {$vo.id}}">
-                                    <a @click="cateChange({$vo.id}, 1)">{$vo.cate_name}</a>
-                                </li>
-                                {/volist}
-                            </ul>
-                            <ul class="textlist" v-show="gender == 2">
-                                <li :class="{'on' : cate == -1}">
-                                    <a @click="cateChange(-1, 2)">全部</a>
-                                </li>
-                                {volist name="girls" id="vo"}
-                                <li :class="{'on' : cate == {$vo.id}}">
-                                    <a @click="cateChange({$vo.id}, 2)">{$vo.cate_name}</a>
+                                {volist name="cates" id="vo"}
+                                <li :class="{'on' : cate == {$vo.typeid}}">
+                                    <a @click="cateChange({$vo.typeid})">{$vo.cate_name}</a>
                                 </li>
                                 {/volist}
                             </ul>
@@ -48,8 +27,8 @@
                         <div class="select selnum">
                             <span class="tname">字数</span>
                             <ul class="textlist">
-                                <li :class="{'on' : words == 9999}">
-                                    <a @click="wordsChange(9999)">全部</a>
+                                <li :class="{'on' : words == -1}">
+                                    <a @click="wordsChange(-1)">全部</a>
                                 </li>
                                 <li :class="{'on' : words == 30}">
                                     <a @click="wordsChange(30)">30万字以内</a>
@@ -68,13 +47,13 @@
                         <div class="select selstatus">
                             <span class="tname">状态</span>
                             <ul class="textlist">
-                                <li :class="{'on' : end == -1}">
+                                <li :class="{'on' : fullflag == -1}">
                                     <a @click="statusChange(-1)">全部</a>
                                 </li>
-                                <li :class="{'on' : end == 2}">
-                                    <a @click="statusChange(2)">连载</a>
+                                <li :class="{'on' : fullflag == 0}">
+                                    <a @click="statusChange(0)">连载</a>
                                 </li>
-                                <li :class="{'on' : end == 1}">
+                                <li :class="{'on' : fullflag == 1}">
                                     <a @click="statusChange(1)">完本</a>
                                 </li>
                             </ul>
@@ -91,29 +70,29 @@
                                             {volist name="books" id="vo"}
                                             <dl>
                                                 <dt>
-                                                    <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.book_name}">
-                                                        <img class="lazyimg" src="{$vo.cover_url}" style="display: block;">
+                                                    <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.articlename}">
+                                                        <img class="lazyimg" src="{$vo.cover}" style="display: block;">
                                                     </a>
                                                 </dt>
                                                 <dd>
-                                                    <a href="/{$book_ctrl}/{$vo.param}" class="bigpic-book-name" title="{$vo.book_name}">
-                                                        {$vo.book_name}
+                                                    <a href="/{$book_ctrl}/{$vo.param}" class="bigpic-book-name" title="{$vo.articlename}">
+                                                        {$vo.articlename}
                                                     </a>
                                                     <p>
-                                                        <a href="/{$search_ctrl}/{$vo.author_name}" target="_blank">
-                                                            {$vo.author_name}
+                                                        <a target="_blank">
+                                                            {$vo.author}
                                                         </a>|
-                                                        <a href="/{$booklist_act}?cate={$vo.cate_id}" target="_blank">
+                                                        <a href="/{$booklist_act}?cate={$vo.typeid}" target="_blank">
                                                             {$vo.cate.cate_name}
                                                         </a>|
-                                                        {$vo.end == 1 ? '已完结' : '连载中'}
+                                                        {$vo.fullflag == 1 ? '已完结' : '连载中'}
                                                     </p>
                                                     <p class="big-book-info">
-                                                        {$vo.summary}
+                                                        {$vo.intro}
                                                     </p>
                                                     <p>
-                                                        <span href="javascript:;">{$vo.words}万字 |</span>
-                                                        <span class="red">{$vo.last_time|date='Y-m-d H:i'}</span>
+                                                        <span href="javascript:;">{$vo.words}字 |</span>
+                                                        <span class="red">{$vo.lastupdate|date='Y-m-d H:i'}</span>
                                                     </p>
                                                 </dd>
                                             </dl>
@@ -169,32 +148,22 @@
     var app = new Vue({
         el: '#app',
         data: {
-            gender: {$gender_selector},
             cate: {$cate_selector},
-            boys: [],
-            girls: [],
             words: {$words_selector},
-            end: {$end_selector},
+            fullflag: {$end_selector},
         },
         methods: {
-            genderChange(index) {
-                this.gender = index
-                this.cate = -1
-                window.location.href = '/{$booklist_act}?cate_id='+this.cate+'&words='+this.words+'&end='+this.end+'&gender='+this.gender;
-            },
             wordsChange(words) {
                 this.words = words
-                window.location.href = '/{$booklist_act}?cate_id='+this.cate+'&words='+this.words+'&end='+this.end+'&gender='+this.gender;
+                window.location.href = '/{$booklist_act}?typeid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
             },
-            cateChange(cate, gender) {
+            cateChange(cate) {
                 this.cate = cate
-                this.gender = gender
-
-                window.location.href = '/{$booklist_act}?cate_id='+this.cate+'&words='+this.words+'&end='+this.end+'&gender='+gender;
+                window.location.href = '/{$booklist_act}?typeid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
             },
-            statusChange(end) {
-                this.end = end
-                window.location.href = '/{$booklist_act}?cate_id='+this.cate+'&words='+this.words+'&end='+this.end+'&gender='+this.gender;
+            statusChange(fullflag) {
+                this.fullflag = fullflag
+                window.location.href = '/{$booklist_act}?typeid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
             }
         }
     })

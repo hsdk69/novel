@@ -1,82 +1,170 @@
 {extend name="pub/base" /}
-{block name="title"}
+{block name="head"}
 <title>作者管理</title>
+<style>
+    /** 数据表格中的select尺寸调整 */
+    .layui-table-view .layui-table-cell .layui-select-title .layui-input {
+        height: 28px;
+        line-height: 28px;
+    }
+
+    .layui-table-view [lay-size="lg"] .layui-table-cell .layui-select-title .layui-input {
+        height: 40px;
+        line-height: 40px;
+    }
+
+    .layui-table-view [lay-size="lg"] .layui-table-cell .layui-select-title .layui-input {
+        height: 40px;
+        line-height: 40px;
+    }
+
+    .layui-table-view [lay-size="sm"] .layui-table-cell .layui-select-title .layui-input {
+        height: 20px;
+        line-height: 20px;
+    }
+
+    .layui-table-view [lay-size="sm"] .layui-table-cell .layui-btn-xs {
+        height: 18px;
+        line-height: 18px;
+    }
+</style>
 {/block}
+{block name="main"}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <!-- 表格工具栏 -->
+            <form class="layui-form toolbar table-tool-mini">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <div class="layui-input-inline">
+                            <input id="uname" class="layui-input" type="text" placeholder="用户名"/>
+                        </div>
+                        <div class="layui-input-inline">
+                            <input id="name" class="layui-input" type="text" placeholder="昵称"/>
+                        </div>
+                    </div>
 
-{block name="body"}
-<section class="Hui-admin-article">
-    <nav class="breadcrumb" style="background-color:#fff;padding: 0 24px"><i class="Hui-iconfont">&#xe67f;</i> 首页
-        <span class="c-gray en">&gt;</span>
-        作者管理
-        <span class="c-gray en">&gt;</span>
-        作者列表
-        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
-           href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
-    </nav>
-    <article class="Hui-admin-content clearfix">
-        <div class="panel">
-            <div class="panel-body">
-                <div class="text-c">
-                    <form action="{:url('search')}">
-                        <input type="text" name="author_name" placeholder=" 作者名称" style="width:250px" class="input-text">
-                        <button class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 查询</button>
-                    </form>
+                    <div class="layui-inline" style="padding-right: 110px;">
+                        <button class="layui-btn icon-btn" lay-filter="tbBasicTbSearch" lay-submit>
+                            <i class="layui-icon">&#xe615;</i>搜索
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </form>
+            <!-- 数据表格 -->
+            <table id="tbBasicTable" lay-filter="tbBasicTable"></table>
         </div>
+    </div>
 
-        <div class="panel mt-20">
-            <div class="panel-body">
-                <div class="clearfix">
-							<span class="f-l">
-                                 <a href="javascript:;" onclick="delAll('请选择要删除的作者','authors')" class="btn btn-danger radius"><i
-                                         class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
-                                <a class="btn btn-primary radius" onclick="editCreate('作者新增','{:url(\'create\')}')">
-                                    <i class="Hui-iconfont">&#xe600;</i> 添加作者
-                                </a>
-							</span>
-                    <span class="f-r">共有数据：<strong>{$count}</strong> 条</span>
-                </div>
-                <div class="mt-20 clearfix">
-                    <table class="table table-border table-bordered table-bg table-hover table-sort">
-                        <thead>
-                        <tr class="text-c">
-                            <th><input id="cbx" type="checkbox" value=""></th>
-                            <th>ID</th>
-                            <th>作者名</th>
-                            <th>创建时间</th>
-                            <th>修改时间</th>
-                            <th>作品数</th>
-                            <th>操作</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {volist name="authors" id="vo"}
-                        <tr class="text-c">
-                            <td><input data-val="{$vo.id}" class="cbx" type="checkbox" value=""></td>
-                            <td>{$vo.id}</td>
-                            <td>{$vo.author_name}</td>
-                            <td>{$vo.create_time|date='Y-m-d H:i'}</td>
-                            <td>{$vo.update_time|date='Y-m-d H:i'}</td>
-                            <td>
-                                {$vo.count}
-                            </td>
-                            <td class="f-14 td-manage">
-                                <a href="{:url('getBooksByAuthor',['author_name' => $vo.author_name])}"
-                                   class="btn radius btn-success size-S">查看作品</a>
-                                <a style="text-decoration:none" class="ml-5" onclick="editCreate('作者编辑','edit?id={$vo.id}')">
-                                    <i class="Hui-iconfont">&#xe6df;</i>
-                                </a>
-                                <a style="text-decoration:none" class="ml-5" onclick="del(this,{$vo.id})" href="javascript:;"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
-                        </tr>
-                        {/volist}
-                        </tbody>
-                    </table>
-                    {$authors|raw}
-                </div>
-            </div>
+    <div class="layui-card">
+        <div class="layui-card-body">
+            交流和反馈建议请加QQ群：780362399
         </div>
-    </article>
+    </div>
 
-</section>
+    <!-- 表格操作列 -->
+    <script type="text/html" id="tbBasicTbBar">
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+</div>
+
+{/block}
+{block name="js"}
+<script>
+    layui.use(['table', 'util', 'form', 'dropdown'], function () {
+        var $ = layui.jquery
+        var table = layui.table
+        var util = layui.util
+        var dropdown = layui.dropdown
+        var form = layui.form
+
+        /* 表格工具条点击事件 */
+        table.on('tool(tbBasicTable)', function (obj) {
+            var data = obj.data; // 获得当前行数据
+            if (obj.event === 'edit') { // 修改
+                parent.layui.index.openTab({
+                    title: '编辑题材',
+                    url: "{:url('authors/edit')}?uid=" + data.uid,
+                    end: function () {
+                        insTb.reload();
+                    }
+                });
+            } else if (obj.event === 'del') { // 删除
+                layer.confirm('确认要删除吗？', function (index) {
+                    $.ajax({
+                        type: 'POST',
+                        url: "{:url('delete')}",
+                        data: {uid: data.uid},
+                        dataType: 'json',
+                        success: function (res) {
+                            if (res.err == 0) { //删除成功
+                                layer.msg(res.msg, {icon: 1, time: 1000}, function () {
+                                    location.reload();
+                                });
+                            } else {
+                                layer.msg(res.msg, {icon: 2}, function () {
+                                    location.reload();
+                                });
+                            }
+                        },
+                        error: function (res) {
+                            layer.msg(res);
+                        },
+                    });
+                });
+            }
+            dropdown.hideAll();
+        });
+
+        /* 渲染表格 */
+        var insTb = table.render({
+            elem: '#tbBasicTable',
+            url: "{:url('authors/list')}",
+            page: true,
+            cellMinWidth: 100,
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'uid', title: 'ID', align: 'center', sort: true},
+                {field: 'uname', title: '用户名', align: 'center', sort: true},
+                {field: 'name', title: '昵称名', align: 'center', sort: true},
+                {field: 'pass', title: '密码', align: 'center', sort: true},
+                {field: 'salt', title: '密码盐', align: 'center', sort: true},
+                {
+                    field: 'lastlogin', title: '最近登录', templet: function (d) {
+                        return util.timeAgo(d.lastlogin * 1000);
+                    }, align: 'center', sort: true
+                },
+                {title: '操作', toolbar: '#tbBasicTbBar', align: 'center', minWidth: 200}
+            ]]
+        });
+
+        form.on('submit(tbBasicTbSearch)', function (data) {
+            var uname = $('#uname').val()
+            var name = $('#name').val()
+            table.render({
+                elem: '#tbBasicTable',
+                url: '{:url("search")}?uname=' + uname + '&name=' + name,
+                page: true,
+                cellMinWidth: 100,
+                cols: [[
+                    {type: 'checkbox'},
+                    {field: 'uid', title: 'ID', align: 'center', sort: true},
+                    {field: 'uname', title: '用户名', align: 'center', sort: true},
+                    {field: 'name', title: '昵称名', align: 'center', sort: true},
+                    {field: 'pass', title: '密码', align: 'center', sort: true},
+                    {field: 'salt', title: '密码盐', align: 'center', sort: true},
+                    {
+                        field: 'lastlogin', title: '最近登录', templet: function (d) {
+                            return util.timeAgo(d.lastlogin * 1000);
+                        }, align: 'center', sort: true
+                    },
+                    {title: '操作', toolbar: '#tbBasicTbBar', align: 'center', minWidth: 200}
+                ]]
+            });
+            return false;
+        });
+    });
+</script>
 {/block}

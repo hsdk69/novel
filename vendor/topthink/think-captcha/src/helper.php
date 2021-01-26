@@ -28,18 +28,20 @@ function captcha($config = null): Response
  */
 function captcha_src($config = null): string
 {
-    return Route::buildUrl('captcha' . ($config ? "/{$config}" : ''));
+    return Route::buildUrl('/captcha' . ($config ? "/{$config}" : ''));
 }
 
 /**
  * @param $id
  * @return string
  */
-function captcha_img($id = ''): string
+function captcha_img($id = '', $domid = ''): string
 {
     $src = captcha_src($id);
+  
+    $domid = empty($domid) ? $domid : "id='" . $domid . "'";
 
-    return "<img src='{$src}' alt='captcha' onclick='this.src=\"{$src}?\"+Math.random();' />";
+    return "<img src='{$src}' alt='captcha' " . $domid . " onclick='this.src=\"{$src}?\"+Math.random();' />";
 }
 
 /**

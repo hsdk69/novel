@@ -4,7 +4,7 @@
 namespace app\app\controller;
 
 
-use app\model\Chapter;
+use app\model\ArticleChapter;
 use app\model\UserBuy;
 use Firebase\JWT\JWT;
 use think\db\exception\DataNotFoundException;
@@ -19,7 +19,7 @@ class Chapters extends Base
 
         $chapters = cache('chapters:' . $book_id);
         if (!$chapters) {
-            $chapters = Chapter::where('book_id', '=', $book_id)->select();
+            $chapters = ArticleChapter::where('book_id', '=', $book_id)->select();
             cache('chapters:' . $book_id, $chapters, null, 'redis');
         }
 
@@ -44,7 +44,7 @@ class Chapters extends Base
         try {
             $chapter = cache('app:chapter:' . $id);
             if (!$chapter) {
-                $chapter = Chapter::with('book')->findOrFail($id);
+                $chapter = ArticleChapter::with('book')->findOrFail($id);
 				cache('app:chapter:' . $id, $chapter, null, 'redis');
             }
 
@@ -103,7 +103,7 @@ class Chapters extends Base
 
                 $chapters = cache('chapters:' . $book_id);
                 if (!$chapters) {
-                    $chapters = Chapter::where('book_id', '=', $book_id)->select();
+                    $chapters = ArticleChapter::where('book_id', '=', $book_id)->select();
                     cache('chapters:' . $book_id, $chapters, null, 'redis');
                 }
 

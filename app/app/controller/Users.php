@@ -4,19 +4,14 @@
 namespace app\app\controller;
 
 
-use app\common\Common;
 use app\common\RedisHelper;
-use app\model\Book;
+use app\model\ArticleArticle;
 use app\model\Comments;
 use app\model\User;
 use app\model\UserFavor;
 use app\model\UserFinance;
-use app\service\FinanceService;
-use app\service\PromotionService;
-use app\service\UserService;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
-use think\facade\Validate;
 
 class Users extends BaseAuth
 {
@@ -36,7 +31,7 @@ class Users extends BaseAuth
     {
         $favors = UserFavor::where('user_id', '=', $this->uid)->select();
         foreach ($favors as &$favor) {
-            $book = Book::find($favor->book_id);
+            $book = ArticleArticle::find($favor->book_id);
             if ($book) {
                 $favor['book'] = $book;
             }
@@ -156,30 +151,6 @@ class Users extends BaseAuth
             return json(['success' => 0, 'msg' => '验证码错误']);
         }
         return json(['success' => 1, 'msg' => '验证码正确']);
-    }
-
-    public function sendcms()
-    {
-        $code = generateRandomString();
-        $phone = trim(input('phone'));
-        $validate = Validate::make([
-            'phone' => 'mobile'
-        ]);
-        $data = [
-            'phone' => $phone
-        ];
-        if (!$validate->check($data)) {
-            return json(['success' => 0, 'msg' => '手机格式不正确']);
-        }
-        $sms = new Common();
-        $result = $sms->sendcode($this->uid, $phone, $code);
-        if ($result['status'] == 0) { //如果发送成功
-            session('xwx_sms_code', $code); //写入session
-            session('xwx_cms_phone', $phone);
-            $redis = RedisHelper::GetInstance();
-            $redis->set($this->redis_prefix . ':xwx_mobile_unlock:' . $this->uid, 1, 300); //设置解锁缓存，让用户可以更改手机
-        }
-        return json(['success' => 0, 'msg' => $result['msg']]);
     }
 
     public function resetpwd()

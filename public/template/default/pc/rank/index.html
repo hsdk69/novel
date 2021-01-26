@@ -1,6 +1,7 @@
 {extend name="./template/default/pc/pub/base.html" /}
 {block name="seo"}
 <title>小说排行榜-{$site_name}</title>
+<meta name="description" content="{$site_name}小说新书榜、点击榜、完结榜">
 {/block}
 {block name="main"}
 <div class="body-bg" id="app">
@@ -16,8 +17,8 @@
                         <li class="{$op == 'click' ? 'on' : ''}">
                             <a href="/{$rank_ctrl}?cate=click">点击榜</a>
                         </li>
-                        <li class="{$op == 'end' ? 'on' : ''}">
-                            <a href="/{$rank_ctrl}?cate=end">完结榜</a>
+                        <li class="{$op == 'fullflag' ? 'on' : ''}">
+                            <a href="/{$rank_ctrl}?cate=fullflag">完结榜</a>
                         </li>
                     </ul>
                 </div>
@@ -28,29 +29,29 @@
                             <dl>
                                 <dt>
                                     <a href="/{$book_ctrl}/{$vo.param}" target="_blank">
-                                        <img src="{$vo.cover_url}" style="display: block;">
+                                        <img src="{$vo.cover}" style="display: block;">
                                     </a>
                                 </dt>
                                 <dd>
                                     <a href="/{$book_ctrl}/{$vo.param}" class="bigpic-book-name" target="_blank">
-                                        <span class="num red">{$i}</span>{$vo.book_name}
+                                        <span class="num red">{$i}</span>{$vo.articlename}
                                     </a>
                                     <p>
                                         <a>
-                                            {$vo.words}万字
+                                            {$vo.words}字
                                         </a>
-                                        <a href="/{$booklist_act}?cate={$vo.cate_id}" target="_blank">
+                                        <a href="/{$booklist_act}?cate={$vo.typeid}" target="_blank">
                                             {$vo.cate.cate_name}
                                         </a> |
                                         {$vo.end == 1 ? '已完结' : '连载中'}
-                                        <span class="clicknum">{$vo.clicks|default=0} 点击</span>
+                                        <span class="clicknum">{$vo.allvisit|default=0} 点击</span>
                                     </p>
-                                    <p class="big-book-info">{$vo.summary}</p>
+                                    <p class="big-book-info">{$vo.intro}</p>
                                     <p>
-                                        <a href="/{$search_ctrl}/{$vo.author_name}" target="_blank" class="red">
-                                             {$vo.author_name}
+                                        <a href="/{$search_ctrl}/{$vo.author}" target="_blank" class="red">
+                                             {$vo.author}
                                         </a>
-                                        <span>| {$vo.last_time|date='Y-m-d H:i'}</span>
+                                        <span>| {$vo.lastupdate|date='Y-m-d H:i'}</span>
                                     </p>
                                 </dd>
                             </dl>

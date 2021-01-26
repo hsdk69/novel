@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <title>{$chapter.chapter_name}-{$site_name}</title>
+    <title>{$chapter.chaptername}-{$site_name}</title>
     <meta name="description" content="{$chapter.book.book_name}{$chapter.chapter_name}在线阅读">
     <link rel="stylesheet" href="/static/css/chapter.css" type="text/css"/>
     {if $next != "null"}
-    <link rel="prefetch" href="/{$chapter_ctrl}/{$next.id}" />
+    <link rel="prefetch" href="/{$chapter_ctrl}/{$next.chapterid}" />
     {/if}
     <script src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
     <!---识别手机或电脑的js开始--->
@@ -84,29 +84,27 @@
         <div class="crumbs-nav">
             <a href="/" target="_blank">首页</a>
             <em class="iconfont"></em>
-            <a href="/{$booklist_act}" target="_blank">{$chapter.book.cate.gender == 1 ? '男频' : '女频'}</a>
-            <em class="iconfont"></em>
             <a href="/{$booklist_act}?cate={$chapter.book.cate_id}" target="_blank">{$chapter.book.cate.cate_name}</a>
             <em class="iconfont"></em>
-            <a href="/{$book_ctrl}/{$chapter.book.param}" target="_blank">{$chapter.book.book_name}</a>
+            <a href="/{$book_ctrl}/{$chapter.book.param}" target="_blank">{$chapter.articlename}</a>
         </div>
         <div :class="'read-main-wrap font-family0' + font" :style="{'font-size': fontsize + 'px'}" id="j_readMainWrap">
             <div id="j_chapterBox">
                 <div class="text-wrap">
                     <div class="main-text-wrap">
                         <div class="text-head">
-                            <h3 class="j_chapterName">{$chapter.chapter_name}</h3>
+                            <h3 class="j_chapterName">{$chapter.chaptername}</h3>
                             <div class="text-info cf">
                                 <div class="info fl">
                                     <a href="/{$book_ctrl}/{$chapter.book.param}" target="_blank">
-                                        <em class="iconfont"></em> {$chapter.book.book_name}
+                                        <em class="iconfont"></em> {$chapter.articlename}
                                     </a>
-                                    <a href="/{$search_ctrl}?keyword={$chapter.book.author_name}" target="_blank">
-                                        <em class="iconfont"></em> {$chapter.book.author_name}
+                                    <a>
+                                        <em class="iconfont"></em> {$chapter.book.author}
                                     </a>
                                     <i><em class="iconfont"></em><span
                                             class="j_chapterWordCut">{$words}</span>字</i>
-                                    <i><em class="iconfont"></em><span class="j_updateTime">{$chapter.create_time|date='Y-m-d'}</span></i>
+                                    <i><em class="iconfont"></em><span class="j_updateTime">{$chapter.lastupdate|date='Y-m-d'}</span></i>
                                 </div>
                             </div>
                         </div>
@@ -125,13 +123,13 @@
                 {if $prev == "null"}
                 <a class="block" style="color: lightgrey">上一章</a>
                 {else/}
-                <a href="/{$chapter_ctrl}/{$prev.id}" class="block" title="{$prev.chapter_name}">上一章</a>
+                <a href="/{$chapter_ctrl}/{$prev.chapterid}" class="block" title="{$prev.chaptername}">上一章</a>
                 {/if}
                 <span>|</span>
                 {if $next == "null"}
                 <a class="block" style="color: lightgrey">下一章</a>
                 {else/}
-                <a href="/{$chapter_ctrl}/{$next.id}" class="block" title="{$next.chapter_name}">下一章</a>
+                <a href="/{$chapter_ctrl}/{$next.chapterid}" class="block" title="{$next.chaptername}">下一章</a>
                 {/if}
             </div>
         </div>
@@ -170,7 +168,7 @@
                                     <ul>
                                         {volist name="chapters" id="vo"}
                                         <li>
-                                            <a href="/{$chapter_ctrl}/{$vo.id}">{$vo.chapter_name}</a>
+                                            <a href="/{$chapter_ctrl}/{$vo.chapterid}">{$vo.chaptername}</a>
                                         </li>
                                         {/volist}
                                     </ul>
@@ -332,27 +330,27 @@
 
     //--本地缓存代码开始--
     let bookInfo = {
-        chapter_id: '{$chapter.id}',
-        end: "{$chapter.book.end == 1 ? '完结' : '连载'}",
-        chapter_name: '{$chapter.chapter_name}',
-        author_name : '{$chapter.book.author_name}',
-        cover_url:'{$chapter.book.cover_url}',
-        book_id: '{$chapter.book_id}',
-        last_time: "{$chapter.book.last_time|date='Y-m-d'}",
-        book_name:'{$chapter.book.book_name}',
+        chapter_id: '{$chapter.chapterid}',
+        end: "{$chapter.book.fullflag == 1 ? '完结' : '连载'}",
+        chapter_name: '{$chapter.chaptername}',
+        author_name : '{$chapter.book.author}',
+        cover_url:'{$chapter.book.cover}',
+        book_id: '{$chapter.articleid}',
+        last_time: "{$chapter.book.lastupdate|date='Y-m-d'}",
+        book_name:'{$chapter.book.articlename}',
         param: '{$chapter.book.param}'
     };
-    localStorage.setItem('manhua_{$chapter.book_id}', JSON.stringify(bookInfo));//id为键，设置缓存
+    localStorage.setItem('manhua_{$chapter.articleid}', JSON.stringify(bookInfo));//id为键，设置缓存
     let history = [];
     let value = localStorage.getItem('xwx_historys'); //读取参照数组
     if (value != undefined && value != null) {
         history = JSON.parse(value);
     }
-    if (history.indexOf('manhua_{$chapter.book_id}') === -1) {
-        history.push('manhua_{$chapter.book_id}'); //把id为值存入参照数组
+    if (history.indexOf('manhua_{$chapter.articleid}') === -1) {
+        history.push('manhua_{$chapter.articleid}'); //把id为值存入参照数组
     }
 
-    console.log(history)
+    console.log(bookInfo)
     localStorage.setItem('xwx_historys', JSON.stringify(history));
     //--本地缓存代码结束--
 

@@ -10,11 +10,11 @@
             {volist name="banners" id="vo"}
             <div class="swiper-slide">
                 <a href="{if $end_point == 'id'}
-                                      /{$book_ctrl}/{$vo.book_id}
+                                      /{$book_ctrl}/{$vo.articleid}
                                       {else /}
-                                      /{$book_ctrl}/{$vo.book.unique_id}
+                                      /{$book_ctrl}/{$vo.book.backupname}
                                       {/if}">
-                    <img src="/static/upload/{$vo.pic_name}">
+                    <img src="{$server}{$vo.pic}">
                 </a>
             </div>
             {/volist}
@@ -32,9 +32,9 @@
             <div class="x-book">
                 <a href="/{$book_ctrl}/{$vo.param}/">
                     <div class="x-book__coverbox">
-                        <img class="x-book__cover" src="{$vo.cover_url}">
+                        <img class="x-book__cover" src="{$server}{$vo.cover}">
                     </div>
-                    <div class="x-book__text--normal">{$vo.book_name}</div>
+                    <div class="x-book__text--normal">{$vo.articlename}</div>
                 </a>
             </div>
             {/volist}
@@ -49,14 +49,14 @@
         <div class="x-part__books--cover">
             {volist name="cateItem.books" id="vo" length="4"}
             <div class="m-book-single f-cb">
-                <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.book_name}">
-                    <img src="{$vo.cover_url}" alt="{$vo.book_name}">
-                    <h3>{$vo.book_name}</h3>
-                    <p>{$vo.author_name}</p>
-                    <p>{$vo.summary}</p>
+                <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.articlename}">
+                    <img src="{$server}{$vo.cover}" alt="{$vo.articlename}">
+                    <h3>{$vo.articlename}</h3>
+                    <p>{$vo.author}</p>
+                    <p>{$vo.intro}</p>
                     <p class="tag">
-                        <span>{$vo.end == 1 ? '已完结' : '连载中'}</span>
-                        <span>{$vo.words}万字</span>
+                        <span>{$vo.fullflag == 1 ? '已完结' : '连载中'}</span>
+                        <span>{$vo.words}字</span>
                     </p>
                 </a>
             </div>
@@ -76,16 +76,15 @@
                     <div class="x-book__text--multi">
                         <p class="x-book__name">
                             <span class="x-book__titleName">
-                                <a href="/{$book_ctrl}/{$vo.param}">{$vo.book_name}</a>
+                                <a href="/{$book_ctrl}/{$vo.param}">{$vo.articlename}</a>
                             </span>
                             <span class="x-book__tag">{$vo.cate.cate_name}</span>
-                            <span class="x-book__tag">{$vo.author_name}</span>
+                            <span class="x-book__tag">{$vo.author}</span>
                         </p>
                         <p class="x-book__intro">
-                            <a href="/{$chapter_ctrl}/{$vo.last_chapter_id}">
-                                {$vo.last_chapter}
+                            <a href="/{$chapter_ctrl}/{$vo.lastchapter}">
+                                {$vo.lastchapter}
                             </a>
-                            {/notempty}
                         </p>
                     </div>
                 </div>

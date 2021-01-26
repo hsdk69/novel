@@ -5,14 +5,10 @@ namespace app\index\controller;
 
 
 use app\common\RedisHelper;
-use app\model\Author;
 use app\model\Banner;
 use app\model\Cate;
-use app\model\Chapter;
-use app\service\BookService;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
-use think\facade\Db;
 use think\facade\View;
 
 class Index extends Base
@@ -27,33 +23,16 @@ class Index extends Base
 
     public function index()
     {
-        $pid = input('pid');
-        if ($pid) { //如果有推广pid
-            cookie('xwx_promotion', $pid); //将pid写入cookie
+        $banners = cache('banners');
+        if (!$banners) {
+            $banners = Banner::with('book')->order('banner_order', 'desc')->select();
+            cache('banners', $banners, null, 'redis');
         }
 
-        $banners = Banner::with('book')->where('banner_order', '>', 0)->order('banner_order', 'desc')->select();
-
         $hot_books = $this->bookService->getHotBooks($this->prefix, $this->end_point);
-
-        $newest = $this->bookService->getBooks($this->end_point, 'last_time', '1=1', 30);
-
-        $newbie = $this->bookService->getBooks($this->end_point, 'create_time', '1=1', 30);
-
-        $ends = $this->bookService->getBooks($this->end_point, 'last_time', [['end', '=', '1']], 30);
-//
-//        $most_charged = cache('mostCharged');
-//        if (!$most_charged) {
-//            $arr = $this->bookService->getMostChargedBook($this->end_point);
-//            if (count($arr) > 0) {
-//                foreach ($arr as $item) {
-//                    $most_charged[] = $item['book'];
-//                }
-//            } else {
-//                $arr = [];
-//            }
-//            cache('mostCharged', $most_charged, null, 'redis');
-//        }
+        $newest = $this->bookService->getBooks($this->end_point, 'lastupdate', '1=1', 30);
+        $newbie = $this->bookService->getBooks($this->end_point, 'postdate', '1=1', 30);
+        $ends = $this->bookService->getBooks($this->end_point, 'lastupdate', [['fullflag', '=', '1']], 30);
 
         $cates = cache('cates');
         if (!$cates) {
@@ -64,9 +43,9 @@ class Index extends Base
         $catelist = array(); //分类漫画数组
         $cateItem = array();
         foreach ($cates as $cate) {
-            $books = $this->bookService->getByCate($cate->id, $this->end_point);
+            $books = $this->bookService->getByCate($cate->typeid, $this->end_point);
             $cateItem['books'] = $books->toArray();
-            $cateItem['cate'] = ['id' => $cate->id, 'cate_name' => $cate->cate_name];
+            $cateItem['cate'] = ['id' => $cate->typeid, 'cate_name' => $cate->cate_name];
             $catelist[] = $cateItem;
         }
 
@@ -94,28 +73,7 @@ class Index extends Base
             $hot_search[] = $k;
         }
 
-        $books = cache('searchresult:' . $keyword);
-        if (!$books) {
-            $books = $this->bookService->search($keyword, $this->prefix);
-            foreach ($books as &$book) {
-                try {
-                    $author = Author::findOrFail($book['author_id']);
-                    $cate = Cate::findOrFail($book['cate_id']);
-                    $book['author'] = $author;
-                    $book['cate'] = $cate;
-                    if ($this->end_point == 'id') {
-                        $book['param'] = $book['id'];
-                    } else {
-                        $book['param'] = $book['unique_id'];
-                    }
-                } catch (DataNotFoundException $e) {
-                    abort(404, $e->getMessage());
-                } catch (ModelNotFoundException $e) {
-                    abort(404, $e->getMessage());
-                }
-            }
-            cache('searchresult:' . $keyword, $books, null, 'redis');
-        }
+        $books = $this->bookService->search($keyword, $this->end_point, $this->prefix);
 
         View::assign([
             'books' => $books,

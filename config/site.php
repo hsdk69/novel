@@ -2,16 +2,13 @@
 return [
     'schema' => 'http://',
     'domain' => 'xs.com',
-    'img_domain' => '',
     'mobile_domain' => 'm.xs.com',
     'mip_domain' => 'mip.xs.com',
-    'admin_domain' => 'admin.llekan.com',
-    'api_domain' => 'api.xs.com',
-    'app_domain' => '',
+    'server' => 'http://xs.com',
     'site_name' => '笔趣阁',
-    'salt' => 'hanmantai',
-    'api_key' => 'hahmh', 
-    'app_key' => 'hahmh',
+    'api_key' => '', 
+    'app_key' => '',
     'tpl' => 'default',
-    'cdn' => 'bootcdn'       
+    'server' => 'http://xs.fancys.shop/',
+    'json_server' => 'http://xsup.fancys.shop/'
  ];

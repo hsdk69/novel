@@ -8,63 +8,39 @@
     <div class="x-book__library">
         <div class="x-library__category">
             <div class="x-category__box">
-                <div class="x-category__box--title">频道</div>
-                <div class="x-category__box--list">
-                    <span class="x-category__item" :class="{'is-active' : gender == 1}">
-                        <a @click="genderChange(1)">男生</a>
-                    </span>
-                    <span class="x-category__item" :class="{'is-active' : gender == 2}">
-                        <a @click="genderChange(2)">女生</a>
-                    </span>
-                </div>
-            </div>
-            <div class="x-category__box" v-show="gender == 1">
                 <div class="x-category__box--title">分类</div>
                 <div class="x-category__box--list">
                     <span class="x-category__item" :class="{'is-active' : cate == -1}">
-                        <a @click="cateChange(-1, 1)">全部</a>
+                        <a @click="cateChange(-1)">全部</a>
                     </span>
-                    {volist name="boys" id="vo"}
-                    <span class="x-category__item" :class="{'is-active' : cate == {$vo.id}}">
-                        <a @click="cateChange({$vo.id}, 1)">{$vo.cate_name}</a>
+                    {volist name="cates" id="vo"}
+                    <span class="x-category__item" :class="{'is-active' : cate == {$vo.typeid}}">
+                        <a @click="cateChange({$vo.typeid})">{$vo.cate_name}</a>
                     </span>
                     {/volist}
                 </div>
+            </div>
 
-            </div>
-            <div class="x-category__box" v-show="gender == 2">
-                <div class="x-category__box--title">分类</div>
-                <div class="x-category__box--list">
-                    <span class="x-category__item" :class="{'is-active' : cate == -1}">
-                        <a @click="cateChange(-1, 2)">全部</a>
-                    </span>
-                    {volist name="girls" id="vo"}
-                    <span class="x-category__item" :class="{'is-active' : cate == {$vo.id}}">
-                        <a @click="cateChange({$vo.id}, 2)">{$vo.cate_name}</a>
-                    </span>
-                    {/volist}
-                </div>
-            </div>
             <div class="x-category__box">
                 <div class="x-category__box--title">状态</div>
                 <div class="x-category__box--list">
-                    <span class="x-category__item" :class="{'is-active' : end == -1}">
+                    <span class="x-category__item" :class="{'is-active' : fullflag == -1}">
                         <a @click="statusChange(-1)">全部</a>
                     </span>
-                    <span class="x-category__item" :class="{'is-active' : end == 2}">
-                        <a @click="statusChange(2)">连载</a>
+                    <span class="x-category__item" :class="{'is-active' : fullflag == 0}">
+                        <a @click="statusChange(0)">连载</a>
                     </span>
-                    <span class="x-category__item" :class="{'is-active' : end == 1}">
+                    <span class="x-category__item" :class="{'is-active' : fullflag == 1}">
                         <a @click="statusChange(1)">完本</a>
                     </span>
                 </div>
             </div>
 
-            <div class="x-category__box" style="display:none;">
+            <div class="x-category__box" v-show="more">
                 <div class="x-category__box--title">字数</div>
                 <div class="x-category__box--list">
-                    <span class="x-category__item" :class="{'is-active' : words == 9999}">
-                        <a @click="wordsChange(9999)">全部</a>
+                    <span class="x-category__item" :class="{'is-active' : words == -1}">
+                        <a @click="wordsChange(-1)">全部</a>
                     </span>
                     <span class="x-category__item" :class="{'is-active' : words == 30}">
                         <a @click="wordsChange(30)">30万字以内</a>
@@ -81,7 +57,7 @@
                 </div>
             </div>
         </div>
-        <div class="x-library__category--more">展开更多筛选项</div>
+        <div class="x-library__category--more" @click="showmore()">展开更多筛选项</div>
         <div class="x-library__books">
             <div class="van-list">
                 <span>
@@ -89,20 +65,20 @@
                     <div class="x-book">
                         <div class="x-book__multi">
                             <div class="x-book__coverbox">
-                                <a href="/{$book_ctrl}/{$vo.param}/" title="{$vo.book_name}">
-                                    <img class="x-book__cover" src="{$vo.cover_url}" style="width: 1.6rem; height: 2.13333rem;">
+                                <a href="/{$book_ctrl}/{$vo.param}/" title="{$vo.articlename}">
+                                    <img class="x-book__cover" src="{$vo.cover}" style="width: 1.6rem; height: 2.13333rem;">
                                 </a>
                             </div>
                             <div class="x-book__text--multi" style="width: calc(100% - 1.6rem); height: 2.13333rem;">
                                 <a href="/{$book_ctrl}/{$vo.param}/">
                                     <div class="x-book__info">
-                                        <p class="x-book__info--name">{$vo.book_name}</p>
+                                        <p class="x-book__info--name">{$vo.articlename}</p>
                                         <p class="x-book__info--chapter">
-                                            {$vo.summary}
+                                            {$vo.intro}
                                         </p>
                                         <p class="x-book__info--update">{$vo.cate.cate_name}</p>
                                         <p class="x-book__info--author">
-                                            {$vo.author_name} <span>{$vo.words}万字</span>
+                                            {$vo.author} <span>{$vo.words}字</span>
                                         </p>
                                     </div>
                                 </a>
@@ -140,32 +116,26 @@
     var app = new Vue({
         el: '#app',
         data: {
-            gender: {$gender_selector},
             cate: {$cate_selector},
-            boys: [],
-            girls: [],
             words: {$words_selector},
-            end: {$end_selector},
+            fullflag: {$end_selector},
+            more: false
         },
         methods: {
-            genderChange(index) {
-                this.gender = index
-                this.cate = -1
-                window.location.href = '/{$booklist_act}?cate_id='+this.cate+'&words='+this.words+'&end='+this.end+'&gender='+this.gender;
-            },
             wordsChange(words) {
                 this.words = words
-                window.location.href = '/{$booklist_act}?cate_id='+this.cate+'&words='+this.words+'&end='+this.end+'&gender='+this.gender;
+                window.location.href = '/{$booklist_act}?typeid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
             },
-            cateChange(cate, gender) {
+            cateChange(cate) {
                 this.cate = cate
-                this.gender = gender
-
-                window.location.href = '/{$booklist_act}?cate_id='+this.cate+'&words='+this.words+'&end='+this.end+'&gender='+gender;
+                window.location.href = '/{$booklist_act}?typeid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
             },
-            statusChange(end) {
-                this.end = end
-                window.location.href = '/{$booklist_act}?cate_id='+this.cate+'&words='+this.words+'&end='+this.end+'&gender='+this.gender;
+            statusChange(fullflag) {
+                this.fullflag = fullflag
+                window.location.href = '/{$booklist_act}?typeid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
+            },
+            showmore() {
+                this.more = !this.more
             }
         },
     })

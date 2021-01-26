@@ -4,7 +4,7 @@
 namespace app\service;
 
 use app\model\Author;
-use app\model\Book;
+use app\model\ArticleArticle;
 
 class AuthorService
 {
@@ -29,7 +29,7 @@ class AuthorService
     {
         $page = config('page.back_end_page');
         $author_id = Author::where('author_name', '=', $author_name)->find()->id;
-        $data = Book::where('author_id', '=', $author_id);
+        $data = ArticleArticle::where('author_id', '=', $author_id);
         $books = $data->with('author')->paginate(
             [
                 'list_rows'=> $page,

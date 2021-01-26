@@ -6,7 +6,7 @@ namespace app\app\controller;
 
 use app\common\RedisHelper;
 use app\model\Author;
-use app\model\Book;
+use app\model\ArticleArticle;
 use app\model\Comments;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
@@ -26,7 +26,7 @@ class Books extends Base
     {
         $newest = cache('app:newest_homepage');
         if (!$newest) {
-            $newest = Book::limit(10)->order('last_time', 'desc')->select();
+            $newest = ArticleArticle::limit(10)->order('lastupdate', 'desc')->select();
             foreach ($newest as &$book) {
                 $book->cover_url = $this->url.$book->cover_url;
             }
@@ -60,7 +60,7 @@ class Books extends Base
     {
         $ends = cache('app:ends_homepage');
         if (!$ends) {
-            $ends = Book::limit(10)->order('last_time', 'desc')->select();
+            $ends = ArticleArticle::limit(10)->order('lastupdate', 'desc')->select();
             foreach ($ends as &$book) {
                 $book->cover_url = $this->url.$book->cover_url;
             }
@@ -112,7 +112,7 @@ class Books extends Base
         $book = cache('app:book:' . $id);
         if ($book == false) {
             try {
-                $book = Book::with('area')->find($id);
+                $book = ArticleArticle::with('area')->find($id);
                 $book->cover_url = $this->url.$book->cover_url;
             } catch (DataNotFoundException $e) {
                 return json(['success' => 0, 'msg' => '该漫画不存在']);
@@ -161,7 +161,7 @@ class Books extends Base
     public function getRecommend(){
         $book_id = input('book_id');
         try {
-            $book = Book::findOrFail($book_id);
+            $book = ArticleArticle::findOrFail($book_id);
             $recommends = cache('randBooks:'.$book->cate_id);
             if (!$recommends) {
                 $recommends = $this->bookService->getRecommand($book->cate_id, $this->end_point);

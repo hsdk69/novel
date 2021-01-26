@@ -9,10 +9,10 @@ use think\Model;
 class Comments extends Model
 {
     public function book(){
-        return $this->belongsTo('Book');
+        return $this->belongsTo(ArticleArticle::class, 'articleid', 'articleid');
     }
 
     public function user(){
-        return $this->belongsTo('User');
+        return $this->belongsTo(SystemUsers::class, 'uid', 'uid');
     }
 }

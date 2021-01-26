@@ -4,8 +4,8 @@
 namespace app\app\controller;
 
 use app\model\Banner;
-use app\model\Book;
-use app\model\Chapter;
+use app\model\ArticleArticle;
+use app\model\ArticleChapter;
 use app\model\Tags;
 
 class Tag extends Base
@@ -62,9 +62,9 @@ class Tag extends Base
             $map[] = ['end', '=', $end];
         }
 
-        $books = Book::where($map)->order('update_time', 'desc')->limit($startItem, $pageSize)->select();
+        $books = ArticleArticle::where($map)->order('update_time', 'desc')->limit($startItem, $pageSize)->select();
         foreach ($books as &$book) {
-            $book['chapter_count'] = Chapter::where('book_id','=', $book['id'])->count();
+            $book['chapter_count'] = ArticleChapter::where('book_id','=', $book['id'])->count();
         }
 
         return json([
@@ -98,7 +98,7 @@ class Tag extends Base
         foreach ($tags as $tag) {
             $books = cache('booksFilterByTag:'.$tag);
             if (!$books) {
-                $books = Book::where('tags', 'like', '%' . $tag . '%')
+                $books = ArticleArticle::where('tags', 'like', '%' . $tag . '%')
                     ->order('id', 'desc')->limit(10)->select();
                 foreach ($books as &$book) {
                     //$book['chapter_count'] = Chapter::where('book_id','=',$book['id'])->count();

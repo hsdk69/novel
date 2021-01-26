@@ -30,7 +30,6 @@
         "overtrue/pinyin": "^4.0",
         "ext-iconv": "*",
         "firebase/php-jwt": "^5.2",
-        "ext-http": "*",
         "ext-json": "*"
     },
     "require-dev": {

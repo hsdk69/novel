@@ -4,8 +4,7 @@
 namespace app\mobile\controller;
 
 
-use app\common\RedisHelper;
-use app\model\User;
+use app\model\SystemUsers;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\facade\View;
@@ -21,20 +20,20 @@ class Account extends Base
 //                return ['err' => 1, 'msg' => '验证码错误'];
 //            }
             $map = array();
-            $map[] = ['username', '=', trim(input('username'))];
-            $map[] = ['password', '=', md5(strtolower(trim(input('password'))) . config('site.salt'))];
+            $map[] = ['uname', '=', trim(input('username'))];
+            $map[] = ['groupid', '=', 2];
+            $password = trim(input('password'));
             try {
-                $user = User::withTrashed()->where($map)->findOrFail();
-                if ($user->delete_time > 0) {
-                    return json(['err' => 1, 'msg' => '用户被锁定']);
+                $user = SystemUsers::where($map)->findOrFail();
+                $passsalt = md5($password.$user['salt']);
+                if ($passsalt != $user['pass']) {
+                    return json(['err' => 1, 'msg' => '密码错误']);
                 } else {
-                    $user->last_login_time = time();
+                    $user->lastlogin = time();
                     $user->save();
-                    cookie('xwx_user_id', $user->id);
-                    cookie('xwx_user', $user->username);
-                    cookie('xwx_nick_name', $user->nick_name);
-                    cookie('xwx_user_mobile', $user->mobile);
-                    cookie('xwx_vip_expire_time', $user->vip_expire_time);
+                    cookie('xwx_user_id', $user->uid);
+                    cookie('xwx_user', $user->uname);
+                    cookie('xwx_nick_name', $user->name);
                     return json(['err' => 0, 'msg' => '登录成功']);
                 }
             } catch (DataNotFoundException $e) {
@@ -44,8 +43,6 @@ class Account extends Base
             }
         } else {
             View::assign([
-                'site_name' => config('site.site_name'),
-                'url' => config('site.url'),
                 'header' => '用户登录'
             ]);
             return view($this->tpl);
@@ -60,66 +57,40 @@ class Account extends Base
 //            {
 //                return ['err' => 1, 'msg' => '验证码错误'];
 //            }
-            $ip = request()->ip();
-            $redis = RedisHelper::GetInstance();
-            if ($redis->exists('user_reg:' . $ip)) {
-                return json(['err' => 1, 'msg' => '操作太频繁']);
-            } else {
-                $data = request()->param();
-                $validate = new \app\validate\User();
-                if ($validate->check($data)) {
-                    $email =trim(input('email'));
-                    try {
-                        User::where('email', '=', $email)->findOrFail();
-                        return json(['err' => 1, 'msg' => '邮箱已存在']);
-                    } catch (DataNotFoundException $e) {
-                    } catch (ModelNotFoundException $e) {
+            $data = request()->param();
+            $validate = new \app\validate\User();
+            if ($validate->check($data)) {
+                $uname =trim($data['username']);
+                try {
+                    SystemUsers::where('uname', '=', $uname)->findOrFail();
+                    return json(['err' => 1, 'msg' => '用户名已经存在']);
+                } catch (ModelNotFoundException $e) {
+                    $user = new SystemUsers();
+                    $user->uname = trim($data['username']);
+                    //生成5位数的dwzkey
+                    $key_str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+                    $salt = substr(str_shuffle($key_str), mt_rand(0, strlen($key_str) - 11), 5);
+                    $user->salt = $salt;
+                    $user->pass = md5(trim($data['password']).$salt);
+                    $user->email = trim($data['email']);
+                    $user->siteid = 0;
+                    $user->groupid = 2;
+                    $user->regdate = time();
+                    $user->sex = 1;
+                    $user->workid = 0;
+                    $user->lastlogin = 0;
+                    $result = $user->save();
+                    if ($result) {
+                        return json(['err' => 0, 'msg' => '注册成功，请登录']);
+                    } else {
+                        return json(['err' => 1, 'msg' => '注册失败，请尝试重新注册']);
                     }
-                    try {
-                        User::where('username', '=', trim(request()->param('username')))->findOrFail();
-                        return json(['err' => 1, 'msg' => '用户名已经存在']);
-                    } catch (DataNotFoundException $e) {
-                    } catch (ModelNotFoundException $e) {
-                        $user = new User();
-                        $user->username = trim($data['username']);
-                        $user->password = trim($data['password']);
-                        $user->email = trim($data['email']);
-                        $pid = cookie('xwx_promotion');
-                        if (!$pid) {
-                            $pid = 0;
-                        }
-                        $user->pid = $pid; //设置用户上线id
-                        $user->reg_ip = request()->ip();
-                        $result = $user->save();
-                        if ($result) {
-                            $redis->set('user_reg:'.$ip,1,60); //写入锁
-                            if ($pid > 0) {
-                                try {
-                                    $puser = User::findOrFail($pid);
-                                    if ($puser) {
-                                        if ($puser->vip_expire_time < time()) { //说明vip已经过期
-                                            $puser->vip_expire_time = time() + 24 * 60 * 60;
-                                        } else { //vip没过期，则在现有vip时间上增加
-                                            $puser->vip_expire_time = $user->vip_expire_time + 24 * 60 * 60;
-                                        }
-                                    }
-                                } catch (DataNotFoundException $e) {
-                                } catch (ModelNotFoundException $e) {
-                                }
-                            }
-                            return json(['err' => 0, 'msg' => '注册成功，请登录']);
-                        } else {
-                            return json(['err' => 1, 'msg' => '注册失败，请尝试重新注册']);
-                        }
-                    }
-                } else {
-                    return json(['err' => 1, 'msg' => $validate->getError()]);
                 }
+            } else {
+                return json(['err' => 1, 'msg' => $validate->getError()]);
             }
         } else {
             View::assign([
-                'site_name' => config('site.site_name'),
-                'url' => config('site.schema').config('site.url'),
                 'header' => '用户注册'
             ]);
             return view($this->tpl);

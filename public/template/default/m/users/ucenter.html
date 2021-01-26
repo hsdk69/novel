@@ -14,17 +14,17 @@
                 <a href="/userinfo"></a>
             </div>
             <div class="app_accountBlock_name">
-                <span class="name">{$user.username}</span>
+                <span class="name">{$user.uname}</span>
             </div>
         </div>
         <div class="app_accountBlock_lis">
             <ul>
-                <li><i class="iconfont"></i>推广<span id="copy-btns">{$promotion_url}</span></li>
-                <li><i class="iconfont"></i>余额<span>{$balance}</span></li>
-                <li><i class="iconfont"></i>vip<span>剩余{$day}天</span></li>
+                <li><i class="iconfont"></i>推广<span id="copy-btns">{$url}?pid={$xwx_user_id}</span></li>
+                <li><i class="iconfont"></i>余额<span>0</span></li>
+                <li><i class="iconfont"></i>vip<span>剩余0天</span></li>
             </ul>
         </div>
-        <input type="text" value="{$promotion_url}" id="copy-text" style="visibility: hidden;">
+        <input type="text" value="{$url}?pid={$xwx_user_id}" id="copy-text" style="visibility: hidden;">
         <div class="app_accountBlock_lis2">
             <ul>
                 <li>

@@ -3,7 +3,7 @@
 
 namespace app\service;
 
-use app\model\Book;
+use app\model\ArticleArticle;
 use app\model\Cate;
 use app\model\User;
 use app\model\UserFavor;
@@ -38,18 +38,21 @@ class UserService
     public function getFavors($uid, $end_point)
     {
         try {
-            $where[] = ['user_id', '=', $uid];
+            $where[] = ['uid', '=', $uid];
             $data = UserFavor::where($where)->order('create_time', 'desc')->paginate(5, false);
             $books = array();
             foreach ($data as &$favor) {
-                $book = Book::findOrFail($favor->book_id);
-                $cate = Cate::findOrFail($book->cate_id);
+                $book = ArticleArticle::findOrFail($favor->articleid);
+                $cate = Cate::findOrFail($book->typeid);
                 $book['cate'] = $cate;
                 if ($end_point == 'id') {
-                    $book['param'] = $book['id'];
+                    $book['param'] = $book['articleid'];
                 } else {
-                    $book['param'] = $book['unique_id'];
+                    $book['param'] = $book['backupname'];
                 }
+                $bigId = floor((double)($book['articleid'] / 1000));
+                $book['cover'] = sprintf('/files/article/image/%s/%s/%ss.jpg',
+                    $bigId, $book['articleid'], $book['articleid']);
                 $books[] = $book->toArray();
             }
             $pages = $data->toArray();
@@ -63,18 +66,20 @@ class UserService
                     'query' => request()->param()
                 ]
             ];
-        } catch (DataNotFoundException $e) {
-            abort(404, $e->getMessage());
         } catch (ModelNotFoundException $e) {
             abort(404, $e->getMessage());
         }
     }
 
-    public function delFavors($uid, $id)
+    public function delFavors($uid, $ids)
     {
-        $where[] = ['user_id', '=', $uid];
-        $where[] = ['book_id', 'in', $id];
-        $favor = UserFavor::where($where)->find();
-        $favor->delete();
+        $where[] = ['uid', '=', $uid];
+        $where[] = ['articleid', 'in', $ids];
+        try {
+            $favor = UserFavor::where($where)->findOrFail();
+            $favor->delete();
+        } catch (ModelNotFoundException $e) {
+            abort(404, $e->getMessage());
+        }
      }
 }

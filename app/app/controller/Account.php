@@ -4,14 +4,13 @@
 namespace app\app\controller;
 
 
-use app\common\RedisHelper;
-use app\service\FinanceService;
 use app\service\PromotionService;
 use app\validate\User as UserValidate;
-use app\model\User;
+use app\model;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use Firebase\JWT\JWT;
+use think\facade\Validate;
 
 class Account extends Base
 {
@@ -92,5 +91,27 @@ class Account extends Base
             $json = json(['success' => 0, 'msg' => '传递参数错误']);
         }
         return $json;
+    }
+
+    public function sendcms()
+    {
+        $code = generateRandomString();
+        $phone = trim(input('phone'));
+        $validate = Validate::make([
+            'phone' => 'mobile'
+        ]);
+        $data = [
+            'phone' => $phone
+        ];
+        if (!$validate->check($data)) {
+            return json(['success' => 0, 'msg' => '手机格式不正确']);
+        }
+        $sms = new Common();
+        $result = sendcode($phone, $code);
+        if ($result['status'] == 0) { //如果发送成功
+            session('xwx_sms_code', $code); //写入session
+            session('xwx_cms_phone', $phone);
+        }
+        return json(['success' => 1, 'msg' => $result['msg']]);
     }
 }

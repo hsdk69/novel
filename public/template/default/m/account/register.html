@@ -9,7 +9,7 @@
         <div class="app_lisLoinSpan app_addPaddingStyle">
             <ul>
                 <li class="username">
-                    <input type="text" id="username" placeholder="请输入用户名" autocomplete="off">
+                    <input type="text" id="uname" placeholder="请输入用户名" autocomplete="off">
                 </li>
                 <li class="email">
                     <input type="text" id="email" placeholder="请输入邮箱地址">
@@ -42,7 +42,7 @@
                 url:'/register',
                 type:'post',
                 data: {
-                    username: $('#username').val(),
+                    username: $('#uname').val(),
                     password: $('#password').val(),
                     email:$('#email').val()
                 },

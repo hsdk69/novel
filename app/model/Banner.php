@@ -10,7 +10,7 @@ class Banner extends Model
 {
     public function book()
     {
-        return $this->hasOne('book', 'id', 'book_id');
+        return $this->hasOne(ArticleArticle::class, 'articleid', 'articleid');
     }
 
     public function setTitleAttr($value)

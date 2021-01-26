@@ -5,8 +5,8 @@ namespace app\app\controller;
 
 
 use app\common\RedisHelper;
-use app\model\Book;
-use app\model\Chapter;
+use app\model\ArticleArticle;
+use app\model\ArticleChapter;
 use app\model\UserBuy;
 use app\model\UserFinance;
 use app\model\UserOrder;
@@ -64,8 +64,8 @@ class Finance extends BaseAuth
         $buys = UserBuy::where('user_id', '=', $this->uid)->order('id', 'desc')->limit(50)->select();
         try {
             foreach ($buys as &$buy) {
-                $chapter = Chapter::findOrFail($buy['chapter_id']);
-                $book = Book::findOrFail($buy['book_id']);
+                $chapter = ArticleChapter::findOrFail($buy['chapter_id']);
+                $book = ArticleArticle::findOrFail($buy['book_id']);
                 if ($this->end_point == 'id') {
                     $book['param'] = $book['id'];
                 } else {
@@ -105,7 +105,7 @@ class Finance extends BaseAuth
     public function buychapter()
     {
         $id = input('chapter_id');
-        $chapter = Chapter::with('book')->cache('buychapter:' . $id, 600, 'redis')->find($id);
+        $chapter = ArticleChapter::with('book')->cache('buychapter:' . $id, 600, 'redis')->find($id);
         $price = $chapter->book->money; //获得单章价格
         $redis = RedisHelper::GetInstance();
         if (!$redis->exists($this->redis_prefix . ':user_buy_lock:' . $this->uid)) { //如果没上锁，则该用户可以进行购买操作

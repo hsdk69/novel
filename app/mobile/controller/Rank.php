@@ -20,7 +20,6 @@ class Rank extends Base
     {
         View::assign([
             'header' => '排行',
-            'c_url' => $this->c_url
         ]);
         return view($this->tpl);
     }
@@ -29,27 +28,29 @@ class Rank extends Base
     {
         $books = array();
         $op = input('op');
-        $date = input('date');
-        $time = date('Y-m-d', strtotime('-1 ' . $date));
 
         if ($op == 'click') {
-            $books = $this->bookService->getHotBooks($this->prefix, $this->end_point, $time, 30);
+            $books = cache('hot_books');
+            if (!$books) {
+                $books = $this->bookService->getHotBooks($this->prefix, $this->end_point);
+                cache('hot_books', $books, null, 'redis');
+            }
         } elseif ($op == 'new') {
             $books = cache('newest_homepage');
             if (!$books) {
-                $books = $this->bookService->getBooks( $this->end_point, 'last_time', '1=1', 30);
+                $books = $this->bookService->getBooks($this->end_point, 'lastupdate', '1=1', 30);
                 cache('newest_homepage', $books, null, 'redis');
             }
-        } elseif ($op == 'end') {
+        } elseif ($op == 'fullflag') {
             $books = cache('ends_homepage');
             if (!$books) {
-                $books = $this->bookService->getBooks( $this->end_point, 'last_time', [['end', '=', '2']], 30);
+                $books = $this->bookService->getBooks($this->end_point, 'lastupdate', [['fullflag', '=', '1']], 30);
                 cache('ends_homepage', $books, null, 'redis');
             }
         }
 
         foreach ($books as &$book) {
-            $book['date'] = date('Y-m-d H:i:s', $book['last_time']);
+            $book['date'] = date('Y-m-d H:i:s', $book['lastupdate']);
         }
         return json(['books' => $books, 'success' => 1]);
     }

@@ -76,9 +76,8 @@ $(function(){
 		$('.x-rank__list').css({height:"calc("+$(window).innerHeight()+"px - 1.2rem)"});
 	}
 
-	$('.x-city__search').click(function(event) {
-		var url = $(this).attr('url');
-		window.location.href=url;
+	$('.x-city__search').click(function() {
+		window.location.href='/search';
 	});
 
 	$('.search-img').click(function(event) {

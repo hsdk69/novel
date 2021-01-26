@@ -4,6 +4,7 @@
 namespace app\admin\controller;
 
 
+use app\model\ArticleArticle;
 use app\model\Banner;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
@@ -14,17 +15,26 @@ class Banners extends Base
 {
     public function index()
     {
-        $data = Banner::with('book');
-        $banners = $data->order('id','desc')->paginate(5, false,
-            [
-                'query' => request()->param(),
-                'var_page' => 'page',
-            ]);
-        View::assign([
-            'banners' => $banners,
-            'count' => $data->count()
-        ]);
         return view();
+    }
+
+    public function list()
+    {
+        $page = intval(input('page'));
+        $limit = intval(input('limit'));
+        $data = Banner::order('id', 'desc');
+        $count = $data->count();
+        $banners = $data->limit($page - 1, $limit)->select();
+        foreach ($banners as $banner) {
+            $banner['articlename'] = ArticleArticle::where('articleid','=',$banner['articleid'])
+                ->column('articlename');
+        }
+        return json([
+            'code' => 0,
+            'msg' => '',
+            'count' => $count,
+            'data' => $banners
+        ]);
     }
 
     public function create()
@@ -32,28 +42,14 @@ class Banners extends Base
         if (request()->isPost()) {
             $banner = new Banner();
             $banner->title = input('title');
-            $banner->book_id = input('book_id');
+            $banner->articleid = input('articleid');
             $banner->banner_order = input('banner_order');
-            $dir = 'banners';
-            if (request()->file() != null) {
-                $cover = request()->file('pic_name');
-                try {
-                    validate(['image'=>'filesize:10240|fileExt:jpg,png,gif'])
-                        ->check((array)$cover);
-                    $savename =str_replace ( '\\', '/',
-                        \think\facade\Filesystem::disk('public')->putFile($dir, $cover));
-                    if (!is_null($savename)) {
-                        $banner->pic_name = str_replace('\\','/', $savename) ;
-                    }
-                } catch (ValidateException $e) {
-                    abort(404, $e->getMessage());
-                }
-            }
+            $banner->pic = input('cover');
             $result = $banner->save();
             if ($result) {
-                $this->success('添加成功','index',1);
+                return json(['err' => 0, 'msg' => '添加成功']);
             } else {
-                throw new ValidateException('添加失败');
+                return json(['err' => 1, 'msg' => '添加失败']);
             }
         }
         return view();
@@ -61,43 +57,46 @@ class Banners extends Base
 
     public function edit()
     {
-        $id = input('id');
+        $data = request()->param();
         try {
-            $banner = Banner::findOrFail($id);
+            $banner = Banner::findOrFail($data['id']);
             if (request()->isPost()) {
                 $banner->title = input('title');
-                $banner->book_id = input('book_id');
+                $banner->articleid = input('articleid');
                 $banner->banner_order = input('banner_order');
-                $dir = 'banners';
-                if (request()->file() != null) {
-                    $cover = request()->file('pic_name');
-                    try {
-                        validate(['image'=>'filesize:10240|fileExt:jpg,png,gif'])
-                            ->check((array)$cover);
-                        $savename =str_replace ( '\\', '/',
-                            \think\facade\Filesystem::disk('public')->putFile($dir, $cover));
-                        if (!is_null($savename)) {
-                            $banner->pic_name = str_replace('\\','/', $savename) ;
-                        }
-                    } catch (ValidateException $e) {
-                        abort(404, $e->getMessage());
-                    }
-                }
+                $banner->pic = input('cover');
                 $result = $banner->save();
                 if ($result) {
-                    $this->success('编辑成功');
+                    return json(['err' => 0, 'msg' => '修改成功']);
                 } else {
-                    throw new ValidateException('修改失败');
+                    return json(['err' => 1, 'msg' => '修改失败']);
                 }
             }
-            View::assign([
-                'banner' => $banner,
-            ]);
+            View::assign('banner', $banner);
             return view();
-        } catch (DataNotFoundException $e) {
-            abort(404, $e->getMessage());
+
         } catch (ModelNotFoundException $e) {
-            abort(404, $e->getMessage());
+            return json(['err' => 1, 'msg' => '找不到该书']);
+        }
+    }
+
+    public function upload()
+    {
+        if (is_null(request()->file())) {
+            return json([
+                'code' => 1
+            ]);
+        } else {
+            $cover = request()->file('file');
+            $dir = sprintf('article/image/banner/');
+            $jpg = 'cover.jpg';
+            $savename = str_replace('\\', '/',
+                \think\facade\Filesystem::disk('public')->putFile($dir, $cover));
+            return json([
+                'code' => 0,
+                'msg' => '',
+                'img' => '/files/' . $savename
+            ]);
         }
     }
 

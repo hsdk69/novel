@@ -1,73 +1,170 @@
 {extend name="pub/base" /}
-{block name="title"}
+{block name="head"}
 <title>轮播管理</title>
-{/block}
+<style>
+    /** 数据表格中的select尺寸调整 */
+    .layui-table-view .layui-table-cell .layui-select-title .layui-input {
+        height: 28px;
+        line-height: 28px;
+    }
 
-{block name="body"}
-<section class="Hui-admin-article">
-    <nav class="breadcrumb" style="background-color:#fff;padding: 0 24px"><i class="Hui-iconfont">&#xe67f;</i> 首页
-        <span class="c-gray en">&gt;</span>
-        轮播管理
-        <span class="c-gray en">&gt;</span>
-        轮播列表
-        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
-           href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
-    </nav>
-    <div class="Hui-admin-content clearfix">
-        <div class="panel mt-20">
-            <div class="panel-body">
-                <div class="clearfix">
-				<span class="f-l">
-                    <a href="javascript:;" onclick="delAll('请选择要删除的轮播','banners')" class="btn btn-danger radius"><i
-                            class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
-				<a class="btn btn-primary radius" onclick="editCreate('轮播新增','{:url(\'create\')}')">
-                    <i class="Hui-iconfont">&#xe600;</i> 添加轮播
-                </a>
-				</span>
-                    <span class="f-r">共有数据：<strong>{$count}</strong> 条</span>
+    .layui-table-view [lay-size="lg"] .layui-table-cell .layui-select-title .layui-input {
+        height: 40px;
+        line-height: 40px;
+    }
+
+    .layui-table-view [lay-size="lg"] .layui-table-cell .layui-select-title .layui-input {
+        height: 40px;
+        line-height: 40px;
+    }
+
+    .layui-table-view [lay-size="sm"] .layui-table-cell .layui-select-title .layui-input {
+        height: 20px;
+        line-height: 20px;
+    }
+
+    .layui-table-view [lay-size="sm"] .layui-table-cell .layui-btn-xs {
+        height: 18px;
+        line-height: 18px;
+    }
+
+    .tb-img-circle {
+        width: 40px;
+        height: 40px;
+        cursor: zoom-in;
+        border-radius: 50%;
+        border: 2px solid #dddddd;
+    }
+</style>
+{/block}
+{block name="main"}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <!-- 表格工具栏 -->
+            <form class="layui-form toolbar table-tool-mini">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <div class="layui-input-inline">
+                            <input id="articlename" class="layui-input" type="text" placeholder="书名"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline" style="padding-right: 110px;">
+                        <button class="layui-btn icon-btn" lay-filter="tbBasicTbSearch" lay-submit>
+                            <i class="layui-icon">&#xe615;</i>搜索
+                        </button>
+                        <button class="layui-btn icon-btn" type="button" id="create">
+                            <i class="layui-icon"></i>新增
+                        </button>
+                    </div>
                 </div>
-                <div class="mt-20 clearfix">
-                    <table class="table table-border table-bordered table-bg table-hover table-sort">
-                        <thead>
-                        <tr class="text-c">
-                            <th><input id="cbx" type="checkbox" value=""></th>
-                            <th>ID</th>
-                            <th>标题</th>
-                            <th>封面图</th>
-                            <th>所属漫画</th>
-                            <th>排序</th>
-                            <th>操作</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {volist name="banners" id="vo"}
-                        <tr class="text-c">
-                            <td><input data-val="{$vo.id}" class="cbx" type="checkbox" value=""></td>
-                            <td>{$vo.id}</td>
-                            <td>{$vo.title}</td>
-                            <td>
-                                <img width="20%" class="picture-thumb" src="/static/upload/{$vo.pic_name}">
-                            </td>
-                            <td>
-                                {$vo.book.book_name}
-                            </td>
-                            <td>{$vo.banner_order}</td>
-                            <td class="f-14 td-manage">
-                                <a style="text-decoration:none" class="ml-5"  onclick="editCreate('轮播编辑','{:url(\'banners/edit\',[\'id\' => $vo.id])}')">
-                                    <i class="Hui-iconfont">&#xe6df;</i>
-                                </a>
-                                <a style="text-decoration:none" class="ml-5" onclick="del(this,{$vo.id})"
-                                   href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>
-                            </td>
-                        </tr>
-                        {/volist}
-                        </tbody>
-                    </table>
-                    {$banners|raw}
-                </div>
-            </div>
+            </form>
+            <!-- 数据表格 -->
+            <table id="tbBasicTable" lay-filter="tbBasicTable"></table>
         </div>
     </div>
-</section>
 
+    <div class="layui-card">
+        <div class="layui-card-body">
+            交流和反馈建议请加QQ群：780362399
+        </div>
+    </div>
+
+    <!-- 表格操作列 -->
+    <script type="text/html" id="tbBasicTbBar">
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+</div>
+{/block}
+
+{block name="js"}
+<script>
+    layui.use(['table', 'form', 'dropdown', 'index'], function () {
+        var $ = layui.jquery
+        var table = layui.table
+        var index = layui.index
+        var dropdown = layui.dropdown
+
+        $('#create').click(function () {
+            index.openTab({
+                title: '新建轮播',
+                url: "{:url('banners/create')}",
+                end: function () {
+                    insTb.reload();
+                }
+            })
+        })
+
+        /* 表格工具条点击事件 */
+        table.on('tool(tbBasicTable)', function (obj) {
+            var data = obj.data; // 获得当前行数据
+            if (obj.event === 'edit') { // 修改
+                parent.layui.index.openTab({
+                    title: '编辑轮播',
+                    url: "{:url('banners/edit')}?id=" + data.id,
+                    end: function () {
+                        insTb.reload();
+                    }
+                });
+            } else if (obj.event === 'del') { // 删除
+                layer.confirm('确认要删除吗？', function (index) {
+                    $.ajax({
+                        type: 'POST',
+                        url: "{:url('delete')}",
+                        data: {id: data.id},
+                        dataType: 'json',
+                        success: function (res) {
+                            if (res.err == 0) { //删除成功
+                                layer.msg(res.msg, {icon: 1, time: 1000}, function () {
+                                    location.reload();
+                                });
+                            } else {
+                                layer.msg(res.msg, {icon: 2}, function () {
+                                    location.reload();
+                                });
+                            }
+                        },
+                        error: function (res) {
+                            layer.msg(res);
+                        },
+                    });
+                });
+            }
+            dropdown.hideAll();
+        });
+
+        /* 渲染表格 */
+        var insTb = table.render({
+            elem: '#tbBasicTable',
+            url: "{:url('banners/list')}",
+            page: true,
+            cellMinWidth: 100,
+            cols: [[
+                {type: 'checkbox'},
+                {field: 'id', title: 'ID', align: 'center', sort: true},
+                {field: 'articlename', title: '书名', align: 'center', sort: true},
+                {field: 'title', title: '标题', align: 'center', sort: true},
+                {field: 'banner_order', title: '章节序', align: 'center', sort: true},
+                {
+                    field: 'pic', title: '封面', templet: function (d) {
+                        return '<img data-index="' + (d.LAY_INDEX - 1) + '" src="' + d.pic + '" class="tb-img-circle" tb-img >'
+                    }, align: 'center', sort: true
+                },
+                {title: '操作', toolbar: '#tbBasicTbBar', align: 'center', minWidth: 200}
+            ]]
+        });
+
+        /* 点击图片放大 */
+        $(document).off('click.tbImg').on('click.tbImg', '[tb-img]', function () {
+            var imgList = table.cache['tbBasicTable'].map(function (d) {
+                return {
+                    src: d.pic
+                }
+            });
+            layer.photos({photos: {data: imgList, start: $(this).data('index')}, shade: .1, closeBtn: true});
+        });
+    });
+</script>
 {/block}

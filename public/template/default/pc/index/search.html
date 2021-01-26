@@ -18,28 +18,29 @@
                         <dl>
                             <dt>
                                 <a href="/{$book_ctrl}/{$vo.param}/" target="_blank">
-                                    <img src="https://s1.ax1x.com/2018/12/13/FN8WLQ.jpg" class="lazyimg" data-original="{$vo.cover_url}" style="display: block;">
+                                    <img src="https://p.pstatp.com/origin/ffa400036691f82c85e5" class="lazyimg"
+                                         data-original="{$vo.cover}" style="display: block;">
                                 </a>
                             </dt>
                             <dd>
                                 <a href="/{$book_ctrl}/{$vo.param}/" class="bigpic-book-name" target="_blank">
-                                    {$vo.book_name}
+                                    {$vo.articlename}
                                 </a>
                                 <p>
-                                    <a href="/search?keyword={$vo.author_name}" target="_blank">{$vo.author_name}</a>
+                                    <a>{$vo.author}</a>
                                     |
-                                    <a href="/{$booklist_act}?cate={$vo.cate_id}" target="_blank">{$vo.cate.cate_name}</a>
-                                    | {$vo.end == 1 ? '已完结' : '连载中'}
-                                    <span class="clicknum"> <em>{$vo.words}万字</em></span>
+                                    <a href="/{$booklist_act}?cate={$vo.typeid}" target="_blank">{$vo.cate.cate_name}</a>
+                                    | {$vo.fullflag == 1 ? '已完结' : '连载中'}
+                                    <span class="clicknum"> <em>{$vo.words}字</em></span>
                                 </p>
                                 <p class="big-book-info">
-                                    {$vo.summary}
+                                    {$vo.intro}
                                 </p>
                                 <p>
                                     <a href="/{$chapter_ctrl}/{$vo.last_chapter_id}/" target="_blank" class="red">
-                                        最近更新 {$vo.last_chapter}
+                                        最近更新 {$vo.lastchapter}
                                     </a>
-                                    <span>| {$vo.last_time|date='Y-m-d'}更新</span>
+                                    <span>| {$vo.lastupdate|date='Y-m-d'}更新</span>
                                 </p>
                             </dd>
                         </dl>

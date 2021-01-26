@@ -16,47 +16,41 @@ class Booklist extends Base
         $this->bookService = app('bookService');
     }
 
-    public function index() {
-        $boys = cache('cates:boys');
-        if (!$boys) {
-            $boys = Cate::where('gender','=',1)->select();
-            cache('cates:boys', $boys,'null','redis');
+    public function index()
+    {
+        $cates = cache('cates');
+        if (!$cates) {
+            $cates = Cate::select();
+            cache('cates:boys', $cates, 'null', 'redis');
         }
-        $girls = cache('cates:girls');
-        if (!$girls) {
-            $girls = Cate::where('gender','=',2)->select();
-            cache('cates:girls', $girls,'null','redis');
-        }
+
         $cate_selector = -1;
-        $words_selector = 9999;
+        $words_selector = -1;
         $end_selector = -1;
 
         $map = array();
-        $cate = (int)input('cate_id');
+        $cate = (int)input('typeid');
         $cate_name = '全部';
-        $cate_model = Cate::where('id',$cate)->find();
-        if (!is_null($cate_model)) {
+        $cate_model = Cate::where('typeid', $cate)->find();
+        if (isset($cate_model)) {
             $cate_name = $cate_model->cate_name;
         }
-        $gender = (int)input('gender');
-        if ($gender == 0) $gender = 1;
-        $arr = array();
-        if ($cate == 0 || $cate == '-1') {
-            if ($gender == 1) {
-                foreach ($boys as $boy) {
-                    array_push($arr, $boy['id']);
-                }
-            } else {
-                foreach ($girls as $girl) {
-                    array_push($arr, $girl['id']);
-                }
-            }
+        if ($cate == 0 || $cate == -1) {
+
         } else {
-            array_push($arr, $cate);
+            $map[] = ['typeid', '=', $cate];
             $cate_selector = $cate;
         }
-        $gender_selector = $gender;
-        $map[] = ['cate_id', 'in', $arr];
+//        $arr = array();
+//        if ($cate == 0 || $cate == '-1') {
+//            foreach ($cates as $c) {
+//                array_push($arr, $c['typeid']);
+//            }
+//        } else {
+//            array_push($arr, $cate);
+//            $cate_selector = $cate;
+//        }
+
         $words = (int)input('words');
         if ($words == 0 || $words == '-1') {
 
@@ -64,14 +58,14 @@ class Booklist extends Base
             $map[] = ['words', '<=', $words];
             $words_selector = $words;
         }
-        $end = (int)input('end');
-        if ($end == 0 || $end == -1) {
+        $fullflag = (int)input('fullflag');
+        if ($fullflag == -1) {
 
         } else {
-            $map[] = ['end', '=', $end];
-            $end_selector = $end;
+            $map[] = ['fullflag', '=', $fullflag];
+            $end_selector = $fullflag;
         }
-        $data = $this->bookService->getPagedBooks(20, $this->end_point, 'id', $map);
+        $data = $this->bookService->getPagedBooks(20, $this->end_point, 'articleid', $map);
         unset($data['page']['query']['page']);
         $param = '';
         foreach ($data['page']['query'] as $k => $v) {
@@ -79,12 +73,10 @@ class Booklist extends Base
         }
         View::assign([
             'books' => $data['books'],
-            'boys' => $boys,
-            'girls' => $girls,
+            'cates' => $cates,
             'cate_selector' => $cate_selector,
             'words_selector' => $words_selector,
             'end_selector' => $end_selector,
-            'gender_selector' => $gender_selector,
             'page' => $data['page'],
             'param' => $param,
             'cate' => $cate_name

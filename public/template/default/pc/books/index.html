@@ -1,48 +1,43 @@
 {extend name="./template/default/pc/pub/base.html" /}
 {block name="seo"}
-<title>{$book.book_name}全本免费阅读-{$site_name}</title>
+<title>{$book.articlename}全本免费阅读-{$site_name}</title>
 <meta name="description"
-      content="{$book.book_name}是一本{$book.cate.cate_name}小说，主角是{$book.role_name}，小说简介：{$book.summary}">
+      content="{$book.articlename}是一本{$book.cate.cate_name}小说，主角是{$book.roles}，小说简介：{$book.intro}">
 {/block}
 {block name="main"}
 <div class="path ">
     <a href="/">首页</a>
     <span>&gt;</span>
-    <a href="/{$booklist_act}?gender={$book.cate.gender}">{$book.cate.gender == 1 ? '男生' : '女生'}</a>
+    <a href="/{$booklist_act}?cate={$book.typeid}">{$book.cate.cate_name}</a>
     <span>&gt;</span>
-    <a href="/{$booklist_act}?cate={$book.cate_id}">{$book.cate.cate_name}</a>
-    <span>&gt;</span>
-    <a href="#">{$book.book_name}</a>
+    <a href="#">{$book.articlename}</a>
 </div>
 <div class="work_brief clearfixer">
     <div class="fl detailgame">
         <div class="pic fl">
-            <span><img src="{$book.cover_url}" alt=""></span>
+            <span><img src="{$server}/{$book.cover}" alt=""></span>
         </div>
         <div class="brief fl">
             <div class="title clearfixer">
-                <span class="name fl">{$book.book_name}</span>
-                <a href="{$search_ctrl}?keyword={$book.author_name}" class="author fl"
-                   target="_blank">{$book.author_name}</a>
+                <span class="name fl">{$book.articlename}</span>
+                <a class="author fl" target="_blank">{$book.author}</a>
                 <span class="write fl">著</span>
             </div>
             <div class="tags clearfixer">
 
-                <a href="{$booklist_act}?end={$book.end}">
-                    <span class="fl isfinish">{$book.end == 2 ? '连载中' : '已完结'}</span>
+                <a href="{$booklist_act}?end={$book.fullflag}">
+                    <span class="fl isfinish">{$book.fullflag == 0 ? '连载中' : '已完结'}</span>
                 </a>
-                {volist name="tags" id="tag" length="4"}
                 <a href="#">
-                    <span class="fl">{$tag.tag_name}</span>
+                    <span class="fl">{$book.keywords}</span>
                 </a>
-                {/volist}
             </div>
             <div class="hits">
                 <i></i><span>{$book.words}万 字</span>
-                <i></i><span>阅读 {$clicks}</span>
+                <i></i><span>阅读 {$book.allvisit}</span>
             </div>
             <p class="brief_text">
-                {$book.summary}
+                {$book.intro}
             </p>
             <div class="btns">
                 {if $start > -1}
@@ -75,17 +70,17 @@
         <div class="tabcontent-1 clearfixer" style="display: block;">
             <div class="column_left fl">
                 <div class="summary">
-                    <pre class="summary1">{$book.summary}</pre>
+                    <pre class="summary1">{$book.intro}</pre>
                 </div>
                 <div class="newchapter">
                     <div class="title clearfixer">
 							<span class="chaptername fl">
 								最新章节&nbsp;:&nbsp;&nbsp;
-								<a target="_blank" href="/{$chapter_ctrl}/{$book.last_chapter_id}">{$book.last_chapter}</a>
+								<a target="_blank" href="/{$chapter_ctrl}/{$book.lastchapterid}">{$book.lastchapter}</a>
 							</span>
                         <span class="updatetime fr">
                             更新时间&nbsp;:&nbsp;
-                            {$book.last_time|date='Y-m-d'}
+                            {$book.lastupdate|date='Y-m-d'}
                         </span>
                     </div>
                 </div>
@@ -109,7 +104,7 @@
                                         <a href="/{$book_ctrl}/{$vo.param}" target="_blank"
                                            class="all_work_contentboxitem visiable" aria-hidden="false"
                                            style="float: left; list-style: none; position: relative; width: 84px; margin-right: 35px;">
-                                            <img src="{$vo.cover_url}" alt="{$vo.book_name}">
+                                            <img src="{$server}{$vo.cover}" alt="{$vo.articlename}">
                                         </a>
                                     </div>
                                 </div>
@@ -125,17 +120,17 @@
                         {volist name="recommand" id="vo" length="10"}
                         <li class="clearfixer">
                             <a href="/{$book_ctrl}/{$vo.param}" class="rec-pic fl" target="_blank">
-                                <img data-original="{$vo.cover_url}" class="lazyimg" src="https://s1.ax1x.com/2018/12/13/FN8WLQ.jpg"
-                                     style="display: inline;" alt="{$vo.book_name}">
+                                <img data-original="{$server}{$vo.cover}" class="lazyimg" src="https://p.pstatp.com/origin/ffa400036691f82c85e5"
+                                     style="display: inline;" alt="{$vo.articlename}">
                             </a>
                             <div class="rec-detail fl">
                                 <a href="/{$book_ctrl}/{$vo.param}" class="rec-con-title"
-                                   target="_blank">{$vo.book_name}</a>
+                                   target="_blank">{$vo.articlename}</a>
                                 <p class="rec-author">
-                                    <a href="/{search_ctrl}?keyword={$vo.author_name}" target="_blank">作者 : {$vo.author_name}</a>
+                                    <a target="_blank">作者 : {$vo.author}</a>
                                 </p>
                                 <p class="rec-text">
-                                    {$vo.summary}
+                                    {$vo.intro}
                                 </p>
                             </div>
                         </li>
@@ -152,9 +147,9 @@
                 <ul>
                     {volist name="book.chapters" id="vo"}
                     <li>
-                        <a target="_blank" href="/{$chapter_ctrl}/{$vo.id}">
-                            <span class="chapter_name">{$vo.chapter_name}</span>
-                            <span class="chapter_date">{$vo.create_time|date='m-d'}</span>
+                        <a target="_blank" href="/{$chapter_ctrl}/{$vo.chapterid}">
+                            <span class="chapter_name">{$vo.chaptername}</span>
+                            <span class="chapter_date">{$vo.lastupdate|date='m-d'}</span>
                         </a>
                     </li>
                     {/volist}
@@ -180,7 +175,7 @@
     $('.addshelf').click(function () {
         $.post({
             url:`/addfavor`,
-            data:{'book_id' : {$book.id} },
+            data:{'articleid' : {$book.articleid} },
             success: function (res) {
                 if (res.err == 1) {
                     layer.msg(res.msg,{icon: 0,shade: 0.3})

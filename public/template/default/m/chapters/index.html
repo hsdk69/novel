@@ -3,13 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-    <title>{$chapter.chapter_name}-{$site_name}</title>
-    <meta name="description" content="您现在正在阅读{$chapter.book.book_name}的{$chapter.chapter_name}">
+    <title>{$chapter.chaptername}-{$site_name}</title>
+    <meta name="description" content="{$chapter.book.articlename}{$chapter.chaptername}在线阅读">
     <link rel="stylesheet" href="/static/css/mread.css" type="text/css"/>
     <link rel="stylesheet" href="/static/css/font.css" type="text/css"/>
     <link href="https://lib.baomitu.com/layer/3.1.1/mobile/need/layer.css" rel="stylesheet">
     {if $next != "null"}
-    <link rel="prefetch" href="/{$chapter_ctrl}/{$next.id}" />
+    <link rel="prefetch" href="/{$chapter_ctrl}/{$next.chapterid}" />
     {/if}
 </head>
 <body>
@@ -18,7 +18,7 @@
         <div class="page-read-content">
             <article class="read-article" :style="{'font-size': fontsize + 'rem'}" @click="touch(true)">
                 <section class="read-section jsChapterWrapper">
-                    <h3>{$chapter.chapter_name}</h3>
+                    <h3>{$chapter.chaptername}</h3>
                     {$content|raw}
                 </section>
             </article>
@@ -26,18 +26,18 @@
                 {if $prev == "null"}
                 <a href="javascript:" class="btn-normal red">没有了</a>
                 {else/}
-                <a href="/{$chapter_ctrl}/{$prev.id}" class="btn-normal red" title="{$prev.chapter_name}">上一章</a>
+                <a href="/{$chapter_ctrl}/{$prev.chapterid}" class="btn-normal red" title="{$prev.chaptername}">上一章</a>
                 {/if}
                 <span>|</span>
                 {if $next == "null"}
                 <a href="javascript:" class="btn-normal red">没有了</a>
                 {else/}
-                <a href="/{$chapter_ctrl}/{$next.id}" class="btn-normal red" title="{$next.chapter_name}">下一章</a>
+                <a href="/{$chapter_ctrl}/{$next.chapterid}" class="btn-normal red" title="{$next.chaptername}">下一章</a>
                 {/if}
             </div>
         </div>
         <div class="page-read-top">
-            <h1 class="read-book-name">{$chapter.chapter_name}</h1>
+            <h1 class="read-book-name">{$chapter.chaptername}</h1>
         </div>
     </div>
     <div id="pageReadOpt" class="page-read-opt" :class="{'active' : show}">
@@ -59,7 +59,7 @@
                 <i class="iconfont icon-lixianxiazai"></i>
                 离线章节
             </a> -->
-            <a href="/{$book_ctrl}/{$chapter.book_id}" class="read-opt-a">
+            <a href="/{$book_ctrl}/{$chapter.articleid}" class="read-opt-a">
                 <i class="iconfont icon-SU"></i>
                 书籍详情
             </a>
@@ -143,7 +143,7 @@
                     <i class="iconfont icon-yueliang"></i>
                     <h4 class="read-opt-footer-h">夜间</h4>
                 </a>
-                <a href="/{$book_ctrl}/{$chapter.book_id}" class="btn-group-cell">
+                <a href="/{$book_ctrl}/{$chapter.articleid}" class="btn-group-cell">
                     <i class="iconfont icon-pinglun"></i>
                     <h4 class="read-opt-footer-h">评论</h4>
                 </a>
@@ -224,27 +224,27 @@
 
     //--本地缓存代码开始--
     let bookInfo = {
-        chapter_id: '{$chapter.id}',
-        end: "{$chapter.book.end == 1 ? '完结' : '连载'}",
-        chapter_name: '{$chapter.chapter_name}',
-        author_name : '{$chapter.book.author_name}',
-        cover_url:'{$chapter.book.cover_url}',
-        book_id: '{$chapter.book_id}',
-        last_time: "{$chapter.book.last_time|date='Y-m-d'}",
-        book_name:'{$chapter.book.book_name}',
+        chapter_id: '{$chapter.chapterid}',
+        end: "{$chapter.book.fullflag == 1 ? '完结' : '连载'}",
+        chapter_name: '{$chapter.chaptername}',
+        author_name : '{$chapter.book.author}',
+        cover_url:'{$chapter.book.cover}',
+        book_id: '{$chapter.articleid}',
+        last_time: "{$chapter.book.lastupdate|date='Y-m-d'}",
+        book_name:'{$chapter.book.articlename}',
         param: '{$chapter.book.param}'
     };
-    localStorage.setItem('manhua_{$chapter.book_id}', JSON.stringify(bookInfo));//id为键，设置缓存
+    localStorage.setItem('manhua_{$chapter.articleid}', JSON.stringify(bookInfo));//id为键，设置缓存
     let history = [];
     let value = localStorage.getItem('xwx_historys'); //读取参照数组
     if (value != undefined && value != null) {
         history = JSON.parse(value);
     }
-    if (history.indexOf('manhua_{$chapter.book_id}') === -1) {
-        history.push('manhua_{$chapter.book_id}'); //把id为值存入参照数组
+    if (history.indexOf('manhua_{$chapter.articleid}') === -1) {
+        history.push('manhua_{$chapter.articleid}'); //把id为值存入参照数组
     }
 
-    console.log(history)
+    console.log(bookInfo)
     localStorage.setItem('xwx_historys', JSON.stringify(history));
     //--本地缓存代码结束--
 

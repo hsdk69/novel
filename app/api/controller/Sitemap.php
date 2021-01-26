@@ -5,7 +5,7 @@ namespace app\api\controller;
 
 
 use app\BaseController;
-use app\model\Book;
+use app\model\ArticleArticle;
 use think\facade\App;
 
 class Sitemap extends BaseController
@@ -17,15 +17,15 @@ class Sitemap extends BaseController
         $end_point = config('seo.end_point');
         $num = config('seo.sitemap_gen_num');
         if ($num <= 0) {
-            $this->books = Book::select();
+            $this->books = ArticleArticle::select();
         } else {
-            $this->books = Book::order('id', 'desc')->limit($num)->select();
+            $this->books = ArticleArticle::order('articleid', 'desc')->limit($num)->select();
         }
         foreach ($this->books as &$book) {
             if ($end_point == 'id') {
-                $book['param'] = $book['id'];
+                $book['param'] = $book['articleid'];
             } else {
-                $book['param'] = $book['unique_id'];
+                $book['param'] = $book['backupname'];
             }
         }
     }

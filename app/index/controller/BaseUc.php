@@ -4,7 +4,7 @@
 namespace app\index\controller;
 
 
-use app\model\User;
+use app\model\SystemUsers;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\facade\View;
@@ -20,7 +20,7 @@ class BaseUc extends Base
             $this->redirect(url('/login'));
         }
         try {
-            $this->user = User::findOrFail($this->uid);
+            $this->user = SystemUsers::findOrFail($this->uid);
         } catch (DataNotFoundException $e) {
             abort(404, $e->getMessage());
         } catch (ModelNotFoundException $e) {

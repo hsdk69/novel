@@ -1,7 +1,7 @@
 {extend name="./template/default/m/pub/base2.html" /}
 {block name="seo"}
-<title>{$book.book_name}小说全文在线免费阅读-{$book.author_name}-{$site_name}</title>
-<meta name="description" content="{$book.book_name}是一本{$book.cate.cate_name}小说，主角是{$book.role_name}，小说简介：{$book.summary}">
+<title>{$book.articlename}小说全文在线免费阅读-{$book.author}-{$site_name}</title>
+<meta name="description" content="{$book.articlename}是一本{$book.cate.cate_name}小说，主角是{$book.roles}，小说简介：{$book.intro}">
 {/block}
 {block name="main"}
 <div class="x-page__content">
@@ -13,16 +13,16 @@
                 <div class="x-book">
                     <div class="x-book__multi">
                         <div class="x-book__coverbox">
-                            <img lazy="loaded" class="x-book__cover"src="{$book.cover_url}" style="width: 1.5rem; height: 2rem;">
+                            <img lazy="loaded" class="x-book__cover"src="{$server}{$book.cover}" style="width: 1.5rem; height: 2rem;">
                         </div>
                         <div class="x-book__text--multi" style="width: calc(100% - 1.5rem); height: 2rem;">
                             <div class="x-detail__book--info">
-                                <p class="x-detail__info--title">{$book.book_name}</p>
-                                <p class="x-detail__info--author">{$book.author_name}</p>
-                                <p class="x-detail__info--words">字数：{$book.words}万字</p>
+                                <p class="x-detail__info--title">{$book.articlename}</p>
+                                <p class="x-detail__info--author">{$book.author}</p>
+                                <p class="x-detail__info--words">字数：{$book.words}字</p>
                                 <p class="x-detail__info--reads">
-                                    阅读：{$clicks}
-                                    <span>{$book.end == 2 ? '连载中' : '已完结'}</span>
+                                    阅读：{$book.allvisit}
+                                    <span>{$book.fullflag == 2 ? '连载中' : '已完结'}</span>
                                 </p>
                             </div>
                         </div>
@@ -54,7 +54,7 @@
 
         <div class="x-detail__intro hr-bottom">
             <div class="x-detail__intro--content">
-                {$book.summary}
+                {$book.intro}
             </div>
             <div class="x-detail__intro--tags">
                 <span></span>
@@ -64,19 +64,19 @@
             <div class="x-part__title">
                 目录
                 <span class="x-catalog__total"></span>
-                <span class="x-catalog__update">更新于：{$book.last_time|date='Y-m-d'}</span>
+                <span class="x-catalog__update">更新于：{$book.lastupdate|date='Y-m-d'}</span>
             </div>
             <div class="x-part__content">
-                <a href="/{$chapter_ctrl}/{$book.last_chapter_id}">
+                <a href="/{$chapter_ctrl}/{$book.lastchapterid}">
                     <div class="x-catalog__new">
-                        {$book.last_chapter}
+                        {$book.lastchapter}
                         <span>最新</span>
                     </div>
                 </a>
                 <div class="x-catalog__list van-hairline--bottom">
                     {volist name="book.chapters" id="vo" length="3"}
-                    <a href="/{$chapter_ctrl}/{$vo.id}">
-                        <p class="x-catalog__list--item">{$vo.chapter_name}</p>
+                    <a href="/{$chapter_ctrl}/{$vo.chapterid}">
+                        <p class="x-catalog__list--item">{$vo.chaptername}</p>
                     </a>
                     {/volist}
                 </div>
@@ -95,8 +95,8 @@
                         <div id="wrapper" class="van-pull-refresh__track">
                             <div class="x-catalog__list van-list">
                                 {volist name="book.chapters" id="vo"}
-                                <a href="/{$chapter_ctrl}/{$vo.id}">
-                                    <p class="x-catalog__item">{$vo.chapter_name}</p>
+                                <a href="/{$chapter_ctrl}/{$vo.chapterid}">
+                                    <p class="x-catalog__item">{$vo.chaptername}</p>
                                 </a>
                                 {/volist}
                             </div>
@@ -117,11 +117,11 @@
                 <div class="x-detail__part--book">
                     {volist name="recommand" id="vo" length="10"}
                     <div class="x-book" style="width: 2rem;">
-                        <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.book_name}">
+                        <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.articlename}">
                             <div class="x-book__coverbox">
-                                <img lazy="loaded" class="x-book__cover" src="{$vo.cover_url}" style="width: 2rem; height: 2.66667rem;">
+                                <img lazy="loaded" class="x-book__cover" src="{$server}{$vo.cover}" style="width: 2rem; height: 2.66667rem;">
                             </div>
-                            <div class="x-book__text--normal">{$vo.book_name}</div>
+                            <div class="x-book__text--normal">{$vo.articlename}</div>
                         </a>
                     </div>
                     {/volist}
@@ -136,7 +136,7 @@
     $('#addshelf').click(function () {
         $.post({
             url:`/addfavor`,
-            data:{'book_id' : {$book.id}},
+            data:{'articleid' : {$book.articleid} },
             success: function (res) {
                 if (res.err == 1) {
                     layer.msg(res.msg,{icon: 0,shade: 0.3})

@@ -24,24 +24,24 @@
                 <tr>
                     <td>
                         <a href="/{$book_ctrl}/{$vo.param}" target="_blank">
-                            <img src="{$vo.cover_url}">
+                            <img src="{$vo.cover}">
                         </a>
                     </td>
                     <td class="t3">
-                        <a href="/{$book_ctrl}/{$vo.param}" target="_blank">{$vo.book_name}</a>
+                        <a href="/{$book_ctrl}/{$vo.param}" target="_blank">{$vo.articlename}</a>
                     </td>
                     <td class="t5">
                         <a href="/{$book_ctrl}/{$vo.param}" target="_blank">{$vo.cate.cate_name}</a>
                     </td>
                     <td class="t4">
-                        <a href="/search?keyword={$vo.author_name}" target="_blank">{$vo.author_name}</a>
+                        <atarget="_blank">{$vo.author}</a>
                     </td>
-                    <td class="t3">{$vo.last_time|date='Y-m-d H:i:s'}</td>
+                    <td class="t3">{$vo.lastupdate|date='Y-m-d H:i:s'}</td>
 
-                    <td class="t6">{$vo.end == 1 ? '已完结' : '连载中'}</td>
+                    <td class="t6">{$vo.fullflag == 1 ? '已完结' : '连载中'}</td>
                     <td class="t7">
                         <a href="/{$book_ctrl}/{$vo.param}" class="goon" target="_blank">阅读</a>
-                        <i><span class="Collection" ajax-get="" url="/delfavors?id={$vo.id}">删除</span></i>
+                        <i><span class="Collection" ajax-get="" url="/delfavors?id={$vo.articleid}">删除</span></i>
                     </td>
                 </tr>
                 {/volist}

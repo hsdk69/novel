@@ -4,7 +4,7 @@
 namespace app\index\controller;
 
 
-use app\model\Chapter;
+use app\model\ArticleChapter;
 use think\facade\Db;
 use think\facade\View;
 
@@ -25,28 +25,19 @@ class Rank extends Base
         if ($op == 'new') {
             $books = cache('newest_homepage');
             if (!$books) {
-                $books = $this->bookService->getBooks($this->end_point, 'last_time', '1=1', 30);
-                foreach ($books as &$book) {
-                    $book['clicks'] = Db::query('SELECT SUM(clicks) as clicks FROM xwx_clicks WHERE book_id='.$book['id'])[0]['clicks'];
-                }
+                $books = $this->bookService->getBooks($this->end_point, 'lastupdate', '1=1', 30);
                 cache('newest_homepage', $books, null, 'redis');
             }
         } elseif ($op == 'click') {
             $books = cache('hot_books');
             if (!$books) {
                 $books = $this->bookService->getHotBooks($this->prefix, $this->end_point);
-                foreach ($books as &$book) {
-                    $book['clicks'] = Db::query('SELECT SUM(clicks) as clicks FROM xwx_clicks WHERE book_id='.$book['id'])[0]['clicks'];
-                }
                 cache('hot_books', $books, null, 'redis');
             }
-        } elseif ($op == 'end') {
+        } elseif ($op == 'fullflag') {
             $books = cache('ends_homepage');
             if (!$books) {
-                $books = $this->bookService->getBooks($this->end_point, 'last_time', [['end', '=', '1']], 30);
-                foreach ($books as &$book) {
-                    $book['clicks'] = Db::query('SELECT SUM(clicks) as clicks FROM xwx_clicks WHERE book_id='.$book['id'])[0]['clicks'];
-                }
+                $books = $this->bookService->getBooks($this->end_point, 'lastupdate', [['fullflag', '=', '1']], 30);
                 cache('ends_homepage', $books, null, 'redis');
             }
         }
