@@ -56,7 +56,7 @@ class Books extends Base
 
         $recommand = cache('randBooks:' . $book->typeid);
         if (!$recommand) {
-            $recommand = $this->bookService->getByCate($book->typeid, $this->end_point, 10);
+            $recommand = $this->bookService->getByCate($book->typeid, $this->end_point, 3);
             cache('randBooks:' . $book->typeid, $recommand, null, 'redis');
         }
 
@@ -69,23 +69,10 @@ class Books extends Base
 
         $comments = $this->getComments($book->articleid);
 
-        $isfavor = 0;
-        if (isset($this->uid)) {
-            $where[] = ['uid', '=', $this->uid];
-            $where[] = ['articleid', '=', $book->articleid];
-            try {
-                $userfavor = UserFavor::where($where)->findOrFail();
-                $isfavor = 1;
-            } catch (ModelNotFoundException $e) {
-                $isfavor = 0;
-            }
-        }
-
         View::assign([
             'book' => $book,
             'start' => $start,
             'recommand' => $recommand,
-            'isfavor' => $isfavor,
             'comments' => $comments,
             'header' => $book->articlename,
         ]);

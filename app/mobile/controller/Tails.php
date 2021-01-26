@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\index\controller;
+namespace app\mobile\controller;
 
 
 use app\model\ArticleChapter;
@@ -46,9 +46,10 @@ class Tails extends Base
         }
         $recommand = cache('randBooks:' . $tail->book->typeid);
         if (!$recommand) {
-            $recommand = $this->bookService->getByCate($tail->book->typeid, $this->end_point, 10);
+            $recommand = $this->bookService->getByCate($tail->book->typeid, $this->end_point, 3);
             cache('randBooks:' . $tail->book->typeid, $recommand, null, 'redis');
         }
+
 
         $start = cache('bookStart:' . $id);
         if ($start == false) {
@@ -61,6 +62,7 @@ class Tails extends Base
             'book' => $tail->book,
             'start' => $start,
             'recommand' => $recommand,
+            'header' => '更新',
         ]);
         return view($this->tpl);
     }

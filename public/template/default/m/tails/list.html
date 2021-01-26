@@ -1,0 +1,37 @@
+{extend name="./template/default/m/pub/base.html" /}
+{block name="seo"}
+<title>{$site_name}-免费的无弹窗小说阅读网</title>
+<meta name="description" content="{$site_name}是广大书友最值得收藏的网络小说阅读网，{$site_name}收录了当前最火热的网络小说，{$site_name}免费提供高质量的小说最新章节，{$site_name}是广大网络小说爱好者必备的小说阅读网。">
+{/block}
+{block name="main"}
+<section class="x-city__part hr-top">
+    <div class="x-part__title">最受欢迎</div>
+    <div class="x-part__books">
+        {volist name="tails" id="vo"}
+        <div class="x-city__swiper--item">
+            <div class="x-book">
+                <div class="x-book__nocover">
+                    <div class="x-book__text--multi">
+                        <p class="x-book__name">
+                            <span class="x-book__titleName">
+                                <a href="/tail/{$vo.tailcode}">{$vo.tailname}</a>
+                            </span>
+                            <span class="x-book__tag">{$vo.book.cate.cate_name}</span>
+                            <span class="x-book__tag">{$vo.book.author}</span>
+                        </p>
+                        <p class="x-book__intro">
+                            <a href="/{$chapter_ctrl}/{$vo.lastchapter}">
+                                {$vo.lastchapter}
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {/volist}
+    </div>
+</section>
+{/block}
+{block name="js"}
+<script type="text/javascript" src="/static/js/touchslide.1.1.js"></script>
+{/block}

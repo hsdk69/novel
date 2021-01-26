@@ -128,11 +128,11 @@
             cols: [[
                 {type: 'checkbox'},
                 {field: 'id', title: 'ID', align: 'center', sort: true},
-                {field: 'uname', title: '名称', align: 'center', sort: true},
-                {field: 'pass', title: '密码', align: 'center', sort: true},
-                {field: 'salt', title: '密码盐', align: 'center', sort: true},
+                {field: 'articlename', title: '小说', align: 'center', sort: true},
+                {field: 'tailname', title: '长尾词', align: 'center', sort: true},
+                {field: 'tailcode', title: '识别码', align: 'center', sort: true},
                 {
-                    field: 'lastlogin', title: '最近登录', templet: function (d) {
+                    field: 'create_time', title: '创建时间', templet: function (d) {
                         return util.timeAgo(d.lastlogin * 1000);
                     }, align: 'center', sort: true
                 },

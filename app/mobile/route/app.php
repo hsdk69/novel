@@ -19,6 +19,8 @@ Route::rule('/commentadd', 'mobile/books/commentadd');
 Route::rule('/login', 'mobile/account/login');
 Route::rule('/register', 'mobile/account/register');
 Route::rule('/logout', 'mobile/account/logout');
+Route::rule('/taillist', 'index/tails/list');
+Route::rule('/tail/:id', 'index/tails/index');
 
 Route::rule('/ucenter', 'mobile/users/ucenter');
 Route::rule('/bookshelf', 'mobile/users/bookshelf');

@@ -95,22 +95,20 @@
                             <div class="text fl">作者作品</div>
                         </div>
                         <div class="all_work_content">
-                            {volist name="authors" id="vo"}
                             <div class="bx-wrapper" style="max-width: 84px;">
                                 <div class="bx-viewport" aria-live="polite"
                                      style="width: 100%; overflow: hidden; position: relative; height: 137px;">
                                     <div class="all_work_contentbox"
                                          style="width: 1215%; position: relative; transition-duration: 0s; transform: translate3d(0px, 0px, 0px);">
-                                        <a href="/{$book_ctrl}/{$vo.param}" target="_blank"
+                                        <a href="/{$book_ctrl}/{$book.param}" target="_blank"
                                            class="all_work_contentboxitem visiable" aria-hidden="false"
                                            style="float: left; list-style: none; position: relative; width: 84px; margin-right: 35px;">
-                                            <img src="{$server}{$vo.cover}" alt="{$vo.articlename}">
+                                            <img src="{$server}{$book.cover}" alt="{$book.articlename}">
                                         </a>
                                     </div>
                                 </div>
                                 <div class="bx-controls"></div>
                             </div>
-                            {/volist}
                         </div>
                     </div>
                 </div>

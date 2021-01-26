@@ -48,6 +48,8 @@ class Books extends Base
             cache('book:' . $id, $book, null, 'redis');
         }
 
+
+
         $redis = RedisHelper::GetInstance();
         $day = date("Y-m-d", time());
         //以当前日期为键，增加点击数
@@ -60,11 +62,6 @@ class Books extends Base
             cache('randBooks:' . $book->typeid, $recommand, null, 'redis');
         }
 
-        $authors = cache('booksForAuthor:' . $book->authorid);
-        if (!$authors) {
-            $authors = $this->bookService->getByAuthor($book->authorid, $this->end_point);
-            cache('booksForAuthor:' . $book->authorid, $authors, null, 'redis');
-        }
 
         $start = cache('bookStart:' . $id);
         if ($start == false) {
@@ -89,7 +86,6 @@ class Books extends Base
         View::assign([
             'book' => $book,
             'start' => $start,
-            'authors' => $authors,
             'recommand' => $recommand,
             'isfavor' => $isfavor,
             'comments' => $comments,
