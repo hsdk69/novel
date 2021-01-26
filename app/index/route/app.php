@@ -18,6 +18,8 @@ Route::rule('/commentadd', 'index/books/commentadd');
 Route::rule('/login', 'index/account/login');
 Route::rule('/register', 'index/account/register');
 Route::rule('/logout', 'index/account/logout');
+Route::rule('/taillist', 'index/tails/list');
+Route::rule('/tail/:id', 'index/tails/index');
 
 Route::rule('/ucenter', 'index/users/ucenter');
 Route::rule('/bookshelf', 'index/users/bookshelf');

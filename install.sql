@@ -283,6 +283,18 @@ CREATE TABLE IF NOT EXISTS `jieqi_article_chapter` (
     KEY `articleid` (`articleid`,`chapterorder`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `jieqi_tail` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `articleid` int(11) unsigned NOT NULL DEFAULT '0',
+    `tailname` varchar(200) NOT NULL COMMENT '长尾词',
+    `tailcode` varchar(200) NOT NULL COMMENT '唯一标识',
+    `create_time` int(11) DEFAULT '0',
+    `update_time` int(11) DEFAULT '0',
+    PRIMARY KEY (`id`),
+    KEY `tailname` (`tailname`),
+    unique key `tailcode` (`tailcode`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `jieqi_friendship_link` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL COMMENT '友链名',

@@ -11,7 +11,7 @@ return [
     'bookService' => \app\service\BookService::class,
     'chapterService' => \app\service\ChapterService::class,
     'promotionService' => \app\service\PromotionService::class,
-    'tagsService' => \app\service\TagsService::class,
+    'tailService' => \app\service\TailService::class,
     'userService' => \app\service\UserService::class,
     'booklogService' => \app\service\BookLogService::class
 ];
