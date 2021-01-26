@@ -162,6 +162,7 @@ INFO;
             file_put_contents($srcUrl, (string)$res->getBody(), true); //将版本号写入到本地文件
             echo '<p style="padding-left:15px;font-weight: 400;color:#999;">覆盖版本号</p>';
             for ($i = $localVersion + 1; $i <= $serverVersion; $i++) {
+                flush();
                 $res = $client->request('GET', $json_server . $i . ".json");
                 if ((int)($res->getStatusCode()) == 200) {
                     $json = json_decode($res->getBody(), true);
@@ -193,6 +194,7 @@ INFO;
                         echo '<p style="padding-left:15px;font-weight: 400;">成功执行以下SQL语句：' . $value . '</p>';
                     }
                 }
+                ob_flush();
             }
             echo '<p style="padding-left:15px;font-weight: 400;color:#999;">升级完成</p>';
         } else {
