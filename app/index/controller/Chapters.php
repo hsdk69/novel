@@ -35,9 +35,9 @@ class Chapters extends Base
             $chapter->book['param'] = $chapter->book['backupname'];
         }
         $bigId = floor((double)($chapter['articleid'] / 1000));
-        $file = sprintf('public/files/article/txt/%s/%s/%s.txt',
-            $bigId, $chapter['articleid'], $chapter['articleid']);
-        $content = $this->getTxtcontent(App::getRootPath() . $file);
+        $file = sprintf('/files/article/txt/%s/%s/%s.txt',
+            $bigId, $chapter['articleid'], $id);
+        $content = $this->getTxtcontent($this->server . $file);
         $articleid = $chapter->articleid;
         $chapters = cache('mulu:' . $articleid);
         if (!$chapters) {
@@ -82,20 +82,21 @@ class Chapters extends Base
 
     private function getTxtcontent($txtfile)
     {
-        $file = fopen($txtfile, 'r');
-        $arr = array();
-        $i = 0;
-        if ($file) {
-            while (!feof($file)) {
-                $arr[$i] = fgets($file);
-                $i++;
-            }
-            fclose($file);
-        } else {
-            // error opening the file.
-        }
+        //$file = fopen($txtfile, 'r');
+        $file = file_get_contents($txtfile);
+        $arr = explode("\n",$file);
+//        $i = 0;
+//        if ($file) {
+//            while (!feof($file)) {
+//                $arr[$i] = fgets($file);
+//                $i++;
+//            }
+//            fclose($file);
+//        } else {
+//            // error opening the file.
+//        }
         $arr = array_filter($arr); //数组去空
         $content = '<p>' . implode('</p><p>', $arr) . '</p>';
-        return $content;
+        return mb_convert_encoding($content, 'HTML-ENTITIES', "UTF-8");
     }
 }

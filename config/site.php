@@ -9,6 +9,6 @@ return [
     'api_key' => '', 
     'app_key' => '',
     'tpl' => 'default',
-    'server' => 'http://xs.fancys.shop/',
+    'up_server' => 'http://xs.fancys.shop/',
     'json_server' => 'http://xsup.fancys.shop/'
  ];

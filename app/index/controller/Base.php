@@ -16,6 +16,7 @@ class Base extends BaseController
     protected $uid;
     protected $end_point;
     protected $tpl;
+    protected $server;
 
     protected function initialize()
     {
@@ -23,6 +24,7 @@ class Base extends BaseController
         $this->uid = cookie('xwx_user_id');
         $this->prefix = Env::get('database.prefix');
         $this->redis_prefix = Env::get('cache.prefix');
+        $this->server = config('site.server');
         $this->end_point = config('seo.book_end_point');
         $tpl_root = './template/' . config('site.tpl') . '/pc/';
         $controller = strtolower($this->request->controller());

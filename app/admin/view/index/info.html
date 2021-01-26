@@ -43,14 +43,6 @@
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label layui-form-required">MIP域名:</label>
-                    <div class="layui-input-block">
-                        <input name="mip_domain" value="{$mip_domain}" class="layui-input"
-                               lay-verType="tips" lay-verify="required" required/>
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
                     <label class="layui-form-label layui-form-required">主服务器域名:</label>
                     <div class="layui-input-block">
                         <input name="server" value="{$server}" class="layui-input"
@@ -78,6 +70,22 @@
                     <label class="layui-form-label layui-form-required">App秘钥:</label>
                     <div class="layui-input-block">
                         <input name="app_key" value="{$app_key}" class="layui-input"
+                               lay-verType="tips" lay-verify="required" required/>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label layui-form-required">更新域名:</label>
+                    <div class="layui-input-block">
+                        <input name="up_server" value="{$up_server}" class="layui-input"
+                               lay-verType="tips" lay-verify="required" required/>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label layui-form-required">更新配置域:</label>
+                    <div class="layui-input-block">
+                        <input name="json_server" value="{$json_server}" class="layui-input"
                                lay-verType="tips" lay-verify="required" required/>
                     </div>
                 </div>

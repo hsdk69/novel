@@ -24,11 +24,12 @@ class Index extends Base
         $site_name = config('site.site_name');
         $domain = config('site.domain');
         $mobile_domain = config('site.mobile_domain');
-        $mip_domain = config('site.mip_domain');
         $server = config('site.server');
         $api_key = config('site.api_key');
         $app_key = config('site.app_key');
         $front_tpl = config('site.tpl');
+        $up_server = config('site.up_server');
+        $json_server = config('site.json_server');
 
         $dirs = array();
         $dir = new DirectoryIterator(App::getRootPath() . 'public/template/');
@@ -43,12 +44,13 @@ class Index extends Base
             'site_name' => $site_name,
             'domain' => $domain,
             'mobile_domain' => $mobile_domain,
-            'mip_domain' => $mip_domain,
             'server' => $server,
             'api_key' => $api_key,
             'app_key' => $app_key,
             'front_tpl' => $front_tpl,
             'tpl_dirs' => $dirs,
+            'up_server' => $up_server,
+            'json_server' => $json_server
         ]);
         return view();
     }
@@ -65,6 +67,8 @@ class Index extends Base
             $api_key = input('api_key');
             $app_key = input('app_key');
             $front_tpl = input('front_tpl');
+            $up_server = input('up_server');
+            $json_server = input('json_server');
             $site_code = <<<INFO
 <?php
 return [
@@ -77,6 +81,8 @@ return [
     'api_key' => '{$api_key}', 
     'app_key' => '{$app_key}',
     'tpl' => '{$front_tpl}',
+    'up_server' => '{$up_server}',
+    'json_server' => '{$json_server}'
  ];
 INFO;
             $file = App::getRootPath() . 'config/site.php';
@@ -141,7 +147,7 @@ INFO;
 
     public function upgrade()
     {
-        $server = config('site.server');
+        $server = config('site.up_server');
         $json_server = config('site.json_server');
 
         $client = new Client();

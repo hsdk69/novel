@@ -41,10 +41,10 @@ class Chapters extends Base
             $chapter->book['param'] = $chapter->book['backupname'];
         }
         $bigId = floor((double)($chapter['articleid'] / 1000));
-        $file = sprintf('public/files/article/txt/%s/%s/%s.txt',
-            $bigId, $chapter['articleid'], $chapter['articleid']);
+        $file = sprintf('/files/article/txt/%s/%s/%s.txt',
+            $bigId, $chapter['articleid'], $id);
+        $content = $this->getTxtcontent($this->server . $file);
 
-        $content = $this->getTxtcontent(App::getRootPath() . $file);
         $articleid = $chapter->articleid;
         $chapters = cache('mulu:' . $articleid);
         if (!$chapters) {
