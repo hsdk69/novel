@@ -22,7 +22,7 @@
                 <a :href="'/{$book_ctrl}/'+ item.param">
                     <div class="x-book__multi">
                         <div class="x-book__coverbox">
-                            <img class="x-book__cover" :src="item.cover" style="width: 1.3rem; height: 1.73333rem;">
+                            <img class="x-book__cover" :src="'{$server}' + item.cover" style="width: 1.3rem; height: 1.73333rem;">
                             <div class="x-book__coverindex">
                                 <span>{{index + 1}}</span>
                             </div>
