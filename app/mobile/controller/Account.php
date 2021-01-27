@@ -21,7 +21,7 @@ class Account extends Base
 //            }
             $map = array();
             $map[] = ['uname', '=', trim(input('username'))];
-            $map[] = ['groupid', '=', 2];
+            $map[] = ['groupid', '=', 3];
             $password = trim(input('password'));
             try {
                 $user = SystemUsers::where($map)->findOrFail();
@@ -74,7 +74,7 @@ class Account extends Base
                     $user->pass = md5(trim($data['password']).$salt);
                     $user->email = trim($data['email']);
                     $user->siteid = 0;
-                    $user->groupid = 2;
+                    $user->groupid = 3;
                     $user->regdate = time();
                     $user->sex = 1;
                     $user->workid = 0;

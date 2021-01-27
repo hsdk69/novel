@@ -5,8 +5,6 @@ namespace app\admin\controller;
 
 
 use app\model\SystemUsers;
-use app\model\User;
-use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\facade\View;
 
@@ -26,7 +24,7 @@ class Users extends Base
     {
         $page = intval(input('page'));
         $limit = intval(input('limit'));
-        $data = SystemUsers::where('groupid', '=', 2);
+        $data = SystemUsers::where('groupid', '=', 3);
         $count = $data->count();
         $users = $data->order('uid', 'desc')
             ->limit($page - 1, $limit)->select();
@@ -41,7 +39,7 @@ class Users extends Base
     public function search()
     {
         $uname = input('uname');
-        $where[] = ['groupid', '=', 2];
+        $where[] = ['groupid', '=', 3];
         $where[] = ['uname', 'like', '%' . $uname . '%'];
         $page = intval(input('page'));
         $limit = intval(input('limit'));

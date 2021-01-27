@@ -6,6 +6,11 @@
     {block name="seo"}{/block}
     <link rel="stylesheet" href="/static/css/style.css" type="text/css">
     <link href="https://lib.baomitu.com/layer/3.1.1/theme/default/layer.css" rel="stylesheet">
+    <script src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+    <script type="text/javascript" src="https://lib.baomitu.com/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
+    <script src="https://lib.baomitu.com/layer/3.1.1/layer.js"></script>
+    <script src="https://lib.baomitu.com/axios/0.19.2/axios.min.js"></script>
     {block name="css"}{/block}
     <!---识别手机或电脑的js开始--->
     <script>
@@ -108,14 +113,10 @@
         </a>
     </div>
 </div>
-<script src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
-<script type="text/javascript" src="https://lib.baomitu.com/jquery/2.2.4/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
+{block name="js"}
 <script type="text/javascript" src="/static/js/jquery.mouseDelay.min.js"></script>
 <script type="text/javascript" src="/static/js/global.js"></script>
-<script src="https://lib.baomitu.com/layer/3.1.1/layer.js"></script>
-<script src="https://lib.baomitu.com/axios/0.19.2/axios.min.js"></script>
-{block name="js"}{/block}
+{/block}
 <div class="to_top ui-toTop"></div>
 </body>
 </html>

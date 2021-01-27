@@ -27,7 +27,7 @@ class Authors extends Base
     {
         $page = intval(input('page'));
         $limit = intval(input('limit'));
-        $data = SystemUsers::where('groupid', '=', 3);
+        $data = SystemUsers::where('groupid', '=', 6);
         $count = $data->count();
         $authors = $data->order('uid', 'desc')
             ->limit($page - 1, $limit)->select();
@@ -91,7 +91,7 @@ class Authors extends Base
     {
         $name = input('name');
         $uname = input('uname');
-        $where[] = ['groupid', '=', 3];
+        $where[] = ['groupid', '=', 6];
         if (isset($name)) {
             $where[] = ['name', 'like', '%' . $name . '%'];
         }

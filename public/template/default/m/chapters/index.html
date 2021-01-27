@@ -11,6 +11,10 @@
     {if $next != "null"}
     <link rel="prefetch" href="/{$chapter_ctrl}/{$next.chapterid}" />
     {/if}
+    <script type="text/javascript" src="https://lib.baomitu.com/zepto/1.2.0/zepto.min.js"></script>
+    <script src="https://lib.baomitu.com/layer/3.1.1/mobile/layer.js"></script>
+    <script src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/js-cookie/2.2.1/js.cookie.min.js"></script>
 </head>
 <body>
 <div id="app" :class="'skin-' + theme" style="width: 100%; height: 100%">
@@ -153,11 +157,7 @@
 </div>
 
 </body>
-<script type="text/javascript" src="https://lib.baomitu.com/zepto/1.2.0/zepto.min.js"></script>
 <script type="text/javascript" src="/static/js/mglobal.js"></script>
-<script src="https://lib.baomitu.com/layer/3.1.1/mobile/layer.js"></script>
-<script src="https://lib.baomitu.com/vue/2.6.10/vue.min.js"></script>
-<script src="https://cdn.bootcss.com/js-cookie/2.2.1/js.cookie.min.js"></script>
 <script>
     var app = new Vue({
         el: '#app',

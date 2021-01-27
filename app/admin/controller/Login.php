@@ -28,7 +28,7 @@ class Login extends BaseController
             $password = trim(input('password'));
             $map = array();
             $map[] = ['uname', '=', $username];
-            $map[] = ['groupid', '=', 1];
+            $map[] = ['groupid', '=', 2];
             try {
                 $admin = SystemUsers::where($map)->findOrFail();
                 $passsalt = md5($password.$admin['salt']);

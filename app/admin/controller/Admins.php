@@ -18,7 +18,7 @@ class Admins extends Base
     {
         $page = intval(input('page'));
         $limit = intval(input('limit'));
-        $data = SystemUsers::where('groupid', '=', 1);
+        $data = SystemUsers::where('groupid', '=', 2);
         $count = $data->count();
         $admins = $data->order('uid', 'desc')
             ->limit($page - 1, $limit)->select();
@@ -32,7 +32,7 @@ class Admins extends Base
 
     public function search() {
         $uname = input('uname');
-        $where[] = ['groupid', '=', 1];
+        $where[] = ['groupid', '=', 2];
         $where[] = ['uname', 'like', '%' . $uname . '%'];
         $page = intval(input('page'));
         $limit = intval(input('limit'));
@@ -60,7 +60,7 @@ class Admins extends Base
                 $admin->uname = $data['uname'];
                 $admin->salt = 'abc';
                 $admin->pass = md5(trim($data['password']) . 'abc');
-                $admin->groupid = 1;
+                $admin->groupid = 2;
                 $result = $admin->save();
                 if ($result) {
                     return json(['err' => 0, 'msg' => '添加成功']);
