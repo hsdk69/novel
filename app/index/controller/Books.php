@@ -39,7 +39,9 @@ class Books extends Base
                 $bigId = floor((double)($book['articleid'] / 1000));
                 $book['cover'] = sprintf('/files/article/image/%s/%s/%ss.jpg',
                     $bigId, $book['articleid'], $book['articleid']);
-                $book['chapters'] = ArticleChapter::where('articleid','=',$book['articleid'])->select();
+                $map[] = ['articleid', '=', $book['articleid']];
+                $map[] = ['chaptertype', '=', 0];
+                $book['chapters'] = ArticleChapter::where($map)->select();
             } catch (DataNotFoundException $e) {
                 abort(404, $e->getMessage());
             } catch (ModelNotFoundException $e) {
@@ -65,7 +67,8 @@ class Books extends Base
 
         $start = cache('bookStart:' . $id);
         if ($start == false) {
-            $db = Db::query('SELECT chapterid FROM ' . $this->prefix . 'article_chapter WHERE articleid = ' . $book->articleid . ' ORDER BY chapterid LIMIT 1');
+            $db = Db::query('SELECT chapterid FROM ' . $this->prefix . 'article_chapter WHERE articleid = '
+                . $book->articleid . ' and chaptertype=0 ORDER BY chapterid LIMIT 1');
             $start = $db ? $db[0]['chapterid'] : -1;
             cache('bookStart:' . $id, $start, null, 'redis');
         }

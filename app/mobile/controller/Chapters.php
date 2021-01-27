@@ -48,7 +48,9 @@ class Chapters extends Base
         $articleid = $chapter->articleid;
         $chapters = cache('mulu:' . $articleid);
         if (!$chapters) {
-            $chapters = ArticleChapter::where('articleid', '=', $articleid)->select();
+            $map[] = ['articleid', '=', $articleid];
+            $map[] = ['chaptertype', '=', 0];
+            $chapters = ArticleChapter::where($map)->select();
             cache('mulu:' . $articleid, $chapters, null, 'redis');
         }
 
@@ -56,7 +58,7 @@ class Chapters extends Base
         if (!$prev) {
             $prev = Db::query(
                 'select * from ' . $this->prefix . 'article_chapter where articleid=' . $articleid . ' 
-                and chapterorder<' . $chapter->chapterorder . ' order by chapterorder desc limit 1');
+                and chapterorder<' . $chapter->chapterorder . ' and chaptertype=0 order by chapterorder desc limit 1');
             cache('chapterPrev:' . $id, $prev, null, 'redis');
         }
         if (count($prev) > 0) {
@@ -69,7 +71,7 @@ class Chapters extends Base
         if (!$next) {
             $next = Db::query(
                 'select * from ' . $this->prefix . 'article_chapter where articleid=' . $articleid . ' 
-                and chapterorder>' . $chapter->chapterorder . ' order by chapterorder limit 1');
+                and chapterorder>' . $chapter->chapterorder . ' chaptertype=0 order by chapterorder limit 1');
             cache('chapterNext:' . $id, $next, null, 'redis');
         }
         if (count($next) > 0) {
