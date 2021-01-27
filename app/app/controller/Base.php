@@ -13,7 +13,7 @@ class Base extends BaseController
     public $prefix;
     public $redis_prefix;
     public $url;
-    public $vip_expire_time;
+    public $server;
     public $book_ctrl;
     public $uid;
     protected $end_point;
@@ -26,6 +26,7 @@ class Base extends BaseController
             : header("Access-Control-Allow-Origin: *");
         header("Access-Control-Allow-Methods:GET, POST, OPTIONS, DELETE");
         header("Access-Control-Allow-Headers:DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type, Accept-Language, Origin, Accept-Encoding");
+        header("Access-Control-Allow-Credentials:true");
 
         $token = $this->request->param('token');
         $time = $this->request->param('time');
@@ -39,14 +40,16 @@ class Base extends BaseController
 
         $this->prefix = Env::get('database.prefix');
         $this->redis_prefix = Env::get('cache.prefix');
-        $this->url = config('site.schema').config('site.domain');
+        $this->url = config('site.schema') . config('site.domain');
+        $this->server = config('site.server');
         $this->book_ctrl = BOOKCTRL;
     }
 
-    public function getAuth($utoken){
+    public function getAuth($utoken)
+    {
         $key = config('site.api_key');
-        try{
-            $info = JWT::decode($utoken, $key, array('HS256', 'HS384', 'HS512', 'RS256' ));
+        try {
+            $info = JWT::decode($utoken, $key, array('HS256', 'HS384', 'HS512', 'RS256'));
             $arr = (array)$info;
             return json(['success' => 1, 'userInfo' => $arr]);
         } catch (\Exception $e) {

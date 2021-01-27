@@ -72,33 +72,21 @@ class Books extends Base
 
         $comments = $this->getComments($book->articleid);
 
-        $isfavor = 0;
-        if (isset($this->uid)) {
-            $where[] = ['uid', '=', $this->uid];
-            $where[] = ['articleid', '=', $book->articleid];
-            try {
-                $userfavor = UserFavor::where($where)->findOrFail();
-                $isfavor = 1;
-            } catch (ModelNotFoundException $e) {
-                $isfavor = 0;
-            }
-        }
         View::assign([
             'book' => $book,
             'start' => $start,
             'recommand' => $recommand,
-            'isfavor' => $isfavor,
             'comments' => $comments,
         ]);
         return view($this->tpl);
     }
 
-    private function getComments($articleid, $num = 5)
+    private function getComments($articleid)
     {
         $comments = cache('comments:' . $articleid);
         if (!$comments) {
             $comments = Comments::with('user')->where('articleid', '=', $articleid)
-                ->order('create_time', 'desc')->limit(0, $num)->select();
+                ->order('create_time', 'desc')->limit(0, 5)->select();
             cache('comments:' . $articleid, $comments);
         }
         return $comments;

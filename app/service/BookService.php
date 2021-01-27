@@ -74,7 +74,8 @@ class BookService
         return $books;
     }
 
-    public function getByAuthor($authorid, $end_point, $num = 10) {
+    public function getByAuthor($authorid, $end_point, $num = 10)
+    {
         $books = ArticleArticle::with('cate')->where('authorid', '=', $authorid)
             ->limit($num)->select();
         foreach ($books as &$book) {
@@ -111,7 +112,7 @@ FROM ' . $prefix . 'article_article AS ad1 JOIN (SELECT ROUND(RAND() *
         return $books;
     }
 
-    public function search($keyword,$end_point, $prefix)
+    public function search($keyword, $end_point)
     {
         $books = ArticleArticle::where('articlename', 'like', '%' . $keyword . '%')->select();
         foreach ($books as &$book) {
@@ -129,7 +130,7 @@ FROM ' . $prefix . 'article_article AS ad1 JOIN (SELECT ROUND(RAND() *
 
     public function getHotBooks($prefix, $end_point, $num = 10)
     {
-        $books = ArticleArticle::with('cate')->order('allvisit','desc')->limit($num)->select();
+        $books = ArticleArticle::with('cate')->order('allvisit', 'desc')->limit($num)->select();
         foreach ($books as &$book) {
             if ($book) {
                 if ($end_point == 'id') {

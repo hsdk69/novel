@@ -28,7 +28,9 @@ class Books extends Base
         if (!$newest) {
             $newest = ArticleArticle::limit(10)->order('lastupdate', 'desc')->select();
             foreach ($newest as &$book) {
-                $book->cover_url = $this->url.$book->cover_url;
+                $bigId = floor((double)($book['articleid'] / 1000));
+                $book['cover'] = $this->url . sprintf('/files/article/image/%s/%s/%ss.jpg',
+                        $bigId, $book['articleid'], $book['articleid']);
             }
             cache('newest_homepage', $newest, null, 'redis');
         }
@@ -43,9 +45,11 @@ class Books extends Base
     {
         $hot_books = cache('app:hot_books');
         if (!$hot_books) {
-            $hot_books =$this->bookService->getHotBooks($this->prefix, $this->end_point);
+            $hot_books = $this->bookService->getHotBooks($this->prefix, $this->end_point);
             foreach ($hot_books as &$book) {
-                $book->cover_url = $this->url.$book->cover_url;
+                $bigId = floor((double)($book['articleid'] / 1000));
+                $book['cover'] = $this->url . sprintf('/files/article/image/%s/%s/%ss.jpg',
+                        $bigId, $book['articleid'], $book['articleid']);
             }
             cache('hot_books', $hot_books, null, 'redis');
         }
@@ -56,19 +60,59 @@ class Books extends Base
         return json($result);
     }
 
+    public function getTops()
+    {
+        $tops = cache('app:tops_homepage');
+        if (!$tops) {
+            $tops = ArticleArticle::where('is_top', '=', '1')->limit(10)->order('last_time', 'desc')->select();
+            foreach ($tops as &$book) {
+                $bigId = floor((double)($book['articleid'] / 1000));
+                $book['cover'] = $this->url . sprintf('/files/article/image/%s/%s/%ss.jpg',
+                        $bigId, $book['articleid'], $book['articleid']);
+            }
+            cache('tops_homepage', $tops, null, 'redis');
+            $result = [
+                'success' => 1,
+                'tops' => $tops
+            ];
+            return json($result);
+        }
+    }
+
     public function getEnds()
     {
         $ends = cache('app:ends_homepage');
         if (!$ends) {
             $ends = ArticleArticle::limit(10)->order('lastupdate', 'desc')->select();
             foreach ($ends as &$book) {
-                $book->cover_url = $this->url.$book->cover_url;
+                $bigId = floor((double)($book['articleid'] / 1000));
+                $book['cover'] = $this->url . sprintf('/files/article/image/%s/%s/%ss.jpg',
+                        $bigId, $book['articleid'], $book['articleid']);
             }
             cache('ends_homepage', $ends, null, 'redis');
         }
         $result = [
             'success' => 1,
             'ends' => $ends
+        ];
+        return json($result);
+    }
+
+    public function getupdate() {
+        $startItem = input('startItem');
+        $pageSize = input('pageSize');
+        $data = ArticleArticle::order('last_time', 'desc');
+        $count = $data->count();
+        $books = $data->limit($startItem, $pageSize)->select();
+        foreach ($books as &$book) {
+            $bigId = floor((double)($book['articleid'] / 1000));
+            $book['cover'] = $this->url . sprintf('/files/article/image/%s/%s/%ss.jpg',
+                    $bigId, $book['articleid'], $book['articleid']);
+        }
+        $result = [
+            'success' => 1,
+            'books' => $books,
+            'count' => $count
         ];
         return json($result);
     }
@@ -85,15 +129,11 @@ class Books extends Base
         }
         $books = cache('appsearchresult:' . $keyword);
         if (!$books) {
-            $books = $this->bookService->search($keyword, 20, $this->prefix);
+            $books = $this->bookService->search($keyword, 20);
             foreach ($books as &$book) {
-                $author = Author::find($book['author_id']);
-                if ($author) {
-                    $book['author'] = $author;
-                } else {
-                    $book['author'] = '佚名';
-                }
-                $book->cover_url = $this->url.$book->cover_url;
+                $bigId = floor((double)($book['articleid'] / 1000));
+                $book['cover'] = $this->url . sprintf('/files/article/image/%s/%s/%ss.jpg',
+                        $bigId, $book['articleid'], $book['articleid']);
             }
             cache('appsearchresult:' . $keyword, $books, null, 'redis');
         }
@@ -112,8 +152,10 @@ class Books extends Base
         $book = cache('app:book:' . $id);
         if ($book == false) {
             try {
-                $book = ArticleArticle::with('area')->find($id);
-                $book->cover_url = $this->url.$book->cover_url;
+                $book = ArticleArticle::with('cate')->find($id);
+                $bigId = floor((double)($book['articleid'] / 1000));
+                $book['cover'] = $this->url . sprintf('/files/article/image/%s/%s/%ss.jpg',
+                        $bigId, $book['articleid'], $book['articleid']);
             } catch (DataNotFoundException $e) {
                 return json(['success' => 0, 'msg' => '该漫画不存在']);
             } catch (ModelNotFoundException $e) {
@@ -127,11 +169,11 @@ class Books extends Base
         //以当前日期为键，增加点击数
         $redis->zIncrBy('click:' . $day, 1, $book->id);
 
-        $start = cache('book_start:' . $id);
+        $start = cache('bookStart:' . $id);
         if ($start == false) {
-            $db = Db::query('SELECT id FROM ' . $this->prefix . 'chapter WHERE book_id = ' . $id . ' ORDER BY id LIMIT 1');
-            $start = $db ? $db[0]['id'] : -1;
-            cache('book_start:' . $id, $start, null, 'redis');
+            $db = Db::query('SELECT chapterid FROM ' . $this->prefix . 'article_chapter WHERE articleid = ' . $book->articleid . ' ORDER BY chapterid LIMIT 1');
+            $start = $db ? $db[0]['chapterid'] : -1;
+            cache('bookStart:' . $id, $start, null, 'redis');
         }
 
         $book['start'] = $start;
@@ -158,17 +200,20 @@ class Books extends Base
         return json($result);
     }
 
-    public function getRecommend(){
-        $book_id = input('book_id');
+    public function getRecommend()
+    {
+        $articleid = input('articleid');
         try {
-            $book = ArticleArticle::findOrFail($book_id);
-            $recommends = cache('randBooks:'.$book->cate_id);
+            $book = ArticleArticle::findOrFail($articleid);
+            $recommends = cache('randBooks:' . $book->typeid);
             if (!$recommends) {
-                $recommends = $this->bookService->getRecommand($book->cate_id, $this->end_point);
+                $recommends = $this->bookService->getByCate($book->typeid, $this->end_point, 10);
                 foreach ($recommends as &$book) {
-                    $book->cover_url = $this->url.$book->cover_url;
+                    $bigId = floor((double)($book['articleid'] / 1000));
+                    $book['cover'] = $this->url . sprintf('/files/article/image/%s/%s/%ss.jpg',
+                            $bigId, $book['articleid'], $book['articleid']);
                 }
-                cache('randBooks:'.$book->cate_id, $recommends, null, 'redis');
+                cache('randBooks:' . $book->typeid, $recommends, null, 'redis');
             }
             $result = [
                 'success' => 1,
