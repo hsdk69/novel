@@ -64,7 +64,7 @@ class Chapters extends Base
         if (!$next) {
             $next = Db::query(
                 'select * from ' . $this->prefix . 'article_chapter where articleid=' . $articleid . ' 
-                and chapterorder>' . $chapter->chapterorder . ' chaptertype=0 order by chapterorder limit 1');
+                and chapterorder>' . $chapter->chapterorder . ' and chaptertype=0 order by chapterorder limit 1');
             cache('chapterNext:' . $id, $next, null, 'redis');
         }
         if (count($next) > 0) {
@@ -84,7 +84,6 @@ class Chapters extends Base
 
     private function getTxtcontent($txtfile)
     {
-        //$file = fopen($txtfile, 'r');
         $contents = file_get_contents($txtfile);
         $content = '';
         $encoding = mb_detect_encoding($contents, array('GB2312', 'GBK', 'UTF-16', 'UCS-2', 'UTF-8', 'BIG5', 'ASCII'));
@@ -103,7 +102,6 @@ class Chapters extends Base
                 }
             }
         }
-        //$content = '<p>' . implode('</p><p>', $arr) . '</p>';
         return $content;
     }
 }

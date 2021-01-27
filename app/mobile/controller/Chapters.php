@@ -71,7 +71,7 @@ class Chapters extends Base
         if (!$next) {
             $next = Db::query(
                 'select * from ' . $this->prefix . 'article_chapter where articleid=' . $articleid . ' 
-                and chapterorder>' . $chapter->chapterorder . ' chaptertype=0 order by chapterorder limit 1');
+                and chapterorder>' . $chapter->chapterorder . ' and chaptertype=0 order by chapterorder desc limit 1');
             cache('chapterNext:' . $id, $next, null, 'redis');
         }
         if (count($next) > 0) {
@@ -92,20 +92,24 @@ class Chapters extends Base
 
     private function getTxtcontent($txtfile)
     {
-        $file = fopen($txtfile, 'r');
-        $arr = array();
-        $i = 0;
-        if ($file) {
-            while (!feof($file)) {
-                $arr[$i] = fgets($file);
-                $i++;
-            }
-            fclose($file);
-        } else {
-            // error opening the file.
-        }
+        $contents = file_get_contents($txtfile);
+        $content = '';
+        $encoding = mb_detect_encoding($contents, array('GB2312', 'GBK', 'UTF-16', 'UCS-2', 'UTF-8', 'BIG5', 'ASCII'));
+        $arr = explode("\n", $contents);
         $arr = array_filter($arr); //数组去空
-        $content = '<p>' . implode('</p><p>', $arr) . '</p>';
+        foreach ($arr as $str) {
+            if ($encoding != false) {
+                $str = iconv($encoding, 'UTF-8', $str);
+                if ($str != "" and $str != NULL) {
+                    $content = $content . '<p>' .  $str. '</p>';
+                }
+            } else {
+                $str = mb_convert_encoding($str, 'UTF-8', 'Unicode');
+                if ($str != "" and $str != NULL) {
+                    $content = $content . '<p>' .  $str. '</p>';
+                }
+            }
+        }
         return $content;
     }
 }
