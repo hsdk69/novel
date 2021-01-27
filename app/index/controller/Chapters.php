@@ -18,7 +18,7 @@ class Chapters extends Base
         try {
             $chapter = cache('chapter:' . $id);
             if ($chapter == false) {
-                $chapter = ArticleChapter::with('book.cate')->where('chapterid','=',$id)->findOrFail();
+                $chapter = ArticleChapter::with('book.cate')->where('chapterid', '=', $id)->findOrFail();
                 $bigId = floor((double)($chapter['articleid'] / 1000));
                 $chapter['book']['cover'] = sprintf('/files/article/image/%s/%s/%ss.jpg',
                     $bigId, $chapter['articleid'], $chapter['articleid']);
@@ -83,20 +83,25 @@ class Chapters extends Base
     private function getTxtcontent($txtfile)
     {
         //$file = fopen($txtfile, 'r');
-        $file = file_get_contents($txtfile);
-        $arr = explode("\n",$file);
-//        $i = 0;
-//        if ($file) {
-//            while (!feof($file)) {
-//                $arr[$i] = fgets($file);
-//                $i++;
-//            }
-//            fclose($file);
-//        } else {
-//            // error opening the file.
-//        }
+        $contents = file_get_contents($txtfile);
+        $content = '';
+        $encoding = mb_detect_encoding($contents, array('GB2312', 'GBK', 'UTF-16', 'UCS-2', 'UTF-8', 'BIG5', 'ASCII'));
+        $arr = explode("\n", $contents);
         $arr = array_filter($arr); //数组去空
-        $content = '<p>' . implode('</p><p>', $arr) . '</p>';
-        return mb_convert_encoding($content, 'HTML-ENTITIES', "UTF-8");
+        foreach ($arr as $str) {
+            if ($encoding != false) {
+                $str = iconv($encoding, 'UTF-8', $str);
+                if ($str != "" and $str != NULL) {
+                    $content = $content . '<p>' .  $str. '</p>';
+                }
+            } else {
+                $str = mb_convert_encoding($str, 'UTF-8', 'Unicode');
+                if ($str != "" and $str != NULL) {
+                    $content = $content . '<p>' .  $str. '</p>';
+                }
+            }
+        }
+        //$content = '<p>' . implode('</p><p>', $arr) . '</p>';
+        return $content;
     }
 }
