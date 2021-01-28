@@ -24,12 +24,13 @@ class Books extends Base
 
     public function getNewest()
     {
+        $num = input('num');
         $newest = cache('app:newest_homepage');
         if (!$newest) {
-            $newest = ArticleArticle::limit(10)->order('lastupdate', 'desc')->select();
+            $newest = ArticleArticle::limit($num)->order('lastupdate', 'desc')->select();
             foreach ($newest as &$book) {
                 $bigId = floor((double)($book['articleid'] / 1000));
-                $book['cover'] = $this->url . sprintf('/files/article/image/%s/%s/%ss.jpg',
+                $book['cover'] = $this->server . sprintf('/files/article/image/%s/%s/%ss.jpg',
                         $bigId, $book['articleid'], $book['articleid']);
             }
             cache('newest_homepage', $newest, null, 'redis');
@@ -43,12 +44,13 @@ class Books extends Base
 
     public function getHot()
     {
+        $num = input('num');
         $hot_books = cache('app:hot_books');
         if (!$hot_books) {
-            $hot_books = $this->bookService->getHotBooks($this->prefix, $this->end_point);
+            $hot_books = ArticleArticle::limit($num)->order('allvisit', 'desc')->select();
             foreach ($hot_books as &$book) {
                 $bigId = floor((double)($book['articleid'] / 1000));
-                $book['cover'] = $this->url . sprintf('/files/article/image/%s/%s/%ss.jpg',
+                $book['cover'] = $this->server . sprintf('/files/article/image/%s/%s/%ss.jpg',
                         $bigId, $book['articleid'], $book['articleid']);
             }
             cache('hot_books', $hot_books, null, 'redis');
@@ -62,12 +64,13 @@ class Books extends Base
 
     public function getTops()
     {
+        $num = input('num');
         $tops = cache('app:tops_homepage');
         if (!$tops) {
-            $tops = ArticleArticle::where('is_top', '=', '1')->limit(10)->order('last_time', 'desc')->select();
+            $tops = ArticleArticle::where('is_top', '=', '1')->limit($num)->order('lastupdate', 'desc')->select();
             foreach ($tops as &$book) {
                 $bigId = floor((double)($book['articleid'] / 1000));
-                $book['cover'] = $this->url . sprintf('/files/article/image/%s/%s/%ss.jpg',
+                $book['cover'] = $this->server . sprintf('/files/article/image/%s/%s/%ss.jpg',
                         $bigId, $book['articleid'], $book['articleid']);
             }
             cache('tops_homepage', $tops, null, 'redis');
@@ -81,12 +84,13 @@ class Books extends Base
 
     public function getEnds()
     {
+        $num = input('num');
         $ends = cache('app:ends_homepage');
         if (!$ends) {
-            $ends = ArticleArticle::limit(10)->order('lastupdate', 'desc')->select();
+            $ends = ArticleArticle::limit($num)->order('lastupdate', 'desc')->select();
             foreach ($ends as &$book) {
                 $bigId = floor((double)($book['articleid'] / 1000));
-                $book['cover'] = $this->url . sprintf('/files/article/image/%s/%s/%ss.jpg',
+                $book['cover'] = $this->server . sprintf('/files/article/image/%s/%s/%ss.jpg',
                         $bigId, $book['articleid'], $book['articleid']);
             }
             cache('ends_homepage', $ends, null, 'redis');
@@ -98,15 +102,16 @@ class Books extends Base
         return json($result);
     }
 
-    public function getupdate() {
+    public function getupdate()
+    {
         $startItem = input('startItem');
         $pageSize = input('pageSize');
-        $data = ArticleArticle::order('last_time', 'desc');
+        $data = ArticleArticle::order('lastupdate', 'desc');
         $count = $data->count();
         $books = $data->limit($startItem, $pageSize)->select();
         foreach ($books as &$book) {
             $bigId = floor((double)($book['articleid'] / 1000));
-            $book['cover'] = $this->url . sprintf('/files/article/image/%s/%s/%ss.jpg',
+            $book['cover'] = $this->server . sprintf('/files/article/image/%s/%s/%ss.jpg',
                     $bigId, $book['articleid'], $book['articleid']);
         }
         $result = [
@@ -120,6 +125,7 @@ class Books extends Base
     public function search()
     {
         $keyword = input('keyword');
+        $num = input('num');
         $redis = RedisHelper::GetInstance();
         $redis->zIncrBy($this->redis_prefix . 'hot_search:', 1, $keyword);
         $hot_search_json = $redis->zRevRange($this->redis_prefix . 'hot_search', 1, 4, true);
@@ -129,10 +135,11 @@ class Books extends Base
         }
         $books = cache('appsearchresult:' . $keyword);
         if (!$books) {
-            $books = $this->bookService->search($keyword, 20);
+            $books = ArticleArticle::where('articlename', 'like', '%' . $keyword . '%')
+                ->limit($num)->select();
             foreach ($books as &$book) {
                 $bigId = floor((double)($book['articleid'] / 1000));
-                $book['cover'] = $this->url . sprintf('/files/article/image/%s/%s/%ss.jpg',
+                $book['cover'] = $this->server . sprintf('/files/article/image/%s/%s/%ss.jpg',
                         $bigId, $book['articleid'], $book['articleid']);
             }
             cache('appsearchresult:' . $keyword, $books, null, 'redis');
@@ -152,14 +159,14 @@ class Books extends Base
         $book = cache('app:book:' . $id);
         if ($book == false) {
             try {
-                $book = ArticleArticle::with('cate')->find($id);
+                $book = ArticleArticle::with('cate')->findOrFail($id);
                 $bigId = floor((double)($book['articleid'] / 1000));
-                $book['cover'] = $this->url . sprintf('/files/article/image/%s/%s/%ss.jpg',
+                $book['cover'] = $this->server . sprintf('/files/article/image/%s/%s/%ss.jpg',
                         $bigId, $book['articleid'], $book['articleid']);
             } catch (DataNotFoundException $e) {
-                return json(['success' => 0, 'msg' => '该漫画不存在']);
+                return json(['success' => 0, 'msg' => '该小说不存在']);
             } catch (ModelNotFoundException $e) {
-                return json(['success' => 0, 'msg' => '该漫画不存在']);
+                return json(['success' => 0, 'msg' => '该小说不存在']);
             }
             cache('book:' . $id, $book, null, 'redis');
         }
@@ -167,11 +174,12 @@ class Books extends Base
         $redis = RedisHelper::GetInstance();
         $day = date("Y-m-d", time());
         //以当前日期为键，增加点击数
-        $redis->zIncrBy('click:' . $day, 1, $book->id);
+        $redis->zIncrBy('click:' . $day, 1, $book->articleid);
 
         $start = cache('bookStart:' . $id);
         if ($start == false) {
-            $db = Db::query('SELECT chapterid FROM ' . $this->prefix . 'article_chapter WHERE articleid = ' . $book->articleid . ' ORDER BY chapterid LIMIT 1');
+            $db = Db::query('SELECT chapterid FROM ' . $this->prefix . 'article_chapter WHERE articleid = '
+                . $book->articleid . ' and chaptertype=0 ORDER BY chapterid LIMIT 1');
             $start = $db ? $db[0]['chapterid'] : -1;
             cache('bookStart:' . $id, $start, null, 'redis');
         }
@@ -184,33 +192,19 @@ class Books extends Base
         return json($result);
     }
 
-    public function getComments()
-    {
-        $book_id = input('book_id');
-        $comments = cache('comments:' . $book_id);
-        if (!$comments) {
-            $comments = Comments::with('user')->where('book_id', '=', $book_id)
-                ->order('create_time', 'desc')->limit(0, 10)->select();
-            cache('comments:' . $book_id, $comments);
-        }
-        $result = [
-            'success' => 1,
-            'comments' => $comments
-        ];
-        return json($result);
-    }
-
     public function getRecommend()
     {
+        $num = input('num');
         $articleid = input('articleid');
         try {
             $book = ArticleArticle::findOrFail($articleid);
             $recommends = cache('randBooks:' . $book->typeid);
             if (!$recommends) {
-                $recommends = $this->bookService->getByCate($book->typeid, $this->end_point, 10);
+                $recommends = ArticleArticle::with('cate')->where('typeid', '=', $book->typeid)
+                    ->limit($num)->select();
                 foreach ($recommends as &$book) {
                     $bigId = floor((double)($book['articleid'] / 1000));
-                    $book['cover'] = $this->url . sprintf('/files/article/image/%s/%s/%ss.jpg',
+                    $book['cover'] = $this->server . sprintf('/files/article/image/%s/%s/%ss.jpg',
                             $bigId, $book['articleid'], $book['articleid']);
                 }
                 cache('randBooks:' . $book->typeid, $recommends, null, 'redis');

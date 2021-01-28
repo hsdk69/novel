@@ -4,8 +4,6 @@
 namespace app\service;
 
 use app\model\ArticleArticle;
-use app\model\ArticleChapter;
-use app\model\UserBuy;
 use think\facade\Db;
 
 class BookService
