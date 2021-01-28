@@ -20,7 +20,7 @@ class Tails extends Base
         $limit = intval(input('limit'));
         $data = Tail::order('id', 'desc');
         $count = $data->count();
-        $tails = $data->limit($page - 1, $limit)->select();
+        $tails = $data->limit(($page - 1) * $limit, $limit)->select();
         foreach ($tails as &$tail) {
             $tail['articlename'] = ArticleArticle::where('articleid', '=', $tail['articleid'])
                 ->column('articlename');

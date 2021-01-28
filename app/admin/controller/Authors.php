@@ -30,7 +30,7 @@ class Authors extends Base
         $data = SystemUsers::where('groupid', '=', 6);
         $count = $data->count();
         $authors = $data->order('uid', 'desc')
-            ->limit($page - 1, $limit)->select();
+            ->limit(($page - 1) * $limit, $limit)->select();
         return json([
             'code' => 0,
             'msg' => '',
@@ -103,7 +103,7 @@ class Authors extends Base
         $data = SystemUsers::where($where);
         $count = $data->count();
         $authors = $data->order('uid', 'desc')
-            ->limit($page - 1, $limit)->select();
+            ->limit(($page - 1) * $limit, $limit)->select();
         return json([
             'code' => 0,
             'msg' => '',

@@ -37,7 +37,7 @@ class Books extends Base
         $limit = intval(input('limit'));
         $data = ArticleArticle::where($where)->order('articleid', 'desc');
         $count = $data->count();
-        $books = $data->limit($page - 1, $limit)->select();
+        $books = $data->limit(($page - 1) * $limit, $limit)->select();
 
         foreach ($books as &$book) {
             $bigId = floor((double)($book['articleid'] / 1000));
@@ -111,7 +111,7 @@ class Books extends Base
         $limit = intval(input('limit'));
         $data = ArticleArticle::where($where)->order('articleid', 'desc');
         $count = $data->count();
-        $books = $data->limit($page - 1, $limit)->select();
+        $books = $data->limit(($page - 1) * $limit, $limit)->select();
 
         foreach ($books as &$book) {
             $bigId = floor((double)($book['articleid'] / 1000));

@@ -24,7 +24,7 @@ class Banners extends Base
         $limit = intval(input('limit'));
         $data = Banner::order('id', 'desc');
         $count = $data->count();
-        $banners = $data->limit($page - 1, $limit)->select();
+        $banners = $data->limit(($page - 1) * $limit, $limit)->select();
         foreach ($banners as $banner) {
             $banner['articlename'] = ArticleArticle::where('articleid','=',$banner['articleid'])
                 ->column('articlename');

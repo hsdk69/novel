@@ -29,7 +29,7 @@ class Index extends Base
         $app_key = config('site.app_key');
         $front_tpl = config('site.tpl');
         $up_server = config('site.up_server');
-        $json_server = config('site.json_server');
+        $json_server = config('site.json_server'); 
 
         $dirs = array();
         $dir = new DirectoryIterator(App::getRootPath() . 'public/template/');

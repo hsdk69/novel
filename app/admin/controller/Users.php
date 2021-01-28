@@ -27,7 +27,7 @@ class Users extends Base
         $data = SystemUsers::where('groupid', '=', 3);
         $count = $data->count();
         $users = $data->order('uid', 'desc')
-            ->limit($page - 1, $limit)->select();
+            ->limit(($page - 1) * $limit, $limit)->select();
         return json([
             'code' => 0,
             'msg' => '',
@@ -46,7 +46,7 @@ class Users extends Base
         $data = SystemUsers::where($where);
         $count = $data->count();
         $users = $data->order('uid', 'desc')
-            ->limit($page - 1, $limit)->select();
+            ->limit(($page - 1) * $limit, $limit)->select();
         return json([
             'code' => 0,
             'msg' => '',

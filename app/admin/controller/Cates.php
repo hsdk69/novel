@@ -22,7 +22,7 @@ class Cates extends Base
         $limit = intval(input('limit'));
         $data = Cate::order('typeid', 'desc');
         $count = $data->count();
-        $cates = $data->limit($page - 1, $limit)->select();
+        $cates = $data->limit(($page - 1) * $limit, $limit)->select();
         return json([
             'code' => 0,
             'msg' => '',
@@ -84,7 +84,7 @@ class Cates extends Base
         $limit = intval(input('limit'));
         $data = Cate::where($where)->order('typeid', 'desc');
         $count = $data->count();
-        $cates = $data->limit($page - 1, $limit)->select();
+        $cates = $data->limit(($page - 1) * $limit, $limit)->select();
         return json([
             'code' => 0,
             'msg' => '',
