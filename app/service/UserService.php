@@ -5,6 +5,7 @@ namespace app\service;
 
 
 use app\model\ArticleArticle;
+use app\model\Cate;
 use app\model\UserFavor;
 use think\db\exception\ModelNotFoundException;
 
@@ -26,6 +27,7 @@ class UserService
                 $bigId = floor((double)($book['articleid'] / 1000));
                 $book['cover'] = sprintf('/files/article/image/%s/%s/%ss.jpg',
                     $bigId, $book['articleid'], $book['articleid']);
+                $book['cate'] = Cate::where('typeid','=',$book['typeid'])->findOrFail();
                 $books[] = $book->toArray();
             }
             $pages = $data->toArray();
