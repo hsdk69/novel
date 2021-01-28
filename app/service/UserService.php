@@ -14,7 +14,7 @@ class UserService
     {
         try {
             $where[] = ['uid', '=', $uid];
-            $data = UserFavor::where($where)->order('lastupdate', 'desc')->paginate(10, false);
+            $data = UserFavor::where($where)->order('id', 'desc')->paginate(10, false);
             $books = array();
             foreach ($data as &$favor) {
                 $book = ArticleArticle::findOrFail($favor->articleid);
