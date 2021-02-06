@@ -1,9 +1,9 @@
 CREATE TABLE IF NOT EXISTS `jieqi_cate` (
-   `typeid` int(11) NOT NULL AUTO_INCREMENT,
+   `sortid` int(11) NOT NULL AUTO_INCREMENT,
    `cate_name` varchar(20) NOT NULL COMMENT '分类名',
    `create_time` int(11) DEFAULT '0',
    `update_time` int(11) DEFAULT '0',
-   PRIMARY KEY (`typeid`) USING BTREE,
+   PRIMARY KEY (`sortid`) USING BTREE,
    unique KEY `cate_name` (`cate_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

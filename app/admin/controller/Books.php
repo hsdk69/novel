@@ -43,7 +43,7 @@ class Books extends Base
             $bigId = floor((double)($book['articleid'] / 1000));
             $book['cover'] = sprintf('/files/article/image/%s/%s/%ss.jpg',
                 $bigId, $book['articleid'], $book['articleid']);
-            $book['cate_name'] = Cate::where('typeid', '=', $book['typeid'])->column('cate_name');
+            $book['cate_name'] = Cate::where('sortid', '=', $book['sortid'])->column('cate_name');
         }
         return json([
             'code' => 0,

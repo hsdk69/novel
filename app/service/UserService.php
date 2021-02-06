@@ -27,7 +27,7 @@ class UserService
                 $bigId = floor((double)($book['articleid'] / 1000));
                 $book['cover'] = sprintf('/files/article/image/%s/%s/%ss.jpg',
                     $bigId, $book['articleid'], $book['articleid']);
-                $book['cate'] = Cate::where('typeid','=',$book['typeid'])->findOrFail();
+                $book['cate'] = Cate::where('sortid','=',$book['sortid'])->findOrFail();
                 $books[] = $book->toArray();
             }
             $pages = $data->toArray();

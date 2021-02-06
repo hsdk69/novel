@@ -1,9 +1,8 @@
 <?php
 return [
-    'schema' => 'http://',
-    'domain' => 'xs.com',
-    'mobile_domain' => 'm.xs.com',
-    'mip_domain' => 'mip.xs.com',
+    'domain' => 'http://xs.com',
+    'mobile_domain' => 'http://m.xs.com',
+    'mip_domain' => 'http://mip.xs.com',
     'server' => 'http://xs.com',
     'site_name' => '笔趣阁',
     'api_key' => '', 

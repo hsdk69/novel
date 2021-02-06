@@ -21,13 +21,13 @@ class Base extends BaseController
             $this->redirect(url('login/login'));
         }
         $this->prefix = Env::get('database.prefix');
-        $this->img_site = config('site.schema').config('site.img_site');
+        $this->img_site = config('site.img_site');
         $this->end_point = config('seo.book_end_point');
         View::assign([
             'prefix' => $this->prefix,
             'admin' => cookie('xwx_admin'),
             'cdn' => config('site.cdn'),
-            'url' => config('site.schema').config('site.domain'),
+            'url' => config('site.domain'),
         ]);
     }
 }

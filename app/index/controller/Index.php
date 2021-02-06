@@ -43,9 +43,9 @@ class Index extends Base
         $catelist = array(); //分类漫画数组
         $cateItem = array();
         foreach ($cates as $cate) {
-            $books = $this->bookService->getByCate($cate->typeid, $this->end_point);
+            $books = $this->bookService->getByCate($cate->sortid, $this->end_point);
             $cateItem['books'] = $books->toArray();
-            $cateItem['cate'] = ['id' => $cate->typeid, 'cate_name' => $cate->cate_name];
+            $cateItem['cate'] = ['id' => $cate->sortid, 'cate_name' => $cate->cate_name];
             $catelist[] = $cateItem;
         }
 

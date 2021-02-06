@@ -38,9 +38,9 @@ class Base extends BaseController
         }
         View::assign([
             'links' => $links,
-            'url' => config('site.schema') . config('site.domain'),
+            'url' =>  config('site.domain'),
             'site_name' => config('site.site_name'),
-            'mobile_url' => config('site.schema') . config('site.mobile_domain'),
+            'mobile_url' =>  config('site.mobile_domain'),
             'server' => config('site.server'),
             'book_ctrl' => BOOKCTRL,
             'chapter_ctrl' => CHAPTERCTRL,

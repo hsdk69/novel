@@ -65,11 +65,11 @@ class Sitemap extends BaseController
 
     private function genurls($option) {
         if ($option == 'pc') {
-            $site_name = config('site.schema').config('site.domain');
+            $site_name = config('site.domain');
         } else if ($option == 'm') {
-            $site_name = config('site.schema').config('site.mobile_domain');
+            $site_name = config('site.mobile_domain');
         } else {
-            $site_name = config('site.schema').config('site.mip_domain');
+            $site_name = config('site.mip_domain');
         }
         $urls = '';
         foreach ($this->books  as $key => $book) {
@@ -81,11 +81,11 @@ class Sitemap extends BaseController
 
     private function create_array($option){
         if ($option == 'pc') {
-            $site_name = config('site.schema').config('site.domain');
+            $site_name = config('site.domain');
         } else if ($option == 'm') {
-            $site_name = config('site.schema').config('site.mobile_domain');
+            $site_name = config('site.mobile_domain');
         } else {
-            $site_name = config('site.schema').config('site.mip_domain');
+            $site_name = config('site.mip_domain');
         }
 
         $data = array();

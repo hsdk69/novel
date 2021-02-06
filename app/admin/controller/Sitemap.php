@@ -24,11 +24,11 @@ class Sitemap extends Base
     private function gen($pagesize, $part, $name)
     {
         if ($name == 'pc') {
-            $site_name = config('site.schema') . config('site.domain');
+            $site_name =  config('site.domain');
         } elseif ($name == 'm') {
-            $site_name = config('site.schema').config('site.mobile_domain');
+            $site_name = config('site.mobile_domain');
         } elseif ($name == 'mip') {
-            $site_name = config('site.schema').config('site.mip_domain');
+            $site_name = config('site.mip_domain');
         }
         if ($part == 'book') {
             $this->genbook($pagesize, $site_name, $name);

@@ -20,7 +20,7 @@ class Cates extends Base
     {
         $page = intval(input('page'));
         $limit = intval(input('limit'));
-        $data = Cate::order('typeid', 'desc');
+        $data = Cate::order('sortid', 'desc');
         $count = $data->count();
         $cates = $data->limit(($page - 1) * $limit, $limit)->select();
         return json([
@@ -54,7 +54,7 @@ class Cates extends Base
 
     public function edit()
     {
-        $id = input('typeid');
+        $id = input('sortid');
         try {
             $cate = Cate::findOrFail($id);
             if (request()->isPost()) {
@@ -82,7 +82,7 @@ class Cates extends Base
         ];
         $page = intval(input('page'));
         $limit = intval(input('limit'));
-        $data = Cate::where($where)->order('typeid', 'desc');
+        $data = Cate::where($where)->order('sortid', 'desc');
         $count = $data->count();
         $cates = $data->limit(($page - 1) * $limit, $limit)->select();
         return json([
@@ -95,7 +95,7 @@ class Cates extends Base
 
     public function delete()
     {
-        $id = input('typeid');
+        $id = input('sortid');
         $result = Cate::destroy($id);
         if ($result) {
             return json(['err' => '0', 'msg' => '删除成功']);

@@ -198,16 +198,16 @@ class Books extends Base
         $articleid = input('articleid');
         try {
             $book = ArticleArticle::findOrFail($articleid);
-            $recommends = cache('randBooks:' . $book->typeid);
+            $recommends = cache('randBooks:' . $book->sortid);
             if (!$recommends) {
-                $recommends = ArticleArticle::with('cate')->where('typeid', '=', $book->typeid)
+                $recommends = ArticleArticle::with('cate')->where('sortid', '=', $book->sortid)
                     ->limit($num)->select();
                 foreach ($recommends as &$book) {
                     $bigId = floor((double)($book['articleid'] / 1000));
                     $book['cover'] = $this->server . sprintf('/files/article/image/%s/%s/%ss.jpg',
                             $bigId, $book['articleid'], $book['articleid']);
                 }
-                cache('randBooks:' . $book->typeid, $recommends, null, 'redis');
+                cache('randBooks:' . $book->sortid, $recommends, null, 'redis');
             }
             $result = [
                 'success' => 1,

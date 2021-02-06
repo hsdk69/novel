@@ -18,7 +18,7 @@
         <div class="layui-card-body">
             <!-- 表单开始 -->
             <form class="layui-form" id="formBasForm" lay-filter="formBasForm">
-                <input type="hidden" value="{$banner.id}">
+                <input type="hidden" name="id" value="{$banner.id}">
                 <div class="layui-form-item">
                     <label class="layui-form-label layui-form-required">标题:</label>
                     <div class="layui-input-block">
@@ -28,9 +28,9 @@
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label layui-form-required">小说ID:</label>
+                    <label class="layui-form-label layui-form-required">漫画ID:</label>
                     <div class="layui-input-block">
-                        <input name="articleid" value="{$banner.articleid}"  class="layui-input"
+                        <input name="book_id" value="{$banner.book_id}"  class="layui-input"
                                lay-verType="tips" lay-verify="required" required/>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
         /* 监听表单提交 */
         form.on('submit(formBasSubmit)', function (data) {
             $.ajax({
-                url: "{:url('create')}",
+                url: "{:url('edit')}",
                 type: 'post',
                 data: $('form').serialize(),
                 success(res) {

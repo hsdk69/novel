@@ -44,10 +44,10 @@ class Tails extends Base
             $tail->book['chapters'] = ArticleChapter::where('articleid','=',$tail['articleid'])->select();
             cache('tail' . $id, $tail, null, 'redis');
         }
-        $recommand = cache('randBooks:' . $tail->book->typeid);
+        $recommand = cache('randBooks:' . $tail->book->sortid);
         if (!$recommand) {
-            $recommand = $this->bookService->getByCate($tail->book->typeid, $this->end_point, 10);
-            cache('randBooks:' . $tail->book->typeid, $recommand, null, 'redis');
+            $recommand = $this->bookService->getByCate($tail->book->sortid, $this->end_point, 10);
+            cache('randBooks:' . $tail->book->sortid, $recommand, null, 'redis');
         }
 
         $start = cache('bookStart:' . $id);

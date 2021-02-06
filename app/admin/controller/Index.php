@@ -20,7 +20,6 @@ class Index extends Base
 
     public function info()
     {
-        $schema = config('site.schema');
         $site_name = config('site.site_name');
         $domain = config('site.domain');
         $mobile_domain = config('site.mobile_domain');
@@ -40,7 +39,6 @@ class Index extends Base
         }
 
         View::assign([
-            'schema' => $schema,
             'site_name' => $site_name,
             'domain' => $domain,
             'mobile_domain' => $mobile_domain,
@@ -58,7 +56,6 @@ class Index extends Base
     public function update()
     {
         if (request()->isPost()) {
-            $schema = input('schema');
             $site_name = input('site_name');
             $domain = input('domain');
             $mobile_domain = input('mobile_domain');
@@ -72,7 +69,6 @@ class Index extends Base
             $site_code = <<<INFO
 <?php
 return [
-    'schema' => '{$schema}',
     'domain' => '{$domain}',
     'site_name' => '{$site_name}',
     'mobile_domain' => '{$mobile_domain}',

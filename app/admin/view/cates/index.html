@@ -97,7 +97,7 @@
             if (obj.event === 'edit') { // 修改
                 parent.layui.index.openTab({
                     title: '编辑题材',
-                    url: "{:url('cates/edit')}?typeid=" + data.typeid,
+                    url: "{:url('cates/edit')}?sortid=" + data.sortid,
                     end: function () {
                         insTb.reload();
                     }
@@ -107,7 +107,7 @@
                     $.ajax({
                         type: 'POST',
                         url: "{:url('delete')}",
-                        data: {typeid: data.typeid},
+                        data: {sortid: data.sortid},
                         dataType: 'json',
                         success: function (res) {
                             if (res.err == 0) { //删除成功
@@ -137,7 +137,7 @@
             cellMinWidth: 100,
             cols: [[
                 {type: 'checkbox'},
-                {field: 'typeid', title: 'ID', align: 'center', sort: true},
+                {field: 'sortid', title: 'ID', align: 'center', sort: true},
                 {field: 'cate_name', title: '题材名', align: 'center', sort: true},
                 {
                     field: 'create_time', title: '创建时间', templet: function (d) {
@@ -162,7 +162,7 @@
                 cellMinWidth: 100,
                 cols: [[
                     {type: 'checkbox'},
-                    {field: 'typeid', title: 'ID', align: 'center', sort: true},
+                    {field: 'sortid', title: 'ID', align: 'center', sort: true},
                     {field: 'cate_name', title: '题材名', align: 'center', sort: true},
                     {
                         field: 'create_time', title: '创建时间', templet: function (d) {

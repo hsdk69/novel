@@ -29,7 +29,7 @@ class ArticleArticle extends Model
 
     public function cate()
     {
-        return $this->hasOne(Cate::class, 'typeid', 'typeid');
+        return $this->hasOne(Cate::class, 'sortid', 'sortid');
     }
 
     public function setArticleNameAttr($value)

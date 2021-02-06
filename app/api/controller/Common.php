@@ -71,30 +71,30 @@ class Common extends BaseController
     {
         $api_key = input('api_key');
         if (empty($api_key) || is_null($api_key)) {
-            $this->error('api密钥错误', config('site.schema') . config('site.admin_damain'));
+            $this->error('api密钥错误',  config('site.admin_damain'));
         }
         if ($api_key != config('site.api_key')) {
-            $this->error('api密钥错误', config('site.schema') . config('site.admin_damain'));
+            $this->error('api密钥错误',  config('site.admin_damain'));
         }
         $salt = input('salt');
         if (empty($salt) || is_null($salt)) {
-            $this->error('密码盐错误', config('site.schema') . config('site.admin_damain'));
+            $this->error('密码盐错误',  config('site.admin_damain'));
         }
         if ($salt != config('site.salt')) {
-            $this->error('密码盐错误', config('site.schema') . config('site.admin_damain'));
+            $this->error('密码盐错误',  config('site.admin_damain'));
         }
         $username = input('username');
         if (empty($username) || is_null($username)) {
-            $this->error('用户名不能为空', config('site.schema') . config('site.admin_damain'));
+            $this->error('用户名不能为空',  config('site.admin_damain'));
         }
         $pwd = input('password');
         if (empty($pwd) || is_null($pwd)) {
-            $this->error('密码不能为空', config('site.schema') . config('site.admin_damain'));
+            $this->error('密码不能为空',  config('site.admin_damain'));
         }
         SystemUsers::create([
             'username' => $username,
             'password' => trim($pwd)
         ]);
-        $this->success('新管理员创建成功', config('site.schema') . config('site.admin_damain'));
+        $this->success('新管理员创建成功',  config('site.admin_damain'));
     }
 }

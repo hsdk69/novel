@@ -29,22 +29,22 @@ class Booklist extends Base
         $end_selector = -1;
 
         $map = array();
-        $cate = (int)input('typeid');
+        $cate = (int)input('sortid');
         $cate_name = '全部';
-        $cate_model = Cate::where('typeid', $cate)->find();
+        $cate_model = Cate::where('sortid', $cate)->find();
         if (isset($cate_model)) {
             $cate_name = $cate_model->cate_name;
         }
         if ($cate == 0 || $cate == -1) {
 
         } else {
-            $map[] = ['typeid', '=', $cate];
+            $map[] = ['sortid', '=', $cate];
             $cate_selector = $cate;
         }
 //        $arr = array();
 //        if ($cate == 0 || $cate == '-1') {
 //            foreach ($cates as $c) {
-//                array_push($arr, $c['typeid']);
+//                array_push($arr, $c['sortid']);
 //            }
 //        } else {
 //            array_push($arr, $cate);

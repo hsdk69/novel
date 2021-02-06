@@ -57,7 +57,7 @@ class BookService
 
     public function getByCate($cate_id, $end_point, $num = 30)
     {
-        $books = ArticleArticle::with('cate')->where('typeid', '=', $cate_id)
+        $books = ArticleArticle::with('cate')->where('sortid', '=', $cate_id)
             ->limit($num)->select();
         foreach ($books as &$book) {
             if ($end_point == 'id') {
@@ -96,7 +96,7 @@ class BookService
 FROM ' . $prefix . 'article_article AS ad1 JOIN (SELECT ROUND(RAND() * 
 ((SELECT MAX(id) FROM ' . $prefix . 'article_article)-(SELECT MIN(id) FROM ' . $prefix . 'article_article))+(SELECT MIN(id) FROM ' . $prefix . 'article_article)) AS id)
  AS t2 WHERE ad1.id >= t2.id ORDER BY ad1.id LIMIT ' . $num . ') as a
- INNER JOIN ' . $prefix . 'cate as b on a.typeid = b.typeid');
+ INNER JOIN ' . $prefix . 'cate as b on a.sortid = b.sortid');
         foreach ($books as &$book) {
             if ($end_point == 'id') {
                 $book['param'] = $book['articleid'];

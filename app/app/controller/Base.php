@@ -40,7 +40,7 @@ class Base extends BaseController
 
         $this->prefix = Env::get('database.prefix');
         $this->redis_prefix = Env::get('cache.prefix');
-        $this->url = config('site.schema') . config('site.domain');
+        $this->url =  config('site.domain');
         $this->server = config('site.server');
         $this->book_ctrl = BOOKCTRL;
     }

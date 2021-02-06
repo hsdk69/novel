@@ -35,16 +35,16 @@ class Cates extends Base
         $words_selector = -1;
         $end_selector = -1;
 
-        $cate = (int)input('typeid');
+        $cate = (int)input('sortid');
         $cate_name = '全部';
-        $cate_model = Cate::where('typeid', $cate)->find();
+        $cate_model = Cate::where('sortid', $cate)->find();
         if (isset($cate_model)) {
             $cate_name = $cate_model->cate_name;
         }
         if ($cate == 0 || $cate == -1) {
 
         } else {
-            $map[] = ['typeid', '=', $cate];
+            $map[] = ['sortid', '=', $cate];
             $cate_selector = $cate;
         }
         $words = (int)input('words');

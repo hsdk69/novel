@@ -56,10 +56,10 @@ class Books extends Base
         $redis->zIncrBy('click:' . $day, 1, $book->id);
 
 
-        $recommand = cache('randBooks:' . $book->typeid);
+        $recommand = cache('randBooks:' . $book->sortid);
         if (!$recommand) {
-            $recommand = $this->bookService->getByCate($book->typeid, $this->end_point, 3);
-            cache('randBooks:' . $book->typeid, $recommand, null, 'redis');
+            $recommand = $this->bookService->getByCate($book->sortid, $this->end_point, 3);
+            cache('randBooks:' . $book->sortid, $recommand, null, 'redis');
         }
 
         $start = cache('bookStart:' . $id);

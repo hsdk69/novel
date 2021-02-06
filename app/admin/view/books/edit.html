@@ -46,9 +46,9 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label layui-form-required">题材：</label>
                     <div class="layui-input-block">
-                        <select name="typeid" lay-verType="tips" lay-verify="required" required>
+                        <select name="sortid" lay-verType="tips" lay-verify="required" required>
                             {volist name="cates" id="vo"}
-                            <option value="{$vo.typeid}" {$book.typeid==$vo.typeid?"selected":""}>
+                            <option value="{$vo.sortid}" {$book.sortid==$vo.sortid?"selected":""}>
                                 {$vo.cate_name}
                             </option>
                             {/volist}

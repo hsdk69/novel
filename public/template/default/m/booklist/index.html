@@ -14,8 +14,8 @@
                         <a @click="cateChange(-1)">全部</a>
                     </span>
                     {volist name="cates" id="vo"}
-                    <span class="x-category__item" :class="{'is-active' : cate == {$vo.typeid}}">
-                        <a @click="cateChange({$vo.typeid})">{$vo.cate_name}</a>
+                    <span class="x-category__item" :class="{'is-active' : cate == {$vo.sortid}}">
+                        <a @click="cateChange({$vo.sortid})">{$vo.cate_name}</a>
                     </span>
                     {/volist}
                 </div>
@@ -124,15 +124,15 @@
         methods: {
             wordsChange(words) {
                 this.words = words
-                window.location.href = '/{$booklist_act}?typeid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
+                window.location.href = '/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
             },
             cateChange(cate) {
                 this.cate = cate
-                window.location.href = '/{$booklist_act}?typeid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
+                window.location.href = '/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
             },
             statusChange(fullflag) {
                 this.fullflag = fullflag
-                window.location.href = '/{$booklist_act}?typeid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
+                window.location.href = '/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
             },
             showmore() {
                 this.more = !this.more
