@@ -10,5 +10,6 @@ return [
     'bookService' => \app\service\BookService::class,
     'chapterService' => \app\service\ChapterService::class,
     'tailService' => \app\service\TailService::class,
-    'booklogService' => \app\service\BookLogService::class
+    'booklogService' => \app\service\BookLogService::class,
+    'httpclient' => \GuzzleHttp\Client::class
 ];
