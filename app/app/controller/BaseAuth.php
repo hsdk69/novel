@@ -5,6 +5,8 @@ namespace app\app\controller;
 
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
+use http\Exception;
+
 class BaseAuth extends Base
 {
     protected function initialize()

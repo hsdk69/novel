@@ -76,13 +76,23 @@ class Users extends BaseAuth
     public function update()
     {
         $nick_name = input('nickname');
-        $user = new SystemUsers();
-        $user->nick_name = $nick_name;
-        $res = $user->save(['id' => $this->uid]);
-        if ($res) {
-            session('xwx_nick_name', $nick_name);
-            return json(['success' => 1, 'msg' => '修改成功']);
-        } else {
+        $password = input('password');
+        try {
+            $user = SystemUsers::findOrFail($this->uid);
+            $user->name = $nick_name;
+            if (empty($password) || is_null($password)) {
+
+            } else {
+                $user->pass = md5($password.$user->salt);
+            }
+            $res = $user->save(['id' => $this->uid]);
+            if ($res) {
+                session('xwx_nick_name', $nick_name);
+                return json(['success' => 1, 'msg' => '修改成功', 'userInfo' => $user]);
+            } else {
+                return json(['success' => 0, 'msg' => '修改失败']);
+            }
+        } catch (DataNotFoundException $e){
             return json(['success' => 0, 'msg' => '修改失败']);
         }
     }

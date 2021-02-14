@@ -14,14 +14,6 @@ use think\facade\Db;
 
 class Books extends Base
 {
-    protected $bookService;
-
-    public function initialize()
-    {
-        parent::initialize();
-        $this->bookService = app('bookService');
-    }
-
     public function getNewest()
     {
         $num = input('num');
@@ -214,10 +206,8 @@ class Books extends Base
                 'recommends' => $recommends
             ];
             return json($result);
-        } catch (DataNotFoundException $e) {
-            return ['success' => 0, 'msg' => '漫画不存在'];
         } catch (ModelNotFoundException $e) {
-            return ['success' => 0, 'msg' => '漫画不存在'];
+            return ['success' => 0, 'msg' => '小说不存在'];
         }
     }
 }

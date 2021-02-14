@@ -15,7 +15,6 @@ class Chapters extends Base
     public function getList()
     {
         $articleid = input('articleid');
-
         $chapters = cache('mulu:' . $articleid);
         if (!$chapters) {
             $chapters = ArticleChapter::where('articleid', '=', $articleid)->select();
@@ -71,8 +70,6 @@ class Chapters extends Base
             ];
 
             return json($result);
-        } catch (DataNotFoundException $e) {
-            return json(['success' => 0, 'msg' => '章节id错误']);
         } catch (ModelNotFoundException $e) {
             return json(['success' => 0, 'msg' => '章节id错误']);
         }

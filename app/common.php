@@ -61,6 +61,12 @@ function random_color(){
     return $c;
 }
 
+function gen_uid($num)
+{
+    $key_str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    return substr(str_shuffle($key_str), mt_rand(0, strlen($key_str) - 11), $num);
+}
+
 function sendcode($_phone, $code){
     $statusStr = array(
         "0" => "短信验证码已经发送至" . $_phone,
