@@ -124,7 +124,7 @@ INFO;
         Cache::clear('redis');
         Cache::clear('pay');
         $rootPath = App::getRootPath();
-        delete_dir_file($rootPath . '/runtime/cache/') && delete_dir_file($rootPath . '/runtime/temp/');
+        delete_dir_file($rootPath . '/runtime/');
         return json(['err' => 0, 'msg' => '清理缓存']);
     }
 

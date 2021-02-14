@@ -10,7 +10,6 @@ use app\model\ArticleChapter;
 use Overtrue\Pinyin\Pinyin;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
-use think\facade\App;
 use think\facade\View;
 
 class Books extends Base
