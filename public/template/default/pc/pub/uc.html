@@ -12,24 +12,24 @@
     <div class="ibody">
         <!--搜索部分 start-->
         <div class="wrap1200 logo iMod">
-            <a href="/ucenter" class="fl imotie">用户中心</a>
+            <a href="/pc/ucenter" class="fl imotie">用户中心</a>
             <ul class="iUl">
                 <li>
                     <a href="/">首页</a>
                 </li>
                 <li>
-                    <a href="/ucenter">个人中心</a>
+                    <a href="/pc/ucenter">个人中心</a>
                 </li>
                 <li class="accounts">
                     <a href="javaScript:;">账户设置</a>
                     <p style="display: none;">
-                        <a href="/ucenter">个人信息</a>
-                        <a href="/resetpwd">修改密码</a>
+                        <a href="/pc/ucenter">个人信息</a>
+                        <a href="/pc/resetpwd">修改密码</a>
                     </p>
                 </li>
             </ul>
             <div class="searchbox">
-                <form action="/search" method="get" >
+                <form action="/pc/search" method="get" >
                     <div class="searchbox-inner">
                         <input type="text" name="keyword" placeholder="找书" class="searchinput" value="">
                         <i class="search-icon"></i>
@@ -41,12 +41,12 @@
                 <div class="login_after" id="mod_login_after">
                     <span class="yh">
                         <img src="/static/images/mrtx.gif" alt="hiliqi">
-                        <a href="/ucenter">{$user.username}</a>
+                        <a href="/pc/ucenter">{$user.username}</a>
                     </span>
                     <ul class="xiala">
-                        <li><i class="iconfont"></i><a href="/bookshelf">我的书架</a></li>
-                        <li><i class="iconfont"></i><a href="/ucenter">个人中心</a></li>
-                        <li><i class="iconfont"></i><a href="/logout">退出</a></li>
+                        <li><i class="iconfont"></i><a href="/pc/bookshelf">我的书架</a></li>
+                        <li><i class="iconfont"></i><a href="/pc/ucenter">个人中心</a></li>
+                        <li><i class="iconfont"></i><a href="/pc/logout">退出</a></li>
                     </ul>
                 </div>
             </div>
@@ -69,13 +69,13 @@
         </p>
         <ul>
             <li>
-                <a href="/bookshelf">
+                <a href="/pc/bookshelf">
                     <i class="iconfont"></i>
                     我的书架
                 </a>
             </li>
             <li>
-                <a href="/history">
+                <a href="/pc/history">
                     <i class="iconfont"></i>
                     最近阅读
                 </a>
@@ -87,13 +87,13 @@
         </p>
         <ul>
             <li class="on">
-                <a href="/ucenter">
+                <a href="/pc/ucenter">
                     <i class="iconfont"></i>
                     个人信息
                 </a>
             </li>
             <li>
-                <a href="/resetpwd">
+                <a href="/pc/resetpwd">
                     <i class="iconfont"></i>
                     修改密码
                 </a>

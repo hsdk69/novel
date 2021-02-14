@@ -20,12 +20,12 @@
             </tr>
             <tr v-for="(item, index) in books" :key="index">
                 <td>
-                    <a :href="'/{$book_ctrl}/' + item.param" target="_blank">
+                    <a :href="'/pc/{$book_ctrl}/' + item.param" target="_blank">
                         <img :src="item.cover_url">
                     </a>
                 </td>
                 <td class="t3">
-                    <a :href="'/{$book_ctrl}/' + item.param" target="_blank">{{item.book_name}}</a>
+                    <a :href="'/pc/{$book_ctrl}/' + item.param" target="_blank">{{item.book_name}}</a>
                 </td>
                 <td class="t5">
                     <a>{{item.author}}</a>
@@ -34,7 +34,7 @@
 
                 <td class="t6">{{item.end}}</td>
                 <td class="t7">
-                    <a :href="'/{$chapter_ctrl}/' + item.chapter_id" class="goon" target="_blank">阅读</a>
+                    <a :href="'/pc/{$chapter_ctrl}/' + item.chapter_id" class="goon" target="_blank">阅读</a>
                     <i><span class="Collection" @click="delHistory(item.book_id)">删除</span></i>
                 </td>
             </tr>

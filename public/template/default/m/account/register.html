@@ -39,7 +39,7 @@
             layer.msg('两次输入密码不一致', {icon: 1,time: 2000,shade:0.3})
         } else {
             $.ajax({
-                url:'/register',
+                url:'/m/register',
                 type:'post',
                 data: {
                     username: $('#uname').val(),
@@ -49,7 +49,7 @@
                 success:function (res) {
                     if (res.err == 0) {
                         layer.msg(res.msg, {icon: 1,time: 1000,shade:0.3}, function () {
-                            location.href = '/login'
+                            location.href = '/m/login'
                         })
                     } else {
                         layer.msg(res.msg, {icon: 1,time: 1000,shade:0.3})

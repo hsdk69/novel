@@ -17,19 +17,19 @@
                     <div class="secd-rank-list">
                         <dl>
                             <dt>
-                                <a href="/{$book_ctrl}/{$vo.param}/" target="_blank">
+                                <a href="/pc/{$book_ctrl}/{$vo.param}/" target="_blank">
                                     <img src="https://p.pstatp.com/origin/ffa400036691f82c85e5" class="lazyimg"
                                          data-original="{$vo.cover}" style="display: block;">
                                 </a>
                             </dt>
                             <dd>
-                                <a href="/{$book_ctrl}/{$vo.param}/" class="bigpic-book-name" target="_blank">
+                                <a href="/pc/{$book_ctrl}/{$vo.param}/" class="bigpic-book-name" target="_blank">
                                     {$vo.articlename}
                                 </a>
                                 <p>
                                     <a>{$vo.author}</a>
                                     |
-                                    <a href="/{$booklist_act}?sortid={$vo.sortid}" target="_blank">{$vo.cate.cate_name}</a>
+                                    <a href="/pc/{$booklist_act}?sortid={$vo.sortid}" target="_blank">{$vo.cate.cate_name}</a>
                                     | {$vo.fullflag == 1 ? '已完结' : '连载中'}
                                     <span class="clicknum"> <em>{$vo.words}字</em></span>
                                 </p>
@@ -37,7 +37,7 @@
                                     {$vo.intro}
                                 </p>
                                 <p>
-                                    <a href="/{$chapter_ctrl}/{$vo.last_chapter_id}/" target="_blank" class="red">
+                                    <a href="/pc/{$chapter_ctrl}/{$vo.last_chapter_id}/" target="_blank" class="red">
                                         最近更新 {$vo.lastchapter}
                                     </a>
                                     <span>| {$vo.lastupdate|date='Y-m-d'}更新</span>
@@ -45,7 +45,7 @@
                             </dd>
                         </dl>
                         <div class="bigbtn">
-                            <a href="/{$book_ctrl}/{$vo.param}/" class="detailbtn" target="_blank">书籍详情</a>
+                            <a href="/pc/{$book_ctrl}/{$vo.param}/" class="detailbtn" target="_blank">书籍详情</a>
                         </div>
                     </div>
                     {/volist}

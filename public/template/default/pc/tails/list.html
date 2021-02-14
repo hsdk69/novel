@@ -15,7 +15,7 @@
                     <div class="hd mod-title">
                         <div class="title-bd">
                             <h2>最近更新</h2>
-                            <a href="/booklist" class="more" target="_blank">更多&gt;&gt;</a>
+                            <a href="/pc/booklist" class="more" target="_blank">更多&gt;&gt;</a>
                         </div>
                     </div>
                     <div class="bd">
@@ -35,20 +35,20 @@
                                 <tr>
                                     <td>
                                         <div>
-                                            <a href="/booklist?sortid={$vo.book.sortid}" class="cat-name" target="_blank">
+                                            <a href="/pc/booklist?sortid={$vo.book.sortid}" class="cat-name" target="_blank">
                                                 {$vo.book.cate.cate_name}
                                             </a>
                                         </div>
                                     </td>
                                     <td>
                                         <div>
-                                            <a href="/tail/{$vo.tailcode}" target="_blank" class="book-name"> <b>{$vo.tailname}</b>
+                                            <a href="/pc/tail/{$vo.tailcode}" target="_blank" class="book-name"> <b>{$vo.tailname}</b>
                                             </a>
                                         </div>
                                     </td>
                                     <td>
                                         <div>
-                                            <a href="/{$chapter_ctrl}/{$vo.book.lastchapterid}" class="chapter-name" target="_blank">
+                                            <a href="/pc/{$chapter_ctrl}/{$vo.book.lastchapterid}" class="chapter-name" target="_blank">
                                                 {$vo.book.lastchapter}
                                             </a>
                                         </div>

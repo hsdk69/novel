@@ -65,12 +65,12 @@
                     <div class="x-book">
                         <div class="x-book__multi">
                             <div class="x-book__coverbox">
-                                <a href="/{$book_ctrl}/{$vo.param}/" title="{$vo.articlename}">
+                                <a href="/m/{$book_ctrl}/{$vo.param}/" title="{$vo.articlename}">
                                     <img class="x-book__cover" src="{$server}{$vo.cover}" style="width: 1.6rem; height: 2.13333rem;">
                                 </a>
                             </div>
                             <div class="x-book__text--multi" style="width: calc(100% - 1.6rem); height: 2.13333rem;">
-                                <a href="/{$book_ctrl}/{$vo.param}/">
+                                <a href="/m/{$book_ctrl}/{$vo.param}/">
                                     <div class="x-book__info">
                                         <p class="x-book__info--name">{$vo.articlename}</p>
                                         <p class="x-book__info--chapter">
@@ -94,13 +94,13 @@
                     {if $page.current_page == 1}
                     <li class="disabled"><span>«</span></li>
                     {else/}
-                    <li><a href="/{$booklist_act}?page={$page.current_page-1}{$param}" title="上一页">«</a></li>
+                    <li><a href="/m/{$booklist_act}?page={$page.current_page-1}{$param}" title="上一页">«</a></li>
                     {/if}
 
                     {if $page.current_page == $page.last_page}
                     <li class="disabled"><span>»</span></li>
                     {else/}
-                    <li><a href="/{$booklist_act}?page={$page.current_page+1}{$param}" title="下一页">»</a></li>
+                    <li><a href="/m/{$booklist_act}?page={$page.current_page+1}{$param}" title="下一页">»</a></li>
                     {/if}
                     {/if}
                 </ul>
@@ -124,15 +124,15 @@
         methods: {
             wordsChange(words) {
                 this.words = words
-                window.location.href = '/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
+                window.location.href = '/m/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
             },
             cateChange(cate) {
                 this.cate = cate
-                window.location.href = '/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
+                window.location.href = '/m/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
             },
             statusChange(fullflag) {
                 this.fullflag = fullflag
-                window.location.href = '/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
+                window.location.href = '/m/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
             },
             showmore() {
                 this.more = !this.more

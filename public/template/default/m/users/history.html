@@ -12,7 +12,7 @@
         <div class="app_listBlock_con">
             <ul class="app_deletePaddingBottom" id="list">
                 <li class="li2" v-for="(item, index) in books" :key="index">
-                    <a :href="'/{$chapter_ctrl}/' + item.chapterid">
+                    <a :href="'/m/{$chapter_ctrl}/' + item.chapterid">
                         <div class="leftImage2">
                             <img :src="item.cover_url">
                         </div>

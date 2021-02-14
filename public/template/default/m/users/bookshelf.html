@@ -13,7 +13,7 @@
             <ul class="app_deletePaddingBottom" id="list">
                 {volist name="books" id="vo"}
                 <li class="li2">
-                    <a href="/{$book_ctrl}/{$vo.param}">
+                    <a href="/m/{$book_ctrl}/{$vo.param}">
                         <div class="leftImage2">
                             <img src="{$vo.cover}">
                         </div>
@@ -26,7 +26,7 @@
                                 </span>
                                 <span class="spanLi Time">{$vo.lastupdate|date='Y-m-d H:i:s'}</span>
                                 <span class="rightJustTime"
-                                    onclick="javascript:window.location.href='/{$book_ctrl}/{$vo.param}'">继续阅读</span>
+                                    onclick="javascript:window.location.href='/m/{$book_ctrl}/{$vo.param}'">继续阅读</span>
                             </span>
                         </div>
                     </a>
@@ -42,13 +42,13 @@
             {if $page.current_page == 1}
             <li class="disabled"><span>«</span></li>
             {else/}
-            <li><a href="/bookshelf?page={$page.current_page-1}{$param}">«</a></li>
+            <li><a href="/m/bookshelf?page={$page.current_page-1}{$param}">«</a></li>
             {/if}
 
             {if $page.current_page == $page.last_page}
             <li class="disabled"><span>»</span></li>
             {else/}
-            <li><a href="/bookshelf?page={$page.current_page+1}{$param}">»</a></li>
+            <li><a href="/m/bookshelf?page={$page.current_page+1}{$param}">»</a></li>
             {/if}
             {/if}
         </ul>
@@ -59,7 +59,7 @@
 <script>
     function delfavor(articleid) {
         $.ajax({
-            url:'/delfavors',
+            url:'/m/delfavors',
             type:'post',
             data: {
                 articleid: articleid

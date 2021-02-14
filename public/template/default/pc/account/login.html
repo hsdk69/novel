@@ -8,29 +8,6 @@
     <link rel="stylesheet" href="https://lib.baomitu.com/layer/3.1.1/theme/default/layer.css">
     <script type="text/javascript" src="https://lib.baomitu.com/jquery/2.2.4/jquery.min.js"></script>
     <script src="https://lib.baomitu.com/layer/3.1.1/layer.js"></script>
-    <!---识别手机或电脑的js开始--->
-    <script>
-        function is_mobile() {
-            var regex_match = /(nokia|iphone|android|motorola|^mot-|softbank|foma|docomo|kddi|up.browser|up.link|htc|dopod|blazer|netfront|helio|hosin|huawei|novarra|CoolPad|webos|techfaith|palmsource|blackberry|alcatel|amoi|ktouch|nexian|samsung|^sam-|s[cg]h|^lge|ericsson|philips|sagem|wellcom|bunjalloo|maui|symbian|smartphone|midp|wap|phone|windows ce|iemobile|^spice|^bird|^zte-|longcos|pantech|gionee|^sie-|portalmmm|jigs browser|hiptop|^benq|haier|^lct|operas*mobi|opera*mini|320x320|240x320|176x220)/i;
-            var u = navigator.userAgent;
-            if (null == u) {
-                return true;
-            }
-            var result = regex_match.exec(u);
-
-            if (null == result) {
-                return false
-            } else {
-                return true
-            }
-        }
-        if (is_mobile()) {
-            var pathname = window.location.pathname;
-            var url = window.location.search; //获取url中"?"符后的字串
-            window.location.href= '{$mobile_url}' + pathname + url;
-        }
-    </script>
-    <!---识别手机或电脑的js结束--->
 </head>
 <body style="">
 <div class="header">
@@ -69,12 +46,12 @@
                             <div class="link fr">
                                 <a href="#" target="_blank">忘记密码</a>
                                 <em>|</em>
-                                <a href="/register">免费注册</a>
+                                <a href="/pc/register">免费注册</a>
                             </div>
                             <input type="checkbox" id="autologin" name="autologin">
                             <label for="autologin" class="ui-checkbox"></label><label for="autologin">自动登录</label>
                         </div>
-                        <a class="blue-btn go-login btnLogin login-button" href="/login">登 录</a>
+                        <a class="blue-btn go-login btnLogin login-button" href="/pc/login">登 录</a>
                     </div>
                     <!-- end 登录操作 -->
                 </div>

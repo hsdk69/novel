@@ -12,13 +12,13 @@
                 <div class="leftbarlist fl">
                     <ul>
                         <li class="{$op == 'new' ? 'on' : ''}">
-                            <a href="/{$rank_ctrl}?cate=new">新书榜</a>
+                            <a href="/pc/{$rank_ctrl}?cate=new">新书榜</a>
                         </li>
                         <li class="{$op == 'click' ? 'on' : ''}">
-                            <a href="/{$rank_ctrl}?cate=click">点击榜</a>
+                            <a href="/pc/{$rank_ctrl}?cate=click">点击榜</a>
                         </li>
                         <li class="{$op == 'fullflag' ? 'on' : ''}">
-                            <a href="/{$rank_ctrl}?cate=fullflag">完结榜</a>
+                            <a href="/pc/{$rank_ctrl}?cate=fullflag">完结榜</a>
                         </li>
                     </ul>
                 </div>
@@ -28,19 +28,19 @@
                         <div class="secd-rank-list rank">
                             <dl>
                                 <dt>
-                                    <a href="/{$book_ctrl}/{$vo.param}" target="_blank">
-                                        <img src="{$vo.cover}" style="display: block;">
+                                    <a href="/pc/{$book_ctrl}/{$vo.param}" target="_blank">
+                                        <img src="{$server}{$vo.cover}" style="display: block;">
                                     </a>
                                 </dt>
                                 <dd>
-                                    <a href="/{$book_ctrl}/{$vo.param}" class="bigpic-book-name" target="_blank">
+                                    <a href="/pc/{$book_ctrl}/{$vo.param}" class="bigpic-book-name" target="_blank">
                                         <span class="num red">{$i}</span>{$vo.articlename}
                                     </a>
                                     <p>
                                         <a>
                                             {$vo.words}字
                                         </a>
-                                        <a href="/{$booklist_act}?sortid={$vo.sortid}" target="_blank">
+                                        <a href="/pc/{$booklist_act}?sortid={$vo.sortid}" target="_blank">
                                             {$vo.cate.cate_name}
                                         </a> |
                                         {$vo.end == 1 ? '已完结' : '连载中'}
@@ -48,7 +48,7 @@
                                     </p>
                                     <p class="big-book-info">{$vo.intro}</p>
                                     <p>
-                                        <a href="/{$search_ctrl}/{$vo.author}" target="_blank" class="red">
+                                        <a href="/pc/{$search_ctrl}/{$vo.author}" target="_blank" class="red">
                                              {$vo.author}
                                         </a>
                                         <span>| {$vo.lastupdate|date='Y-m-d H:i'}</span>
@@ -56,7 +56,7 @@
                                 </dd>
                             </dl>
                             <div class="bigbtn">
-                                <a href="/{$book_ctrl}/{$vo.param}" class="detailbtn" target="_blank">书籍详情</a>
+                                <a href="/pc/{$book_ctrl}/{$vo.param}" class="detailbtn" target="_blank">书籍详情</a>
                             </div>
                         </div>
                         {/volist}

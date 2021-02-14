@@ -17,7 +17,7 @@
                             <a class="title" href="" target="_blank"><em>题材</em></a>
                             <p class="clearfixer">
                                 {volist name="cates" id="vo"}
-                                <a class="gray" href="/{$booklist_act}?type={$vo.sortid}"
+                                <a class="gray" href="/pc/{$booklist_act}?type={$vo.sortid}"
                                    target="_blank">{$vo.cate_name}</a>
                                 {/volist}
                             </p>
@@ -30,9 +30,9 @@
                             <div class="slideBox">
                                 {volist name="banners" id="vo"}
                                 <a href="{if $end_point == 'id'}
-                                      /{$book_ctrl}/{$vo.articleid}
+                                      /pc/{$book_ctrl}/{$vo.articleid}
                                       {else /}
-                                      /{$book_ctrl}/{$vo.book.backupname}
+                                      /pc/{$book_ctrl}/{$vo.book.backupname}
                                       {/if}"
                                    data-shutter-title="{$vo.title}">
                                     <img width="950px" height="360px" src="{$server}{$vo.pic}" alt="{$vo.title}">
@@ -60,14 +60,14 @@
                                 {volist name="newest" id="vo" length="4"}
                                 <dl class="book-block">
                                     <dt>
-                                        <a href="/{$book_ctrl}/{$vo.param}" target="_blank">
+                                        <a href="/pc/{$book_ctrl}/{$vo.param}" target="_blank">
                                             <img class="lazyimg" data-original="{$server}{$vo.cover}"
                                                  src="https://p.pstatp.com/origin/ffa400036691f82c85e5"
                                                  style="display: block;">
                                         </a>
                                     </dt>
                                     <dd>
-                                        <a href="/{$book_ctrl}/{$vo.param}" class="book-name" target="_blank">{$vo.articlename}</a>
+                                        <a href="/pc/{$book_ctrl}/{$vo.param}" class="book-name" target="_blank">{$vo.articlename}</a>
                                         <span class="book-info">
 		            						{$vo.intro}
 		            					</span>
@@ -83,14 +83,14 @@
                                 {volist name="newest" id="vo" offset="4" length="4"}
                                 <dl class="book-block">
                                     <dt>
-                                        <a href="/{$book_ctrl}/{$vo.param}" target="_blank">
+                                        <a href="/pc/{$book_ctrl}/{$vo.param}" target="_blank">
                                             <img class="lazyimg" data-original="{$server}{$vo.cover}"
                                                  src="https://p.pstatp.com/origin/ffa400036691f82c85e5"
                                                  style="display: block;">
                                         </a>
                                     </dt>
                                     <dd>
-                                        <a href="/{$book_ctrl}/{$vo.param}" class="book-name" target="_blank">{$vo.articlename}</a>
+                                        <a href="/pc/{$book_ctrl}/{$vo.param}" class="book-name" target="_blank">{$vo.articlename}</a>
                                         <span class="book-info">
 		            						{$vo.intro}
 		            					</span>
@@ -118,14 +118,14 @@
                                 {volist name="cateItem.books" id="vo" length="4"}
                                 <dl class="book-block">
                                     <dt>
-                                        <a href="/{$book_ctrl}/{$vo.param}" target="_blank">
+                                        <a href="/pc/{$book_ctrl}/{$vo.param}" target="_blank">
                                             <img class="lazyimg" data-original="{$server}{$vo.cover}"
                                                  src="https://p.pstatp.com/origin/ffa400036691f82c85e5"
                                                  style="display: block;">
                                         </a>
                                     </dt>
                                     <dd>
-                                        <a href="/{$book_ctrl}/{$vo.param}" class="book-name" target="_blank">{$vo.articlename}</a>
+                                        <a href="/pc/{$book_ctrl}/{$vo.param}" class="book-name" target="_blank">{$vo.articlename}</a>
                                         <span class="book-info">
 		            						{$vo.intro}
 		            					</span>
@@ -141,14 +141,14 @@
                                 {volist name="cateItem.books" id="vo" offset="4" length="4"}
                                 <dl class="book-block">
                                     <dt>
-                                        <a href="/{$book_ctrl}/{$vo.param}" target="_blank">
+                                        <a href="/pc/{$book_ctrl}/{$vo.param}" target="_blank">
                                             <img class="lazyimg" data-original="{$server}{$vo.cover}"
                                                  src="https://p.pstatp.com/origin/ffa400036691f82c85e5"
                                                  style="display: block;">
                                         </a>
                                     </dt>
                                     <dd>
-                                        <a href="/{$book_ctrl}/{$vo.param}" class="book-name" target="_blank">{$vo.articlename}</a>
+                                        <a href="/pc/{$book_ctrl}/{$vo.param}" class="book-name" target="_blank">{$vo.articlename}</a>
                                         <span class="book-info">
 		            						{$vo.intro}
 		            					</span>
@@ -177,20 +177,20 @@
                             <span class="num">{$k}</span>
                             <dl class="book-block">
                                 <dt>
-                                    <a href="/{$book_ctrl}/{$vo.param}" target="_blank">
+                                    <a href="/pc/{$book_ctrl}/{$vo.param}" target="_blank">
                                         <img class="lazyimg" data-original="{$server}{$vo.cover}"
                                              src="https://p.pstatp.com/origin/ffa400036691f82c85e5">
                                     </a>
                                 </dt>
                                 <dd>
-                                    <a href="/{$book_ctrl}/{$vo.param}" target="_blank" class="book-name">{$vo.articlename}</a>
+                                    <a href="/pc/{$book_ctrl}/{$vo.param}" target="_blank" class="book-name">{$vo.articlename}</a>
                                 </dd>
                             </dl>
                         </li>
                         {else /}
                         <li>
                             <span class="num">{$k}</span>
-                            <a class="book-list-f" href="/{$book_ctrl}/{$vo.param}" target="_blank">{$vo.articlename}</a>
+                            <a class="book-list-f" href="/pc/{$book_ctrl}/{$vo.param}" target="_blank">{$vo.articlename}</a>
                         </li>
                         {/if}
                         {/volist}
@@ -206,25 +206,25 @@
                             <span class="num">{$k}</span>
                             <dl class="book-block">
                                 <dt>
-                                    <a href="/{$book_ctrl}/{$vo.param}" target="_blank">
+                                    <a href="/pc/{$book_ctrl}/{$vo.param}" target="_blank">
                                         <img class="lazyimg" data-original="{$server}{$vo.cover}"
                                              src="https://p.pstatp.com/origin/ffa400036691f82c85e5">
                                     </a>
                                 </dt>
                                 <dd>
-                                    <a href="/{$book_ctrl}/{$vo.param}" target="_blank" class="book-name">{$vo.articlename}</a>
+                                    <a href="/pc/{$book_ctrl}/{$vo.param}" target="_blank" class="book-name">{$vo.articlename}</a>
                                 </dd>
                             </dl>
                         </li>
                         {else /}
                         <li>
                             <span class="num">{$k}</span>
-                            <a class="book-list-f" href="/{$book_ctrl}/{$vo.param}" target="_blank">{$vo.articlename}</a>
+                            <a class="book-list-f" href="/pc/{$book_ctrl}/{$vo.param}" target="_blank">{$vo.articlename}</a>
                         </li>
                         {/if}
                         {/volist}
                     </ul>
-                    <a href="{$booklist_act}" target="_blank" class="more">查看更多&gt;&gt;</a>
+                    <a href="/pc/{$booklist_act}" target="_blank" class="more">查看更多&gt;&gt;</a>
                 </div>
                 <div class="rank-list">
                     <span class="titmenu">完结榜</span>
@@ -235,25 +235,25 @@
                             <span class="num">{$k}</span>
                             <dl class="book-block">
                                 <dt>
-                                    <a href="/{$book_ctrl}/{$vo.param}" target="_blank">
+                                    <a href="/pc/{$book_ctrl}/{$vo.param}" target="_blank">
                                         <img class="lazyimg" data-original="{$server}{$vo.cover}"
                                              src="https://p.pstatp.com/origin/ffa400036691f82c85e5">
                                     </a>
                                 </dt>
                                 <dd>
-                                    <a href="/{$book_ctrl}/{$vo.param}" target="_blank" class="book-name">{$vo.articlename}</a>
+                                    <a href="/pc/{$book_ctrl}/{$vo.param}" target="_blank" class="book-name">{$vo.articlename}</a>
                                 </dd>
                             </dl>
                         </li>
                         {else /}
                         <li>
                             <span class="num">{$k}</span>
-                            <a class="book-list-f" href="/{$book_ctrl}/{$vo.param}" target="_blank">{$vo.articlename}</a>
+                            <a class="book-list-f" href="/pc/{$book_ctrl}/{$vo.param}" target="_blank">{$vo.articlename}</a>
                         </li>
                         {/if}
                         {/volist}
                     </ul>
-                    <a href="{$booklist_act}" target="_blank" class="more">查看更多&gt;&gt;</a>
+                    <a href="/pc/{$booklist_act}" target="_blank" class="more">查看更多&gt;&gt;</a>
                 </div>
                 <div class="rank-list">
                     <span class="titmenu">新书榜</span>
@@ -264,25 +264,25 @@
                             <span class="num">{$k}</span>
                             <dl class="book-block">
                                 <dt>
-                                    <a href="/{$book_ctrl}/{$vo.param}" target="_blank">
+                                    <a href="/pc/{$book_ctrl}/{$vo.param}" target="_blank">
                                         <img class="lazyimg" data-original="{$server}{$vo.cover}"
                                              src="https://p.pstatp.com/origin/ffa400036691f82c85e5">
                                     </a>
                                 </dt>
                                 <dd>
-                                    <a href="/{$book_ctrl}/{$vo.param}" target="_blank" class="book-name">{$vo.articlename}</a>
+                                    <a href="/pc/{$book_ctrl}/{$vo.param}" target="_blank" class="book-name">{$vo.articlename}</a>
                                 </dd>
                             </dl>
                         </li>
                         {else /}
                         <li>
                             <span class="num">{$k}</span>
-                            <a class="book-list-f" href="/{$book_ctrl}/{$vo.param}" target="_blank">{$vo.articlename}</a>
+                            <a class="book-list-f" href="/pc/{$book_ctrl}/{$vo.param}" target="_blank">{$vo.articlename}</a>
                         </li>
                         {/if}
                         {/volist}
                     </ul>
-                    <a href="{$booklist_act}" target="_blank" class="more">查看更多&gt;&gt;</a>
+                    <a href="/pc/{$booklist_act}" target="_blank" class="more">查看更多&gt;&gt;</a>
                 </div>
             </div>
         </div>

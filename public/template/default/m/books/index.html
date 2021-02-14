@@ -31,7 +31,7 @@
                 <div class="x-detail__operator">
                     <span class="x-detail__operator--item" id="addshelf">加入书架</span>
                     {if $start > -1}
-                    <span class="to-read" onclick="javascript:location.href='/{$chapter_ctrl}/{$start}';">开始阅读</span>
+                    <span class="to-read" onclick="javascript:location.href='/m/{$chapter_ctrl}/{$start}';">开始阅读</span>
                     {else /}
                     <span class="to-read">开始阅读</span>
                     {/if}
@@ -67,7 +67,7 @@
                 <span class="x-catalog__update">更新于：{$book.lastupdate|date='Y-m-d'}</span>
             </div>
             <div class="x-part__content">
-                <a href="/{$chapter_ctrl}/{$book.lastchapterid}">
+                <a href="/m/{$chapter_ctrl}/{$book.lastchapterid}">
                     <div class="x-catalog__new">
                         {$book.lastchapter}
                         <span>最新</span>
@@ -75,7 +75,7 @@
                 </a>
                 <div class="x-catalog__list van-hairline--bottom">
                     {volist name="book.chapters" id="vo" length="3"}
-                    <a href="/{$chapter_ctrl}/{$vo.chapterid}">
+                    <a href="/m/{$chapter_ctrl}/{$vo.chapterid}">
                         <p class="x-catalog__list--item">{$vo.chaptername}</p>
                     </a>
                     {/volist}
@@ -95,7 +95,7 @@
                         <div id="wrapper" class="van-pull-refresh__track">
                             <div class="x-catalog__list van-list">
                                 {volist name="book.chapters" id="vo"}
-                                <a href="/{$chapter_ctrl}/{$vo.chapterid}">
+                                <a href="/m/{$chapter_ctrl}/{$vo.chapterid}">
                                     <p class="x-catalog__item">{$vo.chaptername}</p>
                                 </a>
                                 {/volist}
@@ -117,7 +117,7 @@
                 <div class="x-detail__part--book">
                     {volist name="recommand" id="vo" length="10"}
                     <div class="x-book" style="width: 2rem;">
-                        <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.articlename}">
+                        <a href="/m/{$book_ctrl}/{$vo.param}" title="{$vo.articlename}">
                             <div class="x-book__coverbox">
                                 <img lazy="loaded" class="x-book__cover" src="{$server}{$vo.cover}" style="width: 2rem; height: 2.66667rem;">
                             </div>
@@ -135,7 +135,7 @@
 <script>
     $('#addshelf').click(function () {
         $.post({
-            url:`/addfavor`,
+            url:`/m/addfavor`,
             data:{'articleid' : {$book.articleid} },
             success: function (res) {
                 if (res.err == 1) {

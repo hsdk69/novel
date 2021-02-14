@@ -30,13 +30,13 @@
                 {if $prev == "null"}
                 <a href="javascript:" class="btn-normal red">没有了</a>
                 {else/}
-                <a href="/{$chapter_ctrl}/{$prev.chapterid}" class="btn-normal red" title="{$prev.chaptername}">上一章</a>
+                <a href="/m/{$chapter_ctrl}/{$prev.chapterid}" class="btn-normal red" title="{$prev.chaptername}">上一章</a>
                 {/if}
                 <span>|</span>
                 {if $next == "null"}
                 <a href="javascript:" class="btn-normal red">没有了</a>
                 {else/}
-                <a href="/{$chapter_ctrl}/{$next.chapterid}" class="btn-normal red" title="{$next.chaptername}">下一章</a>
+                <a href="/m/{$chapter_ctrl}/{$next.chapterid}" class="btn-normal red" title="{$next.chaptername}">下一章</a>
                 {/if}
             </div>
         </div>
@@ -55,7 +55,7 @@
             </div>
         </header>
         <div class="read-opt-more" :class="{'active' : showMenu}">
-            <a href="/" class="read-opt-a">
+            <a href="/m" class="read-opt-a">
                 <i class="iconfont icon-zhuye1"></i>
                 <h4>返回首页</h4>
             </a>
@@ -63,11 +63,11 @@
                 <i class="iconfont icon-lixianxiazai"></i>
                 离线章节
             </a> -->
-            <a href="/{$book_ctrl}/{$chapter.articleid}" class="read-opt-a">
+            <a href="/m/{$book_ctrl}/{$chapter.articleid}" class="read-opt-a">
                 <i class="iconfont icon-SU"></i>
                 书籍详情
             </a>
-            <a href="/history" class="read-opt-a">
+            <a href="/m/history" class="read-opt-a">
                 <i class="iconfont icon-books"></i>
                 返回我的书架
             </a>
@@ -130,7 +130,7 @@
         </div>
         <footer class="read-opt-footer" v-show="show">
             <div class="btn-group">
-                <a href="/{$book_ctrl}/{$chapter.book.param}/" class="btn-group-cell">
+                <a href="/m/{$book_ctrl}/{$chapter.book.param}/" class="btn-group-cell">
                     <i class="iconfont icon-mulu"></i>
                     <h4 class="read-opt-footer-h">目录</h4>
                 </a>
@@ -147,7 +147,7 @@
                     <i class="iconfont icon-yueliang"></i>
                     <h4 class="read-opt-footer-h">夜间</h4>
                 </a>
-                <a href="/{$book_ctrl}/{$chapter.articleid}" class="btn-group-cell">
+                <a href="/m/{$book_ctrl}/{$chapter.articleid}" class="btn-group-cell">
                     <i class="iconfont icon-pinglun"></i>
                     <h4 class="read-opt-footer-h">评论</h4>
                 </a>

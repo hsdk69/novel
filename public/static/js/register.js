@@ -176,7 +176,7 @@ function register(){
 
 		$.ajax({
 			type: 'POST',
-			url: "/register",
+			url: "/pc/register",
 			data: $('#form-reg').serialize(),
 			dataType: 'json',
 			success: function (data) {

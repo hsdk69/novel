@@ -12,28 +12,6 @@
     <script src="https://lib.baomitu.com/layer/3.1.1/layer.js"></script>
     <script src="https://lib.baomitu.com/axios/0.19.2/axios.min.js"></script>
     {block name="css"}{/block}
-    <!---识别手机或电脑的js开始--->
-    <script>
-        function is_mobile() {
-            var regex_match = /(nokia|iphone|android|motorola|^mot-|softbank|foma|docomo|kddi|up.browser|up.link|htc|dopod|blazer|netfront|helio|hosin|huawei|novarra|CoolPad|webos|techfaith|palmsource|blackberry|alcatel|amoi|ktouch|nexian|samsung|^sam-|s[cg]h|^lge|ericsson|philips|sagem|wellcom|bunjalloo|maui|symbian|smartphone|midp|wap|phone|windows ce|iemobile|^spice|^bird|^zte-|longcos|pantech|gionee|^sie-|portalmmm|jigs browser|hiptop|^benq|haier|^lct|operas*mobi|opera*mini|320x320|240x320|176x220)/i;
-            var u = navigator.userAgent;
-            if (null == u) {
-                return true;
-            }
-            var result = regex_match.exec(u);
-            if (null == result) {
-                return false
-            } else {
-                return true
-            }
-        }
-        if (is_mobile()) {
-            var pathname = window.location.pathname;
-            var url = window.location.search; //获取url中"?"符后的字串
-            window.location.href= '{$mobile_url}' + pathname + url;
-        }
-    </script>
-    <!---识别手机或电脑的js结束--->
 <body style="">
 <div class="index-header" id="topback">
     <div class="header-bg">
@@ -44,7 +22,7 @@
                 <a href="/" class="fl"><img src="/static/images/logo.png" class="logoImage"></a>
                 <div id="mod-search1">
                     <div class="searchbox">
-                        <form action="/search" method="get">
+                        <form action="/pc/search" method="get">
                             <div class="searchbox-inner">
                                 <input type="text" name="keyword" placeholder="找书" class="searchinput">
                                 <i class="search-icon"></i>
@@ -57,17 +35,17 @@
                 {empty name="xwx_user"}
                 <div class="mybookshelf fr">
                     <i class="user"></i>
-                    <a href="/login">登录</a>
-                    <a href="/register">注册</a>
+                    <a href="/pc/login">登录</a>
+                    <a href="/pc/register">注册</a>
                 </div>
                 {else /}
                 <div class="mybookshelf isLogged fr">
                     <img src="/static/images/mrtx.gif" class="headPortrait">
-                    <a href="/ucenter">{$xwx_user}</a>
+                    <a href="/pc/ucenter">{$xwx_user}</a>
                     <span></span>
                 </div>
                 {/empty}}
-                <a href="/bookshelf" class="mybookshelf fr"> <i></i>
+                <a href="/pc/bookshelf" class="mybookshelf fr"> <i></i>
                     我的书架
                 </a>
             </div>
@@ -81,13 +59,13 @@
                 <a href="/">首页</a>
             </li>
             <li>
-                <a href="/{$booklist_act}/">书库</a>
+                <a href="/pc/{$booklist_act}/">书库</a>
             </li>
             <li>
-                <a href="/{$rank_ctrl}/">排行</a>
+                <a href="/pc/{$rank_ctrl}/">排行</a>
             </li>
             <li>
-                <a href="/taillist">书单</a>
+                <a href="/pc/taillist">最近更新</a>
             </li>
         </ul>
     </div>

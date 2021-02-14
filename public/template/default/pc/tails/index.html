@@ -8,7 +8,7 @@
 <div class="path ">
     <a href="/">首页</a>
     <span>&gt;</span>
-    <a href="/{$booklist_act}?sortid={$book.sortid}">{$book.cate.cate_name}</a>
+    <a href="/pc/{$booklist_act}?sortid={$book.sortid}">{$book.cate.cate_name}</a>
     <span>&gt;</span>
     <a href="#">{$book.articlename}</a>
 </div>
@@ -25,7 +25,7 @@
             </div>
             <div class="tags clearfixer">
 
-                <a href="{$booklist_act}?end={$book.fullflag}">
+                <a href="/pc/{$booklist_act}?end={$book.fullflag}">
                     <span class="fl isfinish">{$book.fullflag == 0 ? '连载中' : '已完结'}</span>
                 </a>
                 <a href="#">
@@ -41,7 +41,7 @@
             </p>
             <div class="btns">
                 {if $start > -1}
-                <a href="/{$chapter_ctrl}/{$start}" class="free on ui_bg_bdcolor" target="_blank">马上阅读</a>
+                <a href="/pc/{$chapter_ctrl}/{$start}" class="free on ui_bg_bdcolor" target="_blank">马上阅读</a>
                 {else /}
                 <a class="free on ui_bg_bdcolor" target="_blank">马上阅读</a>
                 {/if}
@@ -76,7 +76,7 @@
                     <div class="title clearfixer">
 							<span class="chaptername fl">
 								最新章节&nbsp;:&nbsp;&nbsp;
-								<a target="_blank" href="/{$chapter_ctrl}/{$book.lastchapterid}">{$book.lastchapter}</a>
+								<a target="_blank" href="/pc/{$chapter_ctrl}/{$book.lastchapterid}">{$book.lastchapter}</a>
 							</span>
                         <span class="updatetime fr">
                             更新时间&nbsp;:&nbsp;
@@ -100,7 +100,7 @@
                                      style="width: 100%; overflow: hidden; position: relative; height: 137px;">
                                     <div class="all_work_contentbox"
                                          style="width: 1215%; position: relative; transition-duration: 0s; transform: translate3d(0px, 0px, 0px);">
-                                        <a href="/{$book_ctrl}/{$book.param}" target="_blank"
+                                        <a href="/pc/{$book_ctrl}/{$book.param}" target="_blank"
                                            class="all_work_contentboxitem visiable" aria-hidden="false"
                                            style="float: left; list-style: none; position: relative; width: 84px; margin-right: 35px;">
                                             <img src="{$server}{$book.cover}" alt="{$book.articlename}">
@@ -117,12 +117,12 @@
                     <ul class="rec-content ">
                         {volist name="recommand" id="vo" length="10"}
                         <li class="clearfixer">
-                            <a href="/{$book_ctrl}/{$vo.param}" class="rec-pic fl" target="_blank">
+                            <a href="/pc/{$book_ctrl}/{$vo.param}" class="rec-pic fl" target="_blank">
                                 <img data-original="{$server}{$vo.cover}" class="lazyimg" src="https://p.pstatp.com/origin/ffa400036691f82c85e5"
                                      style="display: inline;" alt="{$vo.articlename}">
                             </a>
                             <div class="rec-detail fl">
-                                <a href="/{$book_ctrl}/{$vo.param}" class="rec-con-title"
+                                <a href="/pc/{$book_ctrl}/{$vo.param}" class="rec-con-title"
                                    target="_blank">{$vo.articlename}</a>
                                 <p class="rec-author">
                                     <a target="_blank">作者 : {$vo.author}</a>
@@ -145,7 +145,7 @@
                 <ul>
                     {volist name="book.chapters" id="vo"}
                     <li>
-                        <a target="_blank" href="/{$chapter_ctrl}/{$vo.chapterid}">
+                        <a target="_blank" href="/pc/{$chapter_ctrl}/{$vo.chapterid}">
                             <span class="chapter_name">{$vo.chaptername}</span>
                             <span class="chapter_date">{$vo.lastupdate|date='m-d'}</span>
                         </a>
@@ -172,7 +172,7 @@
     });
     $('.addshelf').click(function () {
         $.post({
-            url:`/addfavor`,
+            url:`/pc/addfavor`,
             data:{'articleid' : {$book.articleid} },
             success: function (res) {
                 if (res.err == 1) {

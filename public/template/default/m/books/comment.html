@@ -81,7 +81,7 @@
 			layer.msg('请勿提交空评论', {icon: 0,shade: 0.3})
 		} else {
 			$.post({
-				url: '/commentadd',
+				url: '/m/commentadd',
 				data: {comment: comment, book_id: book_id},
 				success(res) {
 					if (res.err == 1) {

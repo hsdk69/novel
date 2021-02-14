@@ -23,15 +23,15 @@
                 {volist name="books" id="vo"}
                 <tr>
                     <td>
-                        <a href="/{$book_ctrl}/{$vo.param}" target="_blank">
+                        <a href="/pc/{$book_ctrl}/{$vo.param}" target="_blank">
                             <img src="{$vo.cover}">
                         </a>
                     </td>
                     <td class="t3">
-                        <a href="/{$book_ctrl}/{$vo.param}" target="_blank">{$vo.articlename}</a>
+                        <a href="/pc/{$book_ctrl}/{$vo.param}" target="_blank">{$vo.articlename}</a>
                     </td>
                     <td class="t5">
-                        <a href="/{$book_ctrl}/{$vo.param}" target="_blank">{$vo.cate.cate_name}</a>
+                        <a href="/pc/{$book_ctrl}/{$vo.param}" target="_blank">{$vo.cate.cate_name}</a>
                     </td>
                     <td class="t4">
                         <atarget="_blank">{$vo.author}</a>
@@ -40,8 +40,8 @@
 
                     <td class="t6">{$vo.fullflag == 1 ? '已完结' : '连载中'}</td>
                     <td class="t7">
-                        <a href="/{$book_ctrl}/{$vo.param}" class="goon" target="_blank">阅读</a>
-                        <i><span class="Collection" ajax-get="" url="/delfavors?id={$vo.articleid}">删除</span></i>
+                        <a href="/pc/{$book_ctrl}/{$vo.param}" class="goon" target="_blank">阅读</a>
+                        <i><span class="Collection" ajax-get="" url="/pc/delfavors?id={$vo.articleid}">删除</span></i>
                     </td>
                 </tr>
                 {/volist}
@@ -55,21 +55,21 @@
                         {if $page.current_page == 1}
                         <li class="disabled"><span>«</span></li>
                         {else/}
-                        <li><a href="/bookshelf?page={$page.current_page-1}{$param}">«</a></li>
+                        <li><a href="/pc/bookshelf?page={$page.current_page-1}{$param}">«</a></li>
                         {/if}
 
                         {for start="1" end="$page.last_page + 1"}
                         {if $i == $page.current_page }
                         <li class="active"><span>1</span></li>
                         {else/}
-                        <li><a href="/bookshelf?page={$i}{$param}">{$i}</a></li>
+                        <li><a href="/pc/bookshelf?page={$i}{$param}">{$i}</a></li>
                         {/if}
                         {/for}
 
                         {if $page.current_page == $page.last_page}
                         <li class="disabled"><span>»</span></li>
                         {else/}
-                        <li><a href="/bookshelf?page={$page.current_page+1}{$param}">»</a></li>
+                        <li><a href="/pc/bookshelf?page={$page.current_page+1}{$param}">»</a></li>
                         {/if}
                         {/if}
                     </ul>

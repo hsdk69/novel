@@ -84,7 +84,7 @@ function login(){
 			layer.close(loadin_layer);
 		    if (data.err == 0) {
 		    	layer.msg(data.msg, {icon: 1,time: 2000,shade:0.3},function(){
-		            location.href = '/ucenter';
+		            location.href = '/pc/ucenter';
 		        });
 		    } else {
 		    	that.newCode();

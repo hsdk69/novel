@@ -19,7 +19,7 @@
         </div>
         <div class="x-rank__list" style="height: calc(736px - 1.2rem);">
             <div class="x-book x-rank__book van-hairline--bottom" v-for="(item, index) in books" :key="index">
-                <a :href="'/{$book_ctrl}/'+ item.param">
+                <a :href="'/m/{$book_ctrl}/'+ item.param">
                     <div class="x-book__multi">
                         <div class="x-book__coverbox">
                             <img class="x-book__cover" :src="'{$server}' + item.cover" style="width: 1.3rem; height: 1.73333rem;">
@@ -62,7 +62,7 @@
                 this.getBooks(this.op)
             },
             getBooks(op) {
-                axios.get("/getRanks", {
+                axios.get("/m/getRanks", {
                     params: {
                         op: op
                     }

@@ -10,9 +10,9 @@
             {volist name="banners" id="vo"}
             <div class="swiper-slide">
                 <a href="{if $end_point == 'id'}
-                                      /{$book_ctrl}/{$vo.articleid}
+                                      /m/{$book_ctrl}/{$vo.articleid}
                                       {else /}
-                                      /{$book_ctrl}/{$vo.book.backupname}
+                                      /m/{$book_ctrl}/{$vo.book.backupname}
                                       {/if}">
                     <img src="{$server}{$vo.pic}">
                 </a>
@@ -30,7 +30,7 @@
         <div class="x-part__books--cover">
             {volist name="newest" id="vo" length="6"}
             <div class="x-book">
-                <a href="/{$book_ctrl}/{$vo.param}/">
+                <a href="/m/{$book_ctrl}/{$vo.param}/">
                     <div class="x-book__coverbox">
                         <img class="x-book__cover" src="{$server}{$vo.cover}">
                     </div>
@@ -49,7 +49,7 @@
         <div class="x-part__books--cover">
             {volist name="cateItem.books" id="vo" length="4"}
             <div class="m-book-single f-cb">
-                <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.articlename}">
+                <a href="/m/{$book_ctrl}/{$vo.param}" title="{$vo.articlename}">
                     <img src="{$server}{$vo.cover}" alt="{$vo.articlename}">
                     <h3>{$vo.articlename}</h3>
                     <p>{$vo.author}</p>
@@ -76,13 +76,13 @@
                     <div class="x-book__text--multi">
                         <p class="x-book__name">
                             <span class="x-book__titleName">
-                                <a href="/{$book_ctrl}/{$vo.param}">{$vo.articlename}</a>
+                                <a href="/m/{$book_ctrl}/{$vo.param}">{$vo.articlename}</a>
                             </span>
                             <span class="x-book__tag">{$vo.cate.cate_name}</span>
                             <span class="x-book__tag">{$vo.author}</span>
                         </p>
                         <p class="x-book__intro">
-                            <a href="/{$chapter_ctrl}/{$vo.lastchapter}">
+                            <a href="/m/{$chapter_ctrl}/{$vo.lastchapter}">
                                 {$vo.lastchapter}
                             </a>
                         </p>

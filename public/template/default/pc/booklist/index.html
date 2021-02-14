@@ -70,19 +70,19 @@
                                             {volist name="books" id="vo"}
                                             <dl>
                                                 <dt>
-                                                    <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.articlename}">
+                                                    <a href="/pc/{$book_ctrl}/{$vo.param}" title="{$vo.articlename}">
                                                         <img class="lazyimg" src="{$vo.cover}" style="display: block;">
                                                     </a>
                                                 </dt>
                                                 <dd>
-                                                    <a href="/{$book_ctrl}/{$vo.param}" class="bigpic-book-name" title="{$vo.articlename}">
+                                                    <a href="/pc/{$book_ctrl}/{$vo.param}" class="bigpic-book-name" title="{$vo.articlename}">
                                                         {$vo.articlename}
                                                     </a>
                                                     <p>
                                                         <a target="_blank">
                                                             {$vo.author}
                                                         </a>|
-                                                        <a href="/{$booklist_act}?sortid={$vo.sortid}" target="_blank">
+                                                        <a href="/pc/{$booklist_act}?sortid={$vo.sortid}" target="_blank">
                                                             {$vo.cate.cate_name}
                                                         </a>|
                                                         {$vo.fullflag == 1 ? '已完结' : '连载中'}
@@ -109,7 +109,7 @@
                                     {if $page.current_page == 1}
                                     <li class="disabled"><span>«</span></li>
                                     {else/}
-                                    <li><a href="/{$booklist_act}?page={$page.current_page-1}{$param}" title="上一页">«</a></li>
+                                    <li><a href="/pc/{$booklist_act}?page={$page.current_page-1}{$param}" title="上一页">«</a></li>
                                     {/if}
 
                                     {for start="1" end="$page.last_page + 1"}
@@ -122,7 +122,7 @@
                                     {if $i == $page.current_page }
                                     <li class="active"><span>{$i}</span></li>
                                     {else/}
-                                    <li><a href="/{$booklist_act}?page={$i}{$param}" title="第{$i}页">{$i}</a></li>
+                                    <li><a href="/pc/{$booklist_act}?page={$i}{$param}" title="第{$i}页">{$i}</a></li>
                                     {/if}
                                     {/if}
                                     {/for}
@@ -130,7 +130,7 @@
                                     {if $page.current_page == $page.last_page}
                                     <li><a>»</a></li>
                                     {else/}
-                                    <li><a href="/{$booklist_act}?page={$page.current_page+1}{$param}" title="下一页">»</a></li>
+                                    <li><a href="/pc/{$booklist_act}?page={$page.current_page+1}{$param}" title="下一页">»</a></li>
                                     {/if}
                                     {/if}
                                 </ul>
@@ -155,15 +155,15 @@
         methods: {
             wordsChange(words) {
                 this.words = words
-                window.location.href = '/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
+                window.location.href = '/pc/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
             },
             cateChange(cate) {
                 this.cate = cate
-                window.location.href = '/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
+                window.location.href = '/pc/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
             },
             statusChange(fullflag) {
                 this.fullflag = fullflag
-                window.location.href = '/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
+                window.location.href = '/pc/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
             }
         }
     })
