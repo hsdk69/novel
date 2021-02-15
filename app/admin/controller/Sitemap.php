@@ -55,7 +55,7 @@ class Sitemap extends Base
                     $book['param'] = $book['backupname'];
                 }
                 $temp = array(
-                    'loc' => $site_name . '/' . BOOKCTRL . '/' . $book['param'],
+                    'loc' => $site_name . '/' . $name . '/' . BOOKCTRL . '/' . $book['param'],
                     'priority' => '0.9',
                 );
                 array_push($arr, $temp);
@@ -85,7 +85,7 @@ class Sitemap extends Base
             $chapters = $data->limit($pagesize * ($i - 1), $pagesize)->select();
             foreach ($chapters as $chapter) {
                 $temp = array(
-                    'loc' => $site_name . '/' . CHAPTERCTRL . '/' . $chapter['chapterid'],
+                    'loc' => $site_name . '/' . $name . '/' . CHAPTERCTRL . '/' . $chapter['chapterid'],
                     'priority' => '0.9',
                 );
                 array_push($arr, $temp);

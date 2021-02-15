@@ -4,7 +4,9 @@
 namespace app\admin\controller;
 
 
+use app\model\ArticleArticle;
 use app\model\Comments;
+use app\model\SystemUsers;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\facade\View;
@@ -13,32 +15,38 @@ class Comment extends Base
 {
     public function index()
     {
+        return view();
+    }
+
+    public function list()
+    {
+        $page = intval(input('page'));
+        $limit = intval(input('limit'));
         $map = array();
-        $uid = input('uid');
-        if ($uid){
-            $map[] = ['user_id','=',$uid];
+        $uname = input('uname');
+        if ($uname) {
+            $map[] = ['uname', '=', $uname];
         }
 
-        $book_id = input('book_id');
-        if ($book_id){
-            $map[] = ['book_id','=',$book_id];
+        $articlename = input('articlename');
+        if ($articlename) {
+            $map[] = ['articlename', '=', $articlename];
         }
-        $data = Comments::where($map)->with(['book,user']);
-        $comments = $data->order('id', 'desc')->paginate(
-            [
-                'list_rows'=> 5,
-                'query' => request()->param(),
-                'var_page' => 'page',
-            ]);
-//        ->each(function ($item, $key) {
-//            $dir = Env::get('root_path') . '/public/static/upload/comments/' . $item->book->id . '/';
-//            $item['content'] = file_get_contents($dir . $item->id . '.txt'); //获取用户评论内容
-//        });
-        View::assign([
-            'comments' => $comments,
-            'count' => $data->count()
+        $data = Comments::where($map);
+        $count = $data->count();
+        $comments = $data->order('id', 'desc')
+            ->limit(($page - 1) * $limit, $limit)->select();
+        foreach ($comments as &$comment)
+        {
+            $comment['user'] = SystemUsers::where('uid','=',$comment['uid'])->column('uname');
+            $comment['book'] = ArticleArticle::where('articleid','=',$comment['articleid'])->column('articlename');
+        }
+        return json([
+            'code' => 0,
+            'msg' => '',
+            'count' => $count,
+            'data' => $comments
         ]);
-        return view();
     }
 
     public function delete(){
