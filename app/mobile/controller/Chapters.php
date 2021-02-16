@@ -72,7 +72,7 @@ class Chapters extends Base
         if (!$next) {
             $next = Db::query(
                 'select * from ' . $this->prefix . 'article_chapter where articleid=' . $articleid . ' 
-                and chapterorder>' . $chapter->chapterorder . ' and chaptertype=0 order by chapterorder desc limit 1');
+                and chapterorder>' . $chapter->chapterorder . ' and chaptertype=0 order by chapterorder limit 1');
             cache('chapterNext:' . $id, $next, null, 'redis');
         }
         if (count($next) > 0) {
