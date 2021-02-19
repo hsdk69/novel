@@ -27,7 +27,7 @@ class Base extends BaseController
         if ($this->request->isMobile()) {
             $this->redirect($mobile_url . '/m/' . $path);
         }
-        $this->jieqi_ver = (int)config('site.jieqi_ver');
+        $this->jieqi_ver = floatval(config('site.jieqi_ver'));
         $this->uid = session('xwx_user_id');
         $this->prefix = Env::get('database.prefix');
         $this->redis_prefix = Env::get('cache.prefix');
