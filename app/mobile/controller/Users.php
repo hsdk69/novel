@@ -38,7 +38,7 @@ class Users extends BaseUc
                 $this->user->email = $email;
                 $result = $this->user->save();
                 if ($result) {
-                    cookie('xwx_nick_name', $nick_name);
+                    session('xwx_nick_name', $nick_name);
                     return json(['msg' => '修改成功', 'err' => 0]);
                 } else {
                     return json(['msg' => '修改失败', 'err' => 1]);

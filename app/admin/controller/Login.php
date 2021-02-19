@@ -31,7 +31,13 @@ class Login extends BaseController
             $map[] = ['groupid', '=', 2];
             try {
                 $admin = SystemUsers::where($map)->findOrFail();
-                $passsalt = md5($password.$admin['salt']);
+                $jieqi_ver = (int)config('site.jieqi_ver');
+                if ($jieqi_ver >= 2.4) {
+                    $passsalt = md5(md5($password).$admin['salt']);
+                } else {
+                    $passsalt = md5($password.$admin['salt']);
+                }
+
                 if ($passsalt != $admin['pass']) {
                     return json(['err' => 1, 'msg' => '密码错误']);
                 } else {

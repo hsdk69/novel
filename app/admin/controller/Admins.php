@@ -59,7 +59,12 @@ class Admins extends Base
                 $admin = new SystemUsers();
                 $admin->uname = $data['uname'];
                 $admin->salt = 'abc';
-                $admin->pass = md5(trim($data['password']) . 'abc');
+                if ($this->jieqi_ver >= 2.4) {
+                    $admin->pass = md5(md5($data['password']).'abc') ;
+                } else {
+                    $admin->pass = md5(trim($data['password']) . 'abc');
+                }
+
                 $admin->groupid = 2;
                 $result = $admin->save();
                 if ($result) {

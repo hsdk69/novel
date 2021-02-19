@@ -8,6 +8,7 @@ return [
     'api_key' => '', 
     'app_key' => '',
     'tpl' => 'default',
+    'jieqi_ver' => 2.4,
     'up_server' => 'http://xs.fancys.shop/',
     'json_server' => 'http://xsup.fancys.shop/'
  ];

@@ -17,6 +17,7 @@ class Base extends BaseController
     protected $end_point;
     protected $tpl;
     protected $server;
+    protected $jieqi_ver;
 
     protected function initialize()
     {
@@ -26,7 +27,8 @@ class Base extends BaseController
         if ($this->request->isMobile()) {
             $this->redirect($mobile_url . '/m/' . $path);
         }
-        $this->uid = cookie('xwx_user_id');
+        $this->jieqi_ver = (int)config('site.jieqi_ver');
+        $this->uid = session('xwx_user_id');
         $this->prefix = Env::get('database.prefix');
         $this->redis_prefix = Env::get('cache.prefix');
         $this->server = config('site.server');
@@ -57,8 +59,8 @@ class Base extends BaseController
             'tag_ctrl' => TAGCTRL,
             'end_point' => config('seo.book_end_point'),
             'xwx_user_id' => $this->uid,
-            'xwx_user' => cookie('xwx_user'),
-            'xwx_nick_name' => cookie('xwx_nick_name')
+            'xwx_user' => session('xwx_user'),
+            'xwx_nick_name' => session('xwx_nick_name')
         ]);
     }
 }

@@ -13,6 +13,7 @@ class Base extends BaseController
     protected $prefix;
     protected $img_site;
     protected $end_point;
+    protected $jieqi_ver;
 
     protected function initialize()
     {
@@ -23,6 +24,7 @@ class Base extends BaseController
         $this->prefix = Env::get('database.prefix');
         $this->img_site = config('site.img_site');
         $this->end_point = config('seo.book_end_point');
+        $this->jieqi_ver = (int)config('site.jieqi_ver');
         View::assign([
             'prefix' => $this->prefix,
             'admin' => cookie('xwx_admin'),
