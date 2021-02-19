@@ -28,7 +28,8 @@ class Index extends Base
         $app_key = config('site.app_key');
         $front_tpl = config('site.tpl');
         $up_server = config('site.up_server');
-        $json_server = config('site.json_server'); 
+        $json_server = config('site.json_server');
+        $jieqi_ver = config('site.jieqi_ver');
 
         $dirs = array();
         $dir = new DirectoryIterator(App::getRootPath() . 'public/template/');
@@ -48,7 +49,8 @@ class Index extends Base
             'front_tpl' => $front_tpl,
             'tpl_dirs' => $dirs,
             'up_server' => $up_server,
-            'json_server' => $json_server
+            'json_server' => $json_server,
+            'jieqi_ver' => $jieqi_ver
         ]);
         return view();
     }
@@ -66,6 +68,7 @@ class Index extends Base
             $front_tpl = input('front_tpl');
             $up_server = input('up_server');
             $json_server = input('json_server');
+            $jieqi_ver = input('jieqi_ver');
             $site_code = <<<INFO
 <?php
 return [
@@ -78,7 +81,8 @@ return [
     'app_key' => '{$app_key}',
     'tpl' => '{$front_tpl}',
     'up_server' => '{$up_server}',
-    'json_server' => '{$json_server}'
+    'json_server' => '{$json_server}',
+    'jieqi_ver' => '{$jieqi_ver}'
  ];
 INFO;
             $file = App::getRootPath() . 'config/site.php';
