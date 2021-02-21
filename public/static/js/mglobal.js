@@ -77,7 +77,7 @@ $(function(){
 	}
 
 	$('.x-city__search').click(function() {
-		window.location.href='/search';
+		window.location.href='/m/search';
 	});
 
 	$('.search-img').click(function(event) {
