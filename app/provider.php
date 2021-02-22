@@ -11,5 +11,6 @@ return [
     'chapterService' => \app\service\ChapterService::class,
     'tailService' => \app\service\TailService::class,
     'booklogService' => \app\service\BookLogService::class,
-    'httpclient' => \GuzzleHttp\Client::class
+    'httpclient' => \GuzzleHttp\Client::class,
+    'userService' => \app\service\UserService::class
 ];

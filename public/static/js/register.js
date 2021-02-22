@@ -6,7 +6,7 @@ function register(){
 		email:false,
 		code:false
 	};
-	this.loginUrl = '/login';
+	this.loginUrl = '/pc/login';
 	this.tips = {
 		nameEmpty: '请输入用户名',
 		nameExist: '该用户名已注册，请尝试直接 <a class="blue" href="' + this.loginUrl + '">登录</a>',
@@ -183,7 +183,7 @@ function register(){
 				var result = data;
 				if (result.err == 0){ //注册成功
 					layer.msg(data.msg, {icon: 1,time: 2000,shade:0.3},function(){
-						location.href = '/login';
+						location.href = '/pc/login';
 					});
 				} else {
 					//$('#captcha').attr('src','/account/captcha?rnd=' + r)
