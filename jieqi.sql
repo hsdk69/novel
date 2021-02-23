@@ -263,4 +263,4 @@ CREATE TABLE IF NOT EXISTS `jieqi_article_chapter` (
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO jieqi_system_groups(`name`,description,grouptype) VALUES('管理员','系统管理员',0);
-INSERT INTO jieqi_system_users(uname,`name`,pass,salt,groupid) VALUES('admin','管理员','df10ef8509dc176d733d59549e7dbfaf','abc',2);
+INSERT INTO jieqi_system_users(uname,`name`,pass,salt,groupid) VALUES('admin','管理员','322d3fef02fc39251436cb4522d29a71','abc',2);

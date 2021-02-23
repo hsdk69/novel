@@ -83,18 +83,21 @@ class Common extends BaseController
         if ($salt != config('site.salt')) {
             $this->error('密码盐错误',  config('site.admin_damain'));
         }
-        $username = input('username');
-        if (empty($username) || is_null($username)) {
-            $this->error('用户名不能为空',  config('site.admin_damain'));
+        $admin = new SystemUsers();
+        $admin->uname = input('uname');
+        $admin->salt = $salt;
+        if ($this->jieqi_ver >= 2.4) {
+            $admin->pass = md5(md5(input('password')).'abc') ;
+        } else {
+            $admin->pass = md5(trim(input('password')) . 'abc');
         }
-        $pwd = input('password');
-        if (empty($pwd) || is_null($pwd)) {
-            $this->error('密码不能为空',  config('site.admin_damain'));
+
+        $admin->groupid = 2;
+        $result = $admin->save();
+        if ($result) {
+            return json(['err' => 0, 'msg' => '添加成功']);
+        } else {
+            return json(['err' => 1, 'msg' => '添加失败']);
         }
-        SystemUsers::create([
-            'username' => $username,
-            'password' => trim($pwd)
-        ]);
-        $this->success('新管理员创建成功',  config('site.admin_damain'));
     }
 }
