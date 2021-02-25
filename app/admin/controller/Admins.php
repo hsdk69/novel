@@ -66,6 +66,11 @@ class Admins extends Base
                 }
 
                 $admin->groupid = 2;
+                $admin->siteid = 0;
+                $admin->regdate = time();
+                $admin->sex = 1;
+                $admin->workid = 0;
+                $admin->lastlogin = 0;
                 $result = $admin->save();
                 if ($result) {
                     return json(['err' => 0, 'msg' => '添加成功']);
