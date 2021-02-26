@@ -56,7 +56,7 @@ class Tails extends Base
             cache('randBooks:' . $tail->book->sortid, $recommand, null, 'redis');
         }
 
-        $start = cache('bookStart:' . $id);
+        $start = cache('bookStart:' . $tail->articleid);
         if ($start == false) {
             $db = Db::query('SELECT chapterid FROM ' . $this->prefix . 'article_chapter WHERE articleid = ' . $tail->articleid . ' ORDER BY chapterid LIMIT 1');
             $start = $db ? $db[0]['chapterid'] : -1;

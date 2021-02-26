@@ -61,7 +61,7 @@ class Tails extends Base
         if ($start == false) {
             $db = Db::query('SELECT chapterid FROM ' . $this->prefix . 'article_chapter WHERE articleid = ' . $tail->articleid . ' ORDER BY chapterid LIMIT 1');
             $start = $db ? $db[0]['chapterid'] : -1;
-            cache('bookStart:' . $id, $start, null, 'redis');
+            cache('bookStart:' . $tail->articleid, $start, null, 'redis');
         }
 
         View::assign([
