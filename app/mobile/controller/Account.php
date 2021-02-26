@@ -112,7 +112,7 @@ class Account extends Base
         session('xwx_nick_name', null);
         session('xwx_user_mobile',null);
         session('xwx_vip_expire_time', null);
-        $this->redirect('/login');
+        $this->redirect('/m/login');
     }
 
     public function captcha()

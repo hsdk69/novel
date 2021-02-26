@@ -4,6 +4,7 @@
 namespace app\index\controller;
 
 use app\common\RedisHelper;
+use app\model\SystemUsers;
 use app\model\UserFavor;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
@@ -115,7 +116,7 @@ class Users extends BaseUc
                 return ['msg' => '密码在6到21位之间', 'err' => 1];
             }
             try {
-                $user = User::findOrFail($this->uid);
+                $user = SystemUsers::findOrFail($this->uid);
                 $user->password = $pwd;
                 $user->save();
                 return ['msg' => '修改成功', 'err' => 0];

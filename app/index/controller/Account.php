@@ -104,7 +104,7 @@ class Account extends Base
         session('xwx_user', null);
         session('xwx_user_id', null);
         session('xwx_nick_name', null);
-        $this->redirect('/login');
+        $this->redirect('/pc/login');
     }
 
     public function captcha()
