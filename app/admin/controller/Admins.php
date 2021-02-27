@@ -92,7 +92,11 @@ class Admins extends Base
                 if (empty($data['password']) || is_null($data['password'])) {
 
                 } else {
-                    $admin->pass = md5(trim($data['password']) . 'abc');
+                    if ($this->jieqi_ver >= 2.4) {
+                        $admin->pass = md5(md5($data['password']).'abc') ;
+                    } else {
+                        $admin->pass = md5(trim($data['password']) . 'abc');
+                    }
                 }
                 $result = $admin->save();
                 if ($result) {
