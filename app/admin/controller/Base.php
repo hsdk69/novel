@@ -11,7 +11,7 @@ use think\facade\View;
 class Base extends BaseController
 {
     protected $prefix;
-    protected $img_site;
+    protected $server;
     protected $end_point;
     protected $jieqi_ver;
 
@@ -22,7 +22,7 @@ class Base extends BaseController
             $this->redirect(url('login/login'));
         }
         $this->prefix = Env::get('database.prefix');
-        $this->img_site = config('site.img_site');
+        $this->server = config('site.server');
         $this->end_point = config('seo.book_end_point');
         $this->jieqi_ver = floatval(config('site.jieqi_ver'));
         View::assign([

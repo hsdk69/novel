@@ -40,7 +40,7 @@ class Books extends Base
 
         foreach ($books as &$book) {
             $bigId = floor((double)($book['articleid'] / 1000));
-            $book['cover'] = sprintf('/files/article/image/%s/%s/%ss.jpg',
+            $book['cover'] = $this->server . sprintf('/files/article/image/%s/%s/%ss.jpg',
                 $bigId, $book['articleid'], $book['articleid']);
             $book['cate_name'] = Cate::where('sortid', '=', $book['sortid'])->column('cate_name');
         }
