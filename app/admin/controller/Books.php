@@ -30,7 +30,7 @@ class Books extends Base
     public function list()
     {
         $where = [
-            ['rgroup', '=', intval(input('rgroup'))]
+            ['display', '=', intval(input('display'))]
         ];
         $page = intval(input('page'));
         $limit = intval(input('limit'));
@@ -104,7 +104,7 @@ class Books extends Base
         $name = input('articlename');
         $where = [
             ['articlename', 'like', '%' . $name . '%'],
-            ['rgroup', '=', 1]
+            ['display', '=', 1]
         ];
         $page = intval(input('page'));
         $limit = intval(input('limit'));
@@ -131,7 +131,7 @@ class Books extends Base
         if (isset($articleid)) {
             try {
                 $book = ArticleArticle::findOrFail($articleid);
-                $book->rgroup = 0;
+                $book->display = 0;
                 $result = $book->save();
                 if ($result) {
                     return json(['err' => 0, 'msg' => '下架成功']);
@@ -149,7 +149,7 @@ class Books extends Base
         if (isset($articleid)) {
             try {
                 $book = ArticleArticle::findOrFail($articleid);
-                $book->rgroup = 1;
+                $book->display = 1;
                 $result = $book->save();
                 if ($result) {
                     return json(['err' => 0, 'msg' => '上架成功']);
