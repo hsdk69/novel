@@ -104,7 +104,7 @@ class Books extends Base
         $name = input('articlename');
         $where = [
             ['articlename', 'like', '%' . $name . '%'],
-            ['display', '=', 1]
+            ['display', '=', 0]
         ];
         $page = intval(input('page'));
         $limit = intval(input('limit'));
@@ -131,7 +131,7 @@ class Books extends Base
         if (isset($articleid)) {
             try {
                 $book = ArticleArticle::findOrFail($articleid);
-                $book->display = 0;
+                $book->display = 1;
                 $result = $book->save();
                 if ($result) {
                     return json(['err' => 0, 'msg' => '下架成功']);
@@ -149,7 +149,7 @@ class Books extends Base
         if (isset($articleid)) {
             try {
                 $book = ArticleArticle::findOrFail($articleid);
-                $book->display = 1;
+                $book->display = 0;
                 $result = $book->save();
                 if ($result) {
                     return json(['err' => 0, 'msg' => '上架成功']);
