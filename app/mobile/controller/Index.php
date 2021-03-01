@@ -79,23 +79,6 @@ class Index extends Base
         $books = cache('searchresult:' . $keyword);
         if (!$books) {
             $books = $this->bookService->search($keyword, $this->prefix);
-            foreach ($books as &$book) {
-                try {
-                    $author = Author::findOrFail($book['author_id']);
-                    $cate = Cate::findOrFail($book['cate_id']);
-                    $book['author'] = $author;
-                    $book['cate'] = $cate;
-                    if ($this->end_point == 'id') {
-                        $book['param'] = $book['id'];
-                    } else {
-                        $book['param'] = $book['unique_id'];
-                    }
-                } catch (DataNotFoundException $e) {
-                    abort(404, $e->getMessage());
-                } catch (ModelNotFoundException $e) {
-                    abort(404, $e->getMessage());
-                }
-            }
             cache('searchresult:' . $keyword, $books, null, 'redis');
         }
 

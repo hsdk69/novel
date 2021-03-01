@@ -7,7 +7,7 @@
 <div class="x-page__content">
     <div class="x-book__library">
         <div class="search-box">
-            <form action="/m/{search_ctrl}" style="width: 85%;">
+            <form action="/m/{$search_ctrl}" style="width: 85%;">
                 <input type="text" placeholder="请输入搜索的书名" name="keyword" class="search-name">
                 <img src="/static/images/search.png" class="search-img">
             </form>
@@ -20,20 +20,20 @@
                         <div class="x-book__multi">
                             <div class="x-book__coverbox">
                                 <a href="/m/{$book_ctrl}/{$vo.param}">
-                                    <img class="x-book__cover" src="{$vo.cover_url}" style="width: 1.6rem; height: 2.13333rem;">
+                                    <img class="x-book__cover" src="{$server}{$vo.cover}" style="width: 1.6rem; height: 2.13333rem;">
                                 </a>
                             </div>
                             <div class="x-book__text--multi" style="width: calc(100% - 1.6rem); height: 2.13333rem;">
                                 <a href="/m/{$book_ctrl}/{$vo.param}">
                                     <div class="x-book__nocover">
-                                        <p class="x-book__info--name">{$vo.book_name}</p>
+                                        <p class="x-book__info--name">{$vo.articlename}</p>
                                         <div class="book-info-status">
-                                            <span class="book-status">{$vo.end == 1 ? '已完结' : '连载中'}</span>
-                                            <span class="book-author">{$vo.author_name|subtext=5}</span>
-                                            <span class="book-wordcount">{$vo.words}万字</span>
+                                            <span class="book-status">{$vo.fullflag == 1 ? '已完结' : '连载中'}</span>
+                                            <span class="book-author">{$vo.author|subtext=5}</span>
+                                            <span class="book-wordcount">{$vo.words}字</span>
                                         </div>
                                         <p class="x-book__intro">
-                                            {$vo.summary}
+                                            {$vo.intro}
                                         </p>
                                     </div>
                                 </a>
