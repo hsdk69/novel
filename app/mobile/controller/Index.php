@@ -76,11 +76,7 @@ class Index extends Base
             $hot_search[] = $k;
         }
 
-        $books = cache('searchresult:' . $keyword);
-        if (!$books) {
-            $books = $this->bookService->search($keyword, $this->prefix);
-            cache('searchresult:' . $keyword, $books, null, 'redis');
-        }
+        $books = $this->bookService->search($keyword, $this->prefix);
 
         View::assign([
             'books' => $books,
