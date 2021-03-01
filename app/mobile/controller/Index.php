@@ -76,7 +76,7 @@ class Index extends Base
             $hot_search[] = $k;
         }
 
-        $books = $this->bookService->search($keyword, $this->prefix);
+        $books = $this->bookService->search($keyword, $this->end_point, $this->prefix);
 
         View::assign([
             'books' => $books,
