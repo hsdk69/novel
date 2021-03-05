@@ -66,11 +66,11 @@ class Postbot extends BaseController
             $book = new ArticleArticle();
             $book->author_id = $author->id;
             $book->author = $data['author'] ?: '侠名';
-            $book->articlename = trim($data['book_name']);
-            if (isset($data['nick_name'])) {
-                $book->backupname = trim($data['nick_name']);
+            $book->articlename = trim($data['articlename']);
+            if (isset($data['backupname'])) {
+                $book->backupname = trim($data['backupname']);
             }
-            $book->initial = strtoupper(substr($this->convert(trim($data['book_name'])), 0, 1));
+            $book->initial = strtoupper(substr($this->convert(trim($data['articlename'])), 0, 1));
             if (isset($data['keywords'])) {
                 $book->keywords = $data['keywords'];
             }
@@ -84,7 +84,7 @@ class Postbot extends BaseController
             $book->words = 0;
             $book->rgroup = 0;
             $book->fullflag = $data['fullflag'];
-            $book->imgflag = $data['imgflag'];
+            $book->imgflag = '';
             $book->freetime = time();
             $book->poster = 'admin';
             $book->agent = '';
@@ -111,7 +111,7 @@ class Postbot extends BaseController
                 return json(['code' => 0, 'message' => '章节已存在']);
             } catch (ModelNotFoundException $e) {
                 $chapter = new ArticleChapter();
-                $chapter->chaptername = trim($data['chapter_name']);
+                $chapter->chaptername = trim($data['chaptername']);
                 $chapter->articleid = $data['articleid'];
                 $chapter->chapterorder = $data['chapterorder'];
                 $chapter->lastupdate = time();
