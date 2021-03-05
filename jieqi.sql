@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `jieqi_system_users` (
     `name` varchar(60) NOT NULL DEFAULT '',
     `pass` varchar(32) NOT NULL DEFAULT '',
     `salt` varchar(32) NOT NULL DEFAULT '',
-    `groupid` tinyint(3) NOT NULL DEFAULT '0',
+    `groupid` tinyint(3) NOT NULL DEFAULT '0', --1是普通用户,2是管理员,3是作者
     `regdate` int(11) unsigned NOT NULL DEFAULT '0',
     `initial` char(1) NOT NULL DEFAULT '',
     `sex` tinyint(1) NOT NULL DEFAULT '0',
