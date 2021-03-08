@@ -30,7 +30,7 @@ class Postbot extends BaseController
             $book = ArticleArticle::where(
                 array(
                     'articlename' => $data['book_name'],
-                    'author' => $data['unique_id']
+                    'author' => $data['author']
                 )
             )->findOrFail();
             return json(['code' => 0, 'message' => '小说已存在']);
@@ -48,7 +48,8 @@ class Postbot extends BaseController
                 $key_str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                 $salt = substr(str_shuffle($key_str), mt_rand(0, strlen($key_str) - 11), 5);
                 $author->salt = $salt;
-                if ($this->jieqi_ver >= 2.4) {
+                $jieqi_ver = config('site.jieqi_ver');
+                if ($jieqi_ver >= 2.4) {
                     $author->pass = md5(md5($data['password']) . $salt);
                 } else {
                     $author->pass = md5(trim($data['password']) . $salt);

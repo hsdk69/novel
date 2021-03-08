@@ -26,6 +26,13 @@ class Index extends Base
         $banners = cache('banners');
         if (!$banners) {
             $banners = Banner::with('book')->order('banner_order', 'desc')->select();
+            foreach ($banners as &$banner) {
+                if (substr($banner['pic'], 0, 4) === 'http') {
+
+                } else {
+                    $banner['pic'] = $this->server . $banner['pic'];
+                }
+            }
             cache('banners', $banners, null, 'redis');
         }
 
