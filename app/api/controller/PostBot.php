@@ -50,11 +50,11 @@ class Postbot extends BaseController
                 $author->salt = $salt;
                 $jieqi_ver = config('site.jieqi_ver');
                 if ($jieqi_ver >= 2.4) {
-                    $author->pass = md5(md5($data['password']) . $salt);
+                    $author->pass = md5(md5('123456') . $salt);
                 } else {
-                    $author->pass = md5(trim($data['password']) . $salt);
+                    $author->pass = md5(trim('123456') . $salt);
                 }
-                $author->email = trim($data['email']);
+                $author->email = trim('123456@qq.com');
                 $author->siteid = 0;
                 $author->groupid = 3;
                 $author->regdate = time();
