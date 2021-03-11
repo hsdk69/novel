@@ -42,8 +42,6 @@ class Books extends Base
                 $map[] = ['articleid', '=', $book['articleid']];
                 $map[] = ['chaptertype', '=', 0];
                 $book['chapters'] = ArticleChapter::where($map)->select();
-            } catch (DataNotFoundException $e) {
-                abort(404, $e->getMessage());
             } catch (ModelNotFoundException $e) {
                 abort(404, $e->getMessage());
             }

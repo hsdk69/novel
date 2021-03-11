@@ -15,17 +15,10 @@ use app\model\VipCode;
 use app\model\ChargeCode;
 use app\model\SystemUsers;
 
-class Common extends BaseController
+class Common extends Base
 {
     public function clearcache()
     {
-        $key = input('api_key');
-        if (empty($key) || is_null($key)) {
-            return 'api密钥不能为空！';
-        }
-        if ($key != config('site.api_key')) {
-            return 'api密钥错误！';
-        }
         Cache::clear('redis');
         $rootPath = App::getRootPath();
         delete_dir_file($rootPath . '/runtime/cache/') && delete_dir_file($rootPath . '/runtime/temp/');
@@ -34,13 +27,6 @@ class Common extends BaseController
 
     public function sycnclicks()
     {
-        $key = input('api_key');
-        if (empty($key) || is_null($key)) {
-            return 'api密钥不能为空！';
-        }
-        if ($key != config('site.api_key')) {
-            return 'api密钥错误！';
-        }
         $day = input('date');
         if (empty($day)) {
             $day = date("Y-m-d", strtotime("-1 day"));
@@ -69,13 +55,6 @@ class Common extends BaseController
 
     public function resetpwd()
     {
-        $api_key = input('api_key');
-        if (empty($api_key) || is_null($api_key)) {
-            $this->error('api密钥错误',  config('site.admin_damain'));
-        }
-        if ($api_key != config('site.api_key')) {
-            $this->error('api密钥错误',  config('site.admin_damain'));
-        }
         $salt = input('salt');
         if (empty($salt) || is_null($salt)) {
             $this->error('密码盐错误',  config('site.admin_damain'));

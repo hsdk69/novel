@@ -8,7 +8,7 @@ use app\BaseController;
 use app\model\ArticleArticle;
 use think\facade\App;
 
-class Sitemap extends BaseController
+class Sitemap extends Base
 {
     protected $books;
     protected function initialize()

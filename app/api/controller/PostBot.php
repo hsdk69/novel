@@ -12,7 +12,7 @@ use think\db\exception\ModelNotFoundException;
 use think\facade\App;
 use think\Request;
 
-class Postbot extends BaseController
+class Postbot extends Base
 {
     protected $chapterService;
 
@@ -24,8 +24,6 @@ class Postbot extends BaseController
     public function save()
     {
         $data = request()->param();
-        if (!isset($data['api_key']) || $data['api_key'] != config('site.api_key'))
-            return json(['code' => 1, 'message' => 'Api密钥为空/密钥错误']);
         try {
             $book = ArticleArticle::where(
                 array(
