@@ -109,7 +109,7 @@ class Postbot extends Base
             try {
                 $chapter = ArticleChapter::where([
                     'chaptername' => $data['chaptername'],
-                    'articleid' => $data['articleid']
+                    'articleid' => $book['articleid']
                 ])->findOrFail();
                 return json(['code' => 0, 'message' => '章节已存在']);
             } catch (ModelNotFoundException $e) {
