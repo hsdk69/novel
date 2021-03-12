@@ -98,6 +98,10 @@ class Postbot extends Base
             $book->lastchapter = '';
             $book->save();
             $bigId = floor((double)($book['articleid'] / 1000));
+            $dir = App::getRootPath() . sprintf('/files/article/image/%s/%s', $bigId, $book['articleid']);
+            if (!file_exists($dir)) {
+                mkdir($dir, 0777, true);
+            }
             $file = App::getRootPath() . sprintf('/files/article/image/%s/%s/%ss.jpg',
                     $bigId, $book['articleid'], $book['articleid']);
             file_put_contents($file, $data['cover']);
@@ -124,6 +128,10 @@ class Postbot extends Base
                 $book->save();
 
                 $bigId = floor((double)($chapter['articleid'] / 1000));
+                $dir = sprintf('/files/article/txt/%s/%s', $bigId, $chapter['articleid']);
+                if (!file_exists($dir)) {
+                    mkdir($dir, 0777, true);
+                }
                 $file = sprintf('/files/article/txt/%s/%s/%s.txt',
                     $bigId, $chapter['articleid'], $chapter->id);
                 file_put_contents($file, $data['content']);
