@@ -115,7 +115,7 @@ class Postbot extends Base
             } catch (ModelNotFoundException $e) {
                 $chapter = new ArticleChapter();
                 $chapter->chaptername = trim($data['chaptername']);
-                $chapter->articleid = $data['articleid'];
+                $chapter->articleid = $book['articleid'];
                 $chapter->chapterorder = $data['chapterorder'];
                 $chapter->lastupdate = time();
                 $chapter->Words = strlen($data['content']);
