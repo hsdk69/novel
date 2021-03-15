@@ -31,7 +31,6 @@ class Postbot extends Base
                     'author' => $data['author']
                 )
             )->findOrFail();
-            return json(['code' => 0, 'message' => '小说已存在']);
         } catch (ModelNotFoundException $e) {
             try {
                 $author = SystemUsers::where(
@@ -76,7 +75,12 @@ class Postbot extends Base
             if (isset($data['roles'])) {
                 $book->roles = $data['roles'];
             }
-            $book->sortid = Cate::where('cate_name', '=', trim($data['cate']))->column('sortid');
+            try {
+                $cate = Cate::where('cate_name', '=', trim($data['cate']))->findOrFail();
+                $book->sortid = $cate->sortid;
+            } catch (ModelNotFoundException $exception) {
+                $book->sortid = 0;
+            }
             $book->postdate = time();
             $book->infoupdate = time();
             $book->lastupdate = time();
@@ -104,7 +108,8 @@ class Postbot extends Base
             }
             $file = App::getRootPath() . sprintf('/public/files/article/image/%s/%s/%ss.jpg',
                     $bigId, $book['articleid'], $book['articleid']);
-            file_put_contents($file, $data['cover']);
+            $content = file_get_contents($data['cover']);
+            file_put_contents($file, $content);
 
             try {
                 $chapter = ArticleChapter::where([
@@ -134,7 +139,7 @@ class Postbot extends Base
                     mkdir($dir, 0777, true);
                 }
                 $file = App::getRootPath() .  sprintf('/public/files/article/txt/%s/%s/%s.txt',
-                    $bigId, $chapter['articleid'], $chapter->id);
+                        $bigId, $chapter['articleid'], $chapter->chapterid);
                 file_put_contents($file, $data['content']);
                 return json(['code' => 0, 'message' => '发布成功', 'info' => ['book' => $book, 'chapter' => $chapter]]);
             }
