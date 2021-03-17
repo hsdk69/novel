@@ -1,5 +1,4 @@
 <?php
-
 namespace app\api\controller;
 
 use app\BaseController;
@@ -31,6 +30,43 @@ class Postbot extends Base
                     'author' => $data['author']
                 )
             )->findOrFail();
+            try {
+                $chapter = ArticleChapter::where([
+                    'chaptername' => $data['chaptername'],
+                    'articleid' => $book['articleid']
+                ])->findOrFail();
+                return json(['code' => 0, 'message' => '章节已存在']);
+            } catch (ModelNotFoundException $e) {
+                $chapter = new ArticleChapter();
+                $chapter->articlename = $data['book_name'];
+                $chapter->chaptername = trim($data['chaptername']);
+                $chapter->articleid = $book['articleid'];
+                $chapter->chapterorder = $data['chapterorder'];
+                $chapter->lastupdate = time();
+                $chapter->words = strlen($data['content']);
+                $chapter->intro = strlen($data['content']) >= 99 ? substr($data['content'], 0, 99) : $data['content'];
+                $chapter->preface = '';
+                $chapter->notice = '';
+                $chapter->foreword = '';
+                $chapter->save();
+                $book->words = $book->words+strlen($data['content']); 
+                $book->lastchapterid = $chapter->chapterid; 
+                $book->lastchapter = trim($data['chaptername']);
+                $book->lastupdate = time();
+                $book->save();
+                $bigId = floor((double)($chapter['articleid'] / 1000));
+                $dir = App::getRootPath() .  sprintf('/public/files/article/txt/%s/%s', $bigId,
+                        $chapter['articleid']);
+                if (!file_exists($dir)) {
+                    mkdir($dir, 0777, true);
+                }
+                $file = App::getRootPath() .  sprintf('/public/files/article/txt/%s/%s/%s.txt',
+                        $bigId, $chapter['articleid'], $chapter->chapterid);
+                file_put_contents($file, $data['content']);
+                $book->lastchapterid = ArticleChapter::where(['chapterid']);
+                $book->lastchapter = $data['chaptername'];
+                return json(['code' => 0, 'message' => '发布成功', 'info' => ['book' => $book, 'chapter' => $chapter]]);
+            }
         } catch (ModelNotFoundException $e) {
             try {
                 $author = SystemUsers::where(
@@ -84,8 +120,10 @@ class Postbot extends Base
             $book->postdate = time();
             $book->infoupdate = time();
             $book->lastupdate = time();
+            $book->intro = $data['intro'];
             $book->words = 0;
             $book->rgroup = 0;
+            $book->articlecode = $data['backupname'];
             $book->fullflag = $data['fullflag'];
             $book->imgflag = '';
             $book->freetime = time();
@@ -99,7 +137,7 @@ class Postbot extends Base
             $book->buyurl = '';
             $book->vipvolume = '';
             $book->vipchapter = '';
-            $book->lastchapter = '';
+            $book->lastchapter = $data['chaptername'];
             $book->save();
             $bigId = floor((double)($book['articleid'] / 1000));
             $dir = App::getRootPath() . sprintf('/public/files/article/image/%s/%s', $bigId, $book['articleid']);
@@ -119,21 +157,19 @@ class Postbot extends Base
                 return json(['code' => 0, 'message' => '章节已存在']);
             } catch (ModelNotFoundException $e) {
                 $chapter = new ArticleChapter();
+                $chapter->articlename = $data['book_name'];
                 $chapter->chaptername = trim($data['chaptername']);
                 $chapter->articleid = $book['articleid'];
                 $chapter->chapterorder = $data['chapterorder'];
                 $chapter->lastupdate = time();
-                $chapter->Words = strlen($data['content']);
+                $chapter->words = strlen($data['content']);
                 $chapter->preface = '';
                 $chapter->notice = '';
                 $chapter->summary = strlen($data['content']) >= 99 ? substr($data['content'], 0, 99) : $data['content'];
                 $chapter->foreword = '';
                 $chapter->save();
                 $book->lastupdate = time();
-                $book->lastchapterid = $chapter->chapterid;
-                $book->lastchapter = $chapter->chaptername;
                 $book->save();
-
                 $bigId = floor((double)($chapter['articleid'] / 1000));
                 $dir = App::getRootPath() .  sprintf('/public/files/article/txt/%s/%s', $bigId,
                         $chapter['articleid']);
@@ -143,6 +179,8 @@ class Postbot extends Base
                 $file = App::getRootPath() .  sprintf('/public/files/article/txt/%s/%s/%s.txt',
                         $bigId, $chapter['articleid'], $chapter->chapterid);
                 file_put_contents($file, $data['content']);
+                $book->lastchapterid = $chapter->chapterid;
+                $book->lastchapter = $data['chaptername'];
                 return json(['code' => 0, 'message' => '发布成功', 'info' => ['book' => $book, 'chapter' => $chapter]]);
             }
         }
