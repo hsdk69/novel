@@ -130,6 +130,8 @@ class Postbot extends Base
                 $chapter->foreword = '';
                 $chapter->save();
                 $book->lastupdate = time();
+                $book->lastchapterid = $chapter->chapterid;
+                $book->lastchapter = $chapter->chaptername;
                 $book->save();
 
                 $bigId = floor((double)($chapter['articleid'] / 1000));
