@@ -30,23 +30,6 @@
         </div>
         {/volist}
     </div>
-    <div class="pages_bottom" style="display: block;">
-        <ul class="pager">
-            {if $page.last_page > 1}
-            {if $page.current_page == 1}
-            <li class="disabled"><span>«</span></li>
-            {else/}
-            <li><a href="/m/{$booklist_act}?page={$page.current_page-1}{$param}" title="上一页">«</a></li>
-            {/if}
-
-            {if $page.current_page == $page.last_page}
-            <li class="disabled"><span>»</span></li>
-            {else/}
-            <li><a href="/m/{$booklist_act}?page={$page.current_page+1}{$param}" title="下一页">»</a></li>
-            {/if}
-            {/if}
-        </ul>
-    </div>
 </section>
 {/block}
 {block name="js"}
