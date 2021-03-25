@@ -114,7 +114,7 @@ class Sitemap extends Base
             $tails = $data->limit($pagesize * ($i - 1), $pagesize)->select();
             foreach ($tails as &$tail) {
                 $temp = array(
-                    'loc' => $site_name . '/' . $end . '/tails/' . $tail['id'],
+                    'loc' => $site_name . '/' . $end . '/tail/' . $tail['tailcode'],
                     'priority' => '0.9',
                 );
                 array_push($arr, $temp);
@@ -123,9 +123,9 @@ class Sitemap extends Base
                 $content .= $this->create_item($item);
             }
             $content .= '</urlset>';
-            $sitemap_name = '/sitemap_book_' . $end . '_' . $i . '.xml';
+            $sitemap_name = '/sitemap_tail_' . $end . '_' . $i . '.xml';
             file_put_contents(App::getRootPath() . 'public' . $sitemap_name, $content);
-            file_put_contents(App::getRootPath() . 'public' . '/sitemap_book_' . $end . '_newest' . '.xml', $content);
+            file_put_contents(App::getRootPath() . 'public' . '/sitemap_tail_' . $end . '_newest' . '.xml', $content);
             echo '<a href="' . $sitemap_name . '" target="_blank">' . $end . '端网站地图制作成功！点击这里查看</a><br />';
             flush();
             ob_flush();

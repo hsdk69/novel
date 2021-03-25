@@ -41,6 +41,19 @@ function generateRandomString($length = 4) {
     return $randomString;
 }
 
+function adminurl(string $url = '', array $vars = [], $suffix = true, $domain = false) {
+    $defalutModule = 'admin';
+    $currentModule = app('http')->getName();
+    $string = (string) url($url, $vars, $suffix, $domain);
+    if($currentModule == $defalutModule) {
+        #去除url中默认模块名sysusezan
+        $search = '/'.$defalutModule.'/';
+        $pos = stripos($string, $search);
+        $string = substr($string, 0, $pos). '/'. substr($string, $pos + strlen($search));
+    }
+    return $string;
+}
+
 //验证session中的验证码和手机号码是否正确
 function verifycode($code,$phone){
     if (is_null(session('xwx_sms_code')) || $code != session('xwx_sms_code')){
