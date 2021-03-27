@@ -82,4 +82,13 @@ class Sitemap extends Base
         ob_clean();
         return xml($content,200,[],['root_node'=>'xml']);
     }
+
+    private function create_item($data)
+    {
+        $item = "<url>";
+        $item .= "<loc>" . $data['loc'] . "</loc>";
+        $item .= "<priority>" . $data['priority'] . "</priority>";
+        $item .= "</url>";
+        return $item;
+    }
 }
