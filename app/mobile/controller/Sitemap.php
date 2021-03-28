@@ -13,7 +13,7 @@ class Sitemap extends Base
     public function book()
     {
         $num = config('seo.sitemap_gen_num');
-        $site_name = config('site.domain');
+        $site_name = config('site.mobile_domain');
         $books = ArticleArticle::order('articleid','desc')->limit($num)->select();
         $data = array();
         $content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
@@ -41,7 +41,7 @@ class Sitemap extends Base
 
     public function chapter() {
         $num = config('seo.sitemap_gen_num');
-        $site_name = config('site.domain');
+        $site_name = config('site.mobile_domain');
         $chapters = ArticleChapter::order('chapterid','desc')->limit($num)->select();
         $arr = array();
         $content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
@@ -63,7 +63,7 @@ class Sitemap extends Base
 
     public function tail() {
         $num = config('seo.sitemap_gen_num');
-        $site_name = config('site.domain');
+        $site_name = config('site.mobile_domain');
         $tails = Tail::order('id','desc')->limit($num)->select();
         $arr = array();
         $content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
