@@ -14,7 +14,7 @@
                 <div class="mod-chapter-update">
                     <div class="hd mod-title">
                         <div class="title-bd">
-                            <h2>最近更新</h2>
+                            <h2>推荐书单</h2>
                             <a href="/pc/booklist" class="more" target="_blank">更多&gt;&gt;</a>
                         </div>
                     </div>
@@ -66,6 +66,33 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                    <div class="pages_bottom" style="display: block;">
+                        <ul>
+                            <ul class="pagination">
+                                {if $page.last_page > 1}
+                                    {if $page.current_page == 1}
+                                    <li class="disabled"><span>«</span></li>
+                                    {else/}
+                                    <li><a href="/pc/taillist?page={$page.current_page-1}{$param}" title="上一页">«</a></li>
+                                    {/if}
+
+                                    {for start="1" end="$page.last_page + 1"}
+                                    {if $i == $page.current_page }
+                                    <li class="active"><span>{$i}</span></li>
+                                    {elseif ($i > $page.current_page - 4 && $i < $page.current_page + 5)/}
+                                    <li><a href="/pc/taillist?page={$i}{$param}" title="第{$i}页">{$i}</a></li>
+                                    {/if}
+                                    {/for}
+
+                                    {if $page.current_page == $page.last_page}
+                                    <li><a>»</a></li>
+                                    {else/}
+                                    <li><a href="/pc/taillist?page={$page.current_page+1}{$param}" title="下一页">»</a></li>
+                                    {/if}
+                                {/if}
+                            </ul>
+                        </ul>
                     </div>
                 </div>
             </div>

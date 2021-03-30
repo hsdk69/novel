@@ -5,7 +5,7 @@
 {/block}
 {block name="main"}
 <section class="x-city__part hr-top">
-    <div class="x-part__title">最受欢迎</div>
+    <div class="x-part__title">推荐书单</div>
     <div class="x-part__books">
         {volist name="tails" id="vo"}
         <div class="x-city__swiper--item">
@@ -29,6 +29,23 @@
             </div>
         </div>
         {/volist}
+    </div>
+    <div class="pages_bottom" style="display: block;">
+        <ul class="pager">
+            {if $page.last_page > 1}
+            {if $page.current_page == 1}
+            <li class="disabled"><span>«</span></li>
+            {else/}
+            <li><a href="/m/taillist?page={$page.current_page-1}{$param}" title="上一页">«</a></li>
+            {/if}
+
+            {if $page.current_page == $page.last_page}
+            <li class="disabled"><span>»</span></li>
+            {else/}
+            <li><a href="/m/taillist?page={$page.current_page+1}{$param}" title="下一页">»</a></li>
+            {/if}
+            {/if}
+        </ul>
     </div>
 </section>
 {/block}
