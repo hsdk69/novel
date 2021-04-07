@@ -12,6 +12,7 @@ class Base extends BaseController
 {
     protected $prefix;
     protected $server;
+    protected $imgServer;
     protected $end_point;
     protected $jieqi_ver;
 
@@ -23,6 +24,7 @@ class Base extends BaseController
         }
         $this->prefix = Env::get('database.prefix');
         $this->server = config('site.server');
+        $this->imgServer = config('site.imgServer');
         $this->end_point = config('seo.book_end_point');
         $this->jieqi_ver = floatval(config('site.jieqi_ver'));
         View::assign([

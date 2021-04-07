@@ -17,6 +17,7 @@ class Base extends BaseController
     protected $end_point;
     protected $tpl;
     protected $server;
+    protected $imgServer;
     protected $jieqi_ver;
 
     protected function initialize()
@@ -32,6 +33,7 @@ class Base extends BaseController
         $this->prefix = Env::get('database.prefix');
         $this->redis_prefix = Env::get('cache.prefix');
         $this->server = config('site.server');
+        $this->imgServer = config('site.imgServer');
         $this->end_point = config('seo.book_end_point');
         $tpl_root = './template/' . config('site.tpl') . '/pc/';
         $controller = strtolower($this->request->controller());
@@ -49,6 +51,7 @@ class Base extends BaseController
             'site_name' => config('site.site_name'),
             'mobile_url' =>  config('site.mobile_domain'),
             'server' => config('site.server'),
+            'imgServer' => config('site.imgServer'),
             'book_ctrl' => BOOKCTRL,
             'chapter_ctrl' => CHAPTERCTRL,
             'booklist_act' => BOOKLISTACT,

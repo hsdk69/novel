@@ -1,6 +1,6 @@
 {extend name="pub/base" /}
 {block name="head"}
-<title>小说管理</title>
+<title>章节管理</title>
 <style>
     /** 数据表格中的select尺寸调整 */
     .layui-table-view .layui-table-cell .layui-select-title .layui-input {
@@ -46,7 +46,7 @@
                 <div class="layui-form-item">
                     <div class="layui-inline">
                         <div class="layui-input-inline">
-                            <input id="articlename" class="layui-input" type="text" placeholder="书名"/>
+                            <input id="chaptername" class="layui-input" type="text" placeholder="章节名"/>
                         </div>
                     </div>
 
@@ -70,9 +70,7 @@
 
     <!-- 表格操作列 -->
     <script type="text/html" id="tbBasicTbBar">
-        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="chapters">章节管理</a>
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
-        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="disable">下架</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     </script>
 </div>
@@ -80,50 +78,30 @@
 {/block}
 {block name="js"}
 <script>
-    layui.use(['table', 'form', 'dropdown'], function () {
+    layui.use(['table', 'form', 'dropdown', 'util'], function () {
         var $ = layui.jquery
         var table = layui.table
         var form = layui.form
         var dropdown = layui.dropdown
+        var util = layui.util
 
         /* 表格工具条点击事件 */
         table.on('tool(tbBasicTable)', function (obj) {
             var data = obj.data; // 获得当前行数据
             if (obj.event === 'edit') { // 修改
                 parent.layui.index.openTab({
-                    title: '编辑小说',
+                    title: '编辑章节',
                     url: "{:url('books/edit')}?articleid=" + data.articleid,
                     end: function () {
                         insTb.reload();
                     }
-                });
-            } else if (obj.event === 'disable') {
-                $.ajax({
-                    type: 'POST',
-                    url: "{:url('disable')}",
-                    data: {articleid: data.articleid},
-                    dataType: 'json',
-                    success: function (res) {
-                        if (res.err == 0) { //删除成功
-                            layer.msg(res.msg, {icon: 1, time: 1000}, function () {
-                                location.reload();
-                            });
-                        } else {
-                            layer.msg(res.msg, {icon: 2}, function () {
-                                location.reload();
-                            });
-                        }
-                    },
-                    error: function (res) {
-                        layer.msg(res);
-                    },
                 });
             } else if (obj.event === 'del') { // 删除
                 layer.confirm('确认要删除吗？', function (index) {
                     $.ajax({
                         type: 'POST',
                         url: "{:url('delete')}",
-                        data: {uid: data.uid},
+                        data: {chapterid: data.chapterid},
                         dataType: 'json',
                         success: function (res) {
                             if (res.err == 0) { //删除成功
@@ -141,14 +119,6 @@
                         },
                     });
                 });
-            } else if (obj.event === 'chapters') {
-                parent.layui.index.openTab({
-                    title: '章节管理',
-                    url: "{:url('chapters/index')}?articleid=" + data.articleid,
-                    end: function () {
-                        insTb.reload();
-                    }
-                });
             }
             dropdown.hideAll();
         });
@@ -156,20 +126,18 @@
         /* 渲染表格 */
         var insTb = table.render({
             elem: '#tbBasicTable',
-            url: "{:url('books/list')}?display=0",
+            url: "{:url('chapters/list')}?articleid=" + {$articleid},
             page: true,
             cellMinWidth: 100,
             cols: [[
                 {type: 'checkbox'},
-                {field: 'articleid', title: 'ID', align: 'center', sort: true},
-                {field: 'articlename', title: '用户名', align: 'center', sort: true},
-                {field: 'cate_name', title: '分类', align: 'center', sort: true},
-                {field: 'keywords', title: '关键词', align: 'center', sort: true},
-                {field: 'roles', title: '主角名', align: 'center', sort: true},
-                {field: 'author', title: '作者', align: 'center', sort: true},
+                {field: 'chapterid', title: 'ID', align: 'center', sort: true},
+                {field: 'chaptername', title: '章节名', align: 'center', sort: true},
+                {field: 'chapterorder', title: '章节序', align: 'center', sort: true},
+                {field: 'words', title: '字数', align: 'center', sort: true},
                 {
-                    field: 'cover', title: '封面', templet: function (d) {
-                        return '<img data-index="' + (d.LAY_INDEX - 1) + '" src="' + d.cover + '" class="tb-img-circle" tb-img >'
+                    field: 'lastupdate', title: '最近登录', templet: function (d) {
+                        return util.toDateString(d.lastupdate * 1000, 'yyyy-MM-dd HH:mm:ss');
                     }, align: 'center', sort: true
                 },
                 {title: '操作', toolbar: '#tbBasicTbBar', align: 'center', minWidth: 200}
@@ -177,26 +145,20 @@
         });
 
         form.on('submit(tbBasicTbSearch)', function (data) {
-            var articlename = $('#articlename').val()
+            var chaptername = $('#chaptername').val()
 
             table.render({
                 elem: '#tbBasicTable',
-                url: '{:url("search")}?articlename=' + articlename,
+                url: '{:url("search")}?chaptername=' + chaptername,
                 page: true,
                 cellMinWidth: 100,
                 cols: [[
                     {type: 'checkbox'},
-                    {field: 'articleid', title: 'ID', align: 'center', sort: true},
-                    {field: 'articlename', title: '用户名', align: 'center', sort: true},
-                    {field: 'cate_name', title: '分类', align: 'center', sort: true},
-                    {field: 'keywords', title: '关键词', align: 'center', sort: true},
-                    {field: 'roles', title: '主角名', align: 'center', sort: true},
-                    {field: 'author', title: '作者', align: 'center', sort: true},
-                    {
-                        field: 'cover', title: '封面', templet: function (d) {
-                            return '<img data-index="' + (d.LAY_INDEX - 1) + '" src="' + d.cover + '" class="tb-img-circle" tb-img >'
-                        }, align: 'center', sort: true
-                    },
+                    {field: 'chapterid', title: 'ID', align: 'center', sort: true},
+                    {field: 'chaptername', title: '章节名', align: 'center', sort: true},
+                    {field: 'chapterorder', title: '章节序', align: 'center', sort: true},
+                    {field: 'words', title: '字数', align: 'center', sort: true},
+                    {field: 'lastupdate', title: '更新时间', align: 'center', sort: true},
                     {title: '操作', toolbar: '#tbBasicTbBar', align: 'center', minWidth: 200}
                 ]]
             });

@@ -16,6 +16,7 @@ class Base extends BaseController
     protected $redis_prefix;
     protected $end_point;
     protected $server;
+    protected $imgServer;
     protected $jieqi_ver;
 
     protected function initialize()
@@ -27,6 +28,7 @@ class Base extends BaseController
         $this->redis_prefix = Env::get('cache.prefix');
         $this->end_point = config('seo.book_end_point');
         $this->server = config('site.server');
+        $this->imgServer = config('site.imgServer');
         $tpl_root = './template/'.config('site.tpl').'/m/';
         $controller = strtolower($this->request->controller());
         $action = strtolower($this->request->action());
@@ -55,6 +57,7 @@ class Base extends BaseController
             'xwx_user' => session('xwx_user'),
             'xwx_nick_name' => session('xwx_nick_name'),
             'server' => config('site.server'),
+            'imgServer' => config('site.imgServer')
         ]);
     }
 }

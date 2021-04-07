@@ -24,6 +24,7 @@ class Index extends Base
         $domain = config('site.domain');
         $mobile_domain = config('site.mobile_domain');
         $server = config('site.server');
+        $imgServer = config('site.imgServer');
         $api_key = config('site.api_key');
         $app_key = config('site.app_key');
         $front_tpl = config('site.tpl');
@@ -44,6 +45,7 @@ class Index extends Base
             'domain' => $domain,
             'mobile_domain' => $mobile_domain,
             'server' => $server,
+            'imgServer' => $imgServer,
             'api_key' => $api_key,
             'app_key' => $app_key,
             'front_tpl' => $front_tpl,
@@ -63,6 +65,7 @@ class Index extends Base
             $mobile_domain = input('mobile_domain');
             $mip_domain = input('mip_domain');
             $server = input('server');
+            $imgServer = input('imgServer');
             $api_key = input('api_key');
             $app_key = input('app_key');
             $front_tpl = input('front_tpl');
@@ -77,6 +80,7 @@ return [
     'mobile_domain' => '{$mobile_domain}',
     'mip_domain' => '{$mip_domain}',
     'server' => '{$server}',
+    'imgServer' => '{$imgServer}',
     'api_key' => '{$api_key}', 
     'app_key' => '{$app_key}',
     'tpl' => '{$front_tpl}',

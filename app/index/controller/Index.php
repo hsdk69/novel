@@ -30,7 +30,7 @@ class Index extends Base
                 if (substr($banner['pic'], 0, 4) === 'http') {
 
                 } else {
-                    $banner['pic'] = $this->server . $banner['pic'];
+                    $banner['pic'] = $this->imgServer . $banner['pic'];
                 }
             }
             cache('banners', $banners, null, 'redis');

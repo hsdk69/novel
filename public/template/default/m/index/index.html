@@ -32,7 +32,7 @@
             <div class="x-book">
                 <a href="/m/{$book_ctrl}/{$vo.param}/">
                     <div class="x-book__coverbox">
-                        <img class="x-book__cover" src="{$server}{$vo.cover}">
+                        <img class="x-book__cover" src="{$imgServer}{$vo.cover}">
                     </div>
                     <div class="x-book__text--normal">{$vo.articlename}</div>
                 </a>
@@ -50,7 +50,7 @@
             {volist name="cateItem.books" id="vo" length="4"}
             <div class="m-book-single f-cb">
                 <a href="/m/{$book_ctrl}/{$vo.param}" title="{$vo.articlename}">
-                    <img src="{$server}{$vo.cover}" alt="{$vo.articlename}">
+                    <img src="{$imgServer}{$vo.cover}" alt="{$vo.articlename}">
                     <h3>{$vo.articlename}</h3>
                     <p>{$vo.author}</p>
                     <p>{$vo.intro}</p>

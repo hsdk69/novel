@@ -9,6 +9,7 @@ use app\model\ArticleChapter;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\exception\ValidateException;
+use think\facade\App;
 use think\facade\View;
 
 class Chapters extends Base
@@ -23,102 +24,42 @@ class Chapters extends Base
 
     public function index()
     {
-        $book_id = input('book_id');
-        try {
-            $book = ArticleArticle::findOrFail(input('book_id'));
-            $data = $this->chapterService->getChapters([
-                ['book_id','=',$book_id]
-            ]);
-            View::assign([
-                'chapters' => $data['chapters'],
-                'count' => $data['count'],
-                'book' => $book
-            ]);
-            return view();
-        } catch (DataNotFoundException $e) {
-            abort(404, $e->getMessage());
-        } catch (ModelNotFoundException $e) {
-            abort(404, $e->getMessage());
-        }
+        $articleid = input('articleid');
+        View::assign('articleid', $articleid);
+        return \view();
     }
 
-    public function create(){
-        if (request()->isPost()) {
-            $data = request()->param();
-            $chapter = new ArticleChapter();
-            $dir = 'book/content';
-            if (request()->file() != null) {
-                $content= request()->file('content');
-                try {
-                    validate(['content' => 'fileExt:txt'])
-                        ->check((array)$content);
-                    $savename =str_replace ( '\\', '/',
-                        \think\facade\Filesystem::disk('public')->putFile($dir, $content));
-                    if (!is_null($savename)) {
-                        $data['content_url'] = '/static/upload/'.$savename;
-                    }
-                } catch (ValidateException $e) {
-                    abort(404, $e->getMessage());
-                }
-            }
-            $result = $chapter->save($data);
-            if ($result){
-                $param = [
-                    "id" => $data["book_id"],
-                    "lastupdate" => time()
-                ];
-                $result2 = ArticleArticle::update($param);
-                if ($result2) {
-                    $this->success('添加成功');
-                } else {
-                    $this->error('添加失败');
-                }
-            }else{
-                $this->error('添加失败');
-            }
-        }
+    public function list() {
+        $articleid = input('articleid');
+        $page = intval(input('page'));
+        $limit = intval(input('limit'));
+        $data = ArticleChapter::where('articleid', '=', $articleid)->order('chapterorder', 'desc');
+        $count = $data->count();
+        $chapters = $data->limit(($page - 1) * $limit, $limit)->select();
 
-        $book_id = input('book_id');
-        $lastChapterOrder = 0;
-        $lastChapter = $this->chapterService->getLastChapter($book_id);
-        if ($lastChapter){
-            $lastChapterOrder = $lastChapter->chapter_order;
-        }
-        View::assign([
-            'book_id' => $book_id,
-            'order' => $lastChapterOrder + 1,
+        return json([
+            'code' => 0,
+            'msg' => '',
+            'count' => $count,
+            'data' => $chapters
         ]);
-        return view();
     }
+
 
     public function edit()
     {
-        $id = input('id');
+        $id = input('chapterid');
         try {
             $chapter = ArticleChapter::findOrFail(input('id'));
             if (request()->isPost()) {
-                $chapter->chapter_name = input('chapter_name');
-                $chapter->chapter_order = input('chapter_order');
-                if (request()->file() != null) {
-                    $dir = 'book/content';
-                    $content= request()->file('content');
-                    try {
-                        validate(['content' => 'fileExt:txt'])
-                            ->check((array)$content);
-                        $savename =str_replace ( '\\', '/',
-                            \think\facade\Filesystem::disk('public')->putFile($dir, $content));
-                        if (!is_null($savename)) {
-                            $chapter['content_url'] = '/static/upload/'.$savename;
-                        }
-                    } catch (ValidateException $e) {
-                        abort(404, $e->getMessage());
-                    }
-                }
+                $chapter->chapter_name = input('chaptername');
+                $chapter->chapter_order = input('chapterorder');
                 $result = $chapter->save();
-                if ($result){
+                if ($result) {
                     $param = [
-                        "id" => $chapter["book_id"],
-                        "lastupdate" => time()
+                        "articleid" => $chapter["articleid"],
+                        "lastupdate" => time(),
+                        'lastchapterid' => $id
                     ];
                     $result2 = ArticleArticle::update($param);
                     if ($result2) {
@@ -126,7 +67,7 @@ class Chapters extends Base
                     } else {
                         $this->error('修改失败');
                     }
-                }else{
+                } else {
                     $this->error('修改失败');
                 }
 
@@ -144,11 +85,11 @@ class Chapters extends Base
 
     public function delete()
     {
-        $id = input('id');
+        $id = input('chapterid');
         try {
             $chapter = ArticleChapter::findOrFail($id);
             $chapter->delete();
-            return ['err'=>0,'msg'=>'删除成功'];
+            return ['err' => 0, 'msg' => '删除成功'];
         } catch (DataNotFoundException $e) {
             abort(404, $e->getMessage());
         } catch (ModelNotFoundException $e) {
@@ -157,7 +98,8 @@ class Chapters extends Base
 
     }
 
-    public function deleteAll(){
+    public function deleteAll()
+    {
         $ids = input('ids');
         ArticleChapter::destroy($ids);
     }

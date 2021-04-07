@@ -24,10 +24,14 @@ CREATE TABLE IF NOT EXISTS `jieqi_tail` (
     `articleid` int(11) unsigned NOT NULL DEFAULT '0',
     `tailname` varchar(200) NOT NULL COMMENT '长尾词',
     `tailcode` varchar(255) NOT NULL COMMENT '唯一标识',
+    `tailtype` tinyint(4) NOT NULL COMMENT '类型，1.根据书名拓展，2.自己导入，3.导入词拓展',
+    `parent` int(11) DEFAULT 0  COMMENT '父词ID',
     `create_time` int(11) DEFAULT '0',
     `update_time` int(11) DEFAULT '0',
     PRIMARY KEY (`id`),
     KEY `tailname` (`tailname`),
+    KEY `tailtype` (`tailtype`),
+    KEY `parent` (`parent`),
     unique key `tailcode` (`tailcode`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
