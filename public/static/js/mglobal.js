@@ -1,5 +1,5 @@
 $(function(){
-
+	$(".lazyimg").lazyload({threshold:100,effect:"fadeIn",skip_invisible:!1});
 	var Cookie = {
         set:function(name, value, expires, path, domain){
             if(expires){
