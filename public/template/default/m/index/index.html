@@ -96,4 +96,7 @@
 {/block}
 {block name="js"}
 <script type="text/javascript" src="/static/js/touchslide.1.1.js"></script>
+<script>
+    $(".lazyimg").lazyload({threshold:100,effect:"fadeIn",skip_invisible:!1});
+</script>
 {/block}

@@ -113,6 +113,7 @@
 <script src="/static/js/vue.min.js"></script>
 <script src="/static/js/axios.min.js"></script>
 <script>
+    $(".lazyimg").lazyload({threshold:100,effect:"fadeIn",skip_invisible:!1});
     var app = new Vue({
         el: '#app',
         data: {

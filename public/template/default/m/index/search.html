@@ -20,7 +20,7 @@
                         <div class="x-book__multi">
                             <div class="x-book__coverbox">
                                 <a href="/m/{$book_ctrl}/{$vo.param}">
-                                    <img class="x-book__cover" src="{$imgServer}{$vo.cover}" style="width: 1.6rem; height: 2.13333rem;">
+                                    <img src="https://p.pstatp.com/origin/ffa400036691f82c85e5" class="x-book__cover lazyimg" data-original="{$imgServer}{$vo.cover}" style="width: 1.6rem; height: 2.13333rem;">
                                 </a>
                             </div>
                             <div class="x-book__text--multi" style="width: calc(100% - 1.6rem); height: 2.13333rem;">
@@ -46,4 +46,9 @@
         </div>
     </div>
 </div>
+{/block}
+{block name="js"}
+<script>
+    $(".lazyimg").lazyload({threshold:100,effect:"fadeIn",skip_invisible:!1});
+</script>
 {/block}

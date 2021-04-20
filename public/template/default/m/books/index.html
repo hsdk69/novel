@@ -133,6 +133,7 @@
 {/block}
 {block name="js"}
 <script>
+    $(".lazyimg").lazyload({threshold:100,effect:"fadeIn",skip_invisible:!1});
     $('#addshelf').click(function () {
         $.post({
             url:`/m/addfavor`,
