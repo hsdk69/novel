@@ -72,6 +72,9 @@
     <script type="text/html" id="tbBasicTbBar">
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="chapters">章节管理</a>
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+
+    </script>
+    <script type="text/html" id="tbBasicTbBar2">
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="disable">下架</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     </script>
@@ -123,7 +126,7 @@
                     $.ajax({
                         type: 'POST',
                         url: "{:url('delete')}",
-                        data: {uid: data.uid},
+                        data: {articleid: data.articleid},
                         dataType: 'json',
                         success: function (res) {
                             if (res.err == 0) { //删除成功
@@ -172,7 +175,8 @@
                         return '<img data-index="' + (d.LAY_INDEX - 1) + '" src="' + d.cover + '" class="tb-img-circle" tb-img >'
                     }, align: 'center', sort: true
                 },
-                {title: '操作', toolbar: '#tbBasicTbBar', align: 'center', minWidth: 200}
+                {title: '操作一', toolbar: '#tbBasicTbBar', align: 'center', minWidth: 200},
+                {title: '操作二', toolbar: '#tbBasicTbBar2', align: 'center', minWidth: 200}
             ]]
         });
 

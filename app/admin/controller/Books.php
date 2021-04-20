@@ -5,8 +5,10 @@ namespace app\admin\controller;
 
 
 use app\model\ArticleArticle;
+use app\model\BookLogs;
 use app\model\Cate;
 use app\model\ArticleChapter;
+use app\model\ChapterLogs;
 use Overtrue\Pinyin\Pinyin;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
@@ -168,24 +170,27 @@ class Books extends Base
 
     public function delete()
     {
-        $id = input('id');
+        $id = input('articleid');
         try {
-            $book = ArticleArticle::withTrashed()->findOrFail($id);
-            $chapters = ArticleChapter::where('book_id', '=', $id)->select(); //按漫画id查找所有章节
+            $book = ArticleArticle::findOrFail($id);
+            $chapters = ArticleChapter::where('articleid', '=', $id)->select(); //按漫画id查找所有章节
             foreach ($chapters as $chapter) {
                 $chapter->delete(); //删除章节
+                $chapterLog = ChapterLogs::where('chapter_id','=',$chapter->chapterid)->find();
+                if ($chapterLog) {
+                    $chapterLog->delete();
+                }
             }
-            $result = $book->delete(true);
-            if ($result) {
-                return json(['err' => 0, 'msg' => '删除成功']);
-            } else {
-                return json(['err' => 1, 'msg' => '删除失败']);
+            $book->delete();
+            $bookLog = BookLogs::where('book_id','=',$book->articleid)->find();
+            if ($bookLog) {
+                $bookLog->delete();
             }
+            return json(['err' => 0, 'msg' => '删除成功']);
 
-        } catch (DataNotFoundException $e) {
-            abort(404, $e->getMessage());
         } catch (ModelNotFoundException $e) {
             abort(404, $e->getMessage());
+            return json(['err' => 1, 'msg' => $e->getMessage()]);
         }
     }
 
