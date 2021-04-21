@@ -10,9 +10,6 @@ use app\model\ArticleArticle;
 use think\db\exception\ModelNotFoundException;
 use think\facade\Cache;
 use think\facade\App;
-use app\model\Clicks;
-use app\model\VipCode;
-use app\model\ChargeCode;
 use app\model\SystemUsers;
 
 class Common extends Base
