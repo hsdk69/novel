@@ -59,7 +59,7 @@ class Books extends Base
         $num = input('num');
         $tops = cache('app:tops_homepage');
         if (!$tops) {
-            $tops = ArticleArticle::where('is_top', '=', '1')->limit($num)->order('lastupdate', 'desc')->select();
+            $tops = ArticleArticle::where('toptime', '>', 0)->limit($num)->order('lastupdate', 'desc')->select();
             foreach ($tops as &$book) {
                 $bigId = floor((double)($book['articleid'] / 1000));
                 $book['cover'] = $this->server . sprintf('/files/article/image/%s/%s/%ss.jpg',
@@ -79,7 +79,7 @@ class Books extends Base
         $num = input('num');
         $ends = cache('app:ends_homepage');
         if (!$ends) {
-            $ends = ArticleArticle::limit($num)->order('lastupdate', 'desc')->select();
+            $ends = ArticleArticle::where('fullflag','=',1)->limit($num)->order('lastupdate', 'desc')->select();
             foreach ($ends as &$book) {
                 $bigId = floor((double)($book['articleid'] / 1000));
                 $book['cover'] = $this->server . sprintf('/files/article/image/%s/%s/%ss.jpg',
@@ -96,9 +96,43 @@ class Books extends Base
 
     public function getupdate()
     {
+        $num = input('num');
+        $newest = cache('app:newest_homepage');
+        if (!$newest) {
+            $newest = ArticleArticle::limit($num)->order('articleid', 'desc')->select();
+            foreach ($newest as &$book) {
+                $bigId = floor((double)($book['articleid'] / 1000));
+                $book['cover'] = $this->server . sprintf('/files/article/image/%s/%s/%ss.jpg',
+                        $bigId, $book['articleid'], $book['articleid']);
+            }
+            cache('newest_homepage', $newest, null, 'redis');
+        }
+        $result = [
+            'success' => 1,
+            'newest' => $newest
+        ];
+        return json($result);
+    }
+
+    public function getRankList()
+    {
         $startItem = input('startItem');
         $pageSize = input('pageSize');
-        $data = ArticleArticle::order('lastupdate', 'desc');
+        $type = input('type');
+        switch ($type) {
+            case 'hot':
+                $data = ArticleArticle::order('allvisit', 'desc'); break;
+            case 'newest':
+                $data = ArticleArticle::order('articleid', 'desc'); break;
+            case 'ends':
+                $data = ArticleArticle::where('fullflag','=',1)->order('lastupdate', 'desc'); break;
+            case 'tops':
+                $data = ArticleArticle::where('toptime', '>', 0)->order('lastupdate', 'desc'); break;
+            case 'update':
+                ArticleArticle::order('lastupdate', 'desc'); break;
+            default:
+                ArticleArticle::order('lastupdate', 'desc'); break;
+        }
         $count = $data->count();
         $books = $data->limit($startItem, $pageSize)->select();
         foreach ($books as &$book) {
