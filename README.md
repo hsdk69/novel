@@ -12,7 +12,6 @@
 - 官方博客：https://www.xiaohuanxiong.net/
 - 文档地址：https://www.kancloud.cn/hiliqi/xhxxscms
 - 官方QQ群：780362399
-- 电报群：https://t.me/comiccms
 - 另外开源一套漫画cms：https://github.com/hiliqi/xiaohuanxiong
 
 # 开源协议
