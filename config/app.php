@@ -19,16 +19,15 @@ return [
 
     // 应用映射（自动多应用模式有效）
     'app_map'          => [
-        'm'  => 'mobile',
-        'admin' => 'admin',
-        'mip' => 'mip',
-        'api' => 'api',
-        'app' => 'app',
-        'pc' => 'index'
+
     ],
     // 域名绑定（自动多应用模式有效）
     'domain_bind'      => [
-
+        'admin' => 'admin',
+        'api' => 'api',
+        'app' => 'app', //如果不需要app，则忽略这项
+        '' => 'index',
+        'www' => 'index'
     ],
     // 禁止URL访问的应用列表（自动多应用模式有效）
     'deny_app_list'    => [

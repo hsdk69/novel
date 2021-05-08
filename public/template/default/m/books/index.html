@@ -3,6 +3,7 @@
 <title>{$book.articlename}小说全文在线免费阅读-{$book.author}-{$site_name}</title>
 <meta name="description" content="{$book.articlename}是一本{$book.cate.cate_name}小说，主角是{$book.roles}，小说简介：{$book.intro}">
 {/block}
+{block name="header"}{$book.articlename}{/block}
 {block name="main"}
 <div class="x-page__content">
     <div class="x-book__detail">
@@ -13,7 +14,7 @@
                 <div class="x-book">
                     <div class="x-book__multi">
                         <div class="x-book__coverbox">
-                            <img lazy="loaded" class="x-book__cover"src="{$imgServer}{$book.cover}" style="width: 1.5rem; height: 2rem;">
+                            <img class="x-book__cover lazyimg" src="https://p.pstatp.com/origin/ffa400036691f82c85e5" data-original="{$imgServer}{$book.cover}" style="width: 1.5rem; height: 2rem;">
                         </div>
                         <div class="x-book__text--multi" style="width: calc(100% - 1.5rem); height: 2rem;">
                             <div class="x-detail__book--info">
@@ -31,7 +32,7 @@
                 <div class="x-detail__operator">
                     <span class="x-detail__operator--item" id="addshelf">加入书架</span>
                     {if $start > -1}
-                    <span class="to-read" onclick="javascript:location.href='/m/{$chapter_ctrl}/{$start}';">开始阅读</span>
+                    <span class="to-read" onclick="javascript:location.href='/{$chapter_ctrl}/{$start}';">开始阅读</span>
                     {else /}
                     <span class="to-read">开始阅读</span>
                     {/if}
@@ -60,25 +61,25 @@
                 <span></span>
             </div>
         </div>
-        <div class="x-city__part x-detail__part hr-bottom">
+        <div class="x-city__part x-detail__part hr-bottom" id="mulu">
             <div class="x-part__title">
                 目录
                 <span class="x-catalog__total"></span>
                 <span class="x-catalog__update">更新于：{$book.lastupdate|date='Y-m-d'}</span>
             </div>
             <div class="x-part__content">
-                <a href="/m/{$chapter_ctrl}/{$book.lastchapterid}">
+                <a href="/{$chapter_ctrl}/{$book.lastchapterid}">
                     <div class="x-catalog__new">
                         {$book.lastchapter}
                         <span>最新</span>
                     </div>
                 </a>
                 <div class="x-catalog__list van-hairline--bottom">
-                    {volist name="book.chapters" id="vo" length="3"}
-                    <a href="/m/{$chapter_ctrl}/{$vo.chapterid}">
+                    {raccoon:chapters name="chapters" where="articleid='$book->articleid'" order="chapterorder asc" limit="10"}
+                    <a href="/{$chapter_ctrl}/{$vo.chapterid}">
                         <p class="x-catalog__list--item">{$vo.chaptername}</p>
                     </a>
-                    {/volist}
+                    {/raccoon:chapters}
                 </div>
                 <div class="x-catalog__more">更多目录&gt;</div>
             </div>
@@ -94,11 +95,11 @@
                     <div class="van-pull-refresh">
                         <div id="wrapper" class="van-pull-refresh__track">
                             <div class="x-catalog__list van-list">
-                                {volist name="book.chapters" id="vo"}
-                                <a href="/m/{$chapter_ctrl}/{$vo.chapterid}">
+                                {raccoon:chapters name="chapters" where="articleid='$book->articleid'" order="chapterorder asc"}
+                                <a href="/{$chapter_ctrl}/{$vo.chapterid}">
                                     <p class="x-catalog__item">{$vo.chaptername}</p>
                                 </a>
-                                {/volist}
+                                {/raccoon:chapters}
                             </div>
                         </div>
                     </div>
@@ -115,16 +116,16 @@
             <div class="x-part__title">同类作品</div>
             <div class="x-part__content">
                 <div class="x-detail__part--book">
-                    {volist name="recommand" id="vo" length="10"}
+                    {raccoon:books name="books" where="sortid='$book->sortid'" order="lastupdate desc" limit="5"}
                     <div class="x-book" style="width: 2rem;">
-                        <a href="/m/{$book_ctrl}/{$vo.param}" title="{$vo.articlename}">
+                        <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.articlename}">
                             <div class="x-book__coverbox">
-                                <img lazy="loaded" class="x-book__cover" src="{$imgServer}{$vo.cover}" style="width: 2rem; height: 2.66667rem;">
+                                <img class="x-book__cover lazyimg" src="https://p.pstatp.com/origin/ffa400036691f82c85e5" data-original="{$imgServer}{$book.cover}" style="width: 1.5rem; height: 2rem;">
                             </div>
                             <div class="x-book__text--normal">{$vo.articlename}</div>
                         </a>
                     </div>
-                    {/volist}
+                    {/raccoon:books}
                 </div>
             </div>
         </div>
@@ -133,10 +134,9 @@
 {/block}
 {block name="js"}
 <script>
-    $(".lazyimg").lazyload({threshold:100,effect:"fadeIn",skip_invisible:!1});
     $('#addshelf').click(function () {
         $.post({
-            url:`/m/addfavor`,
+            url:`/addfavor`,
             data:{'articleid' : {$book.articleid} },
             success: function (res) {
                 if (res.err == 1) {

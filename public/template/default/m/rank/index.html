@@ -7,73 +7,129 @@
 <div class="x-page__content">
     <div class="x-rank">
         <div class="x-rank__menu">
-            <a @click="foo('new')">
-                <p class="x-rank__menu--item" :class="{'is-active' : op == 'new'}">新书榜</p>
+            <a onclick="change('new')">
+                <p id="new1" class="x-rank__menu--item is-active">新书榜</p>
             </a>
-            <a @click="foo('click')">
-                <p class="x-rank__menu--item" :class="{'is-active' : op == 'click'}">点击榜</p>
+            <a onclick="change('click')">
+                <p id="click1" class="x-rank__menu--item">点击榜</p>
             </a>
-            <a @click="foo('fullflag')">
-                <p class="x-rank__menu--item" :class="{'is-active' : op == 'end'}">完结榜</p>
+            <a onclick="change('fullflag')">
+                <p id="fullflag1" class="x-rank__menu--item">完结榜</p>
             </a>
         </div>
-        <div class="x-rank__list" style="height: calc(736px - 1.2rem);">
-            <div class="x-book x-rank__book van-hairline--bottom" v-for="(item, index) in books" :key="index">
-                <a :href="'/m/{$book_ctrl}/'+ item.param">
+        <div class="x-rank__list" style="height: calc(736px - 1.2rem);" id="new">
+            {raccoon:books name="books" order="lastupdate desc" limit="10" key="k"}
+            <div class="x-book x-rank__book van-hairline--bottom">
+                <a href="/{$book_ctrl}/{$vo.param}">
                     <div class="x-book__multi">
                         <div class="x-book__coverbox">
-                            <img class="x-book__cover" :src="'{$imgServer}' + item.cover" style="width: 1.3rem; height: 1.73333rem;">
+                            <img class="x-book__cover lazyimg" src="https://p.pstatp.com/origin/ffa400036691f82c85e5" data-original="{$imgServer}{$vo.cover}" style="width: 1.3rem; height: 1.73333rem;">
                             <div class="x-book__coverindex">
-                                <span>{{index + 1}}</span>
+                                <span>{$k}</span>
                             </div>
                         </div>
                         <div class="x-book__text--multi" style="width: calc(100% - 1.3rem); height: 1.73333rem;">
                             <div class="x-rank__book--info">
-                                <p class="x-info__name">{{item.articlename}}</p>
+                                <p class="x-info__name">{$vo.articlename}</p>
                                 <p class="x-info__author">
-                                    {{item.cate_name}}
-                                    <span>{{item.author}}</span>
+                                    {$vo.cate_name}
+                                    <span>{$vo.author}</span>
                                 </p>
                                 <p class="x-info__intro">
-                                    {{item.intro}}
+                                    {$vo.intro}
                                 </p>
                             </div>
                         </div>
                     </div>
                 </a>
             </div>
+            {/raccoon:books}
+        </div>
+        <div class="x-rank__list" style="display: none;" id="click">
+            {raccoon:books name="books" order="allvisit desc" limit="10" key="k"}
+            <div class="x-book x-rank__book van-hairline--bottom">
+                <a href="/{$book_ctrl}/{$vo.param}">
+                    <div class="x-book__multi">
+                        <div class="x-book__coverbox">
+                            <img class="x-book__cover lazyimg" src="https://p.pstatp.com/origin/ffa400036691f82c85e5" data-original="{$imgServer}{$vo.cover}" style="width: 1.3rem; height: 1.73333rem;">
+                            <div class="x-book__coverindex">
+                                <span>{$k}</span>
+                            </div>
+                        </div>
+                        <div class="x-book__text--multi" style="width: calc(100% - 1.3rem); height: 1.73333rem;">
+                            <div class="x-rank__book--info">
+                                <p class="x-info__name">{$vo.articlename}</p>
+                                <p class="x-info__author">
+                                    {$vo.cate_name}
+                                    <span>{$vo.author}</span>
+                                </p>
+                                <p class="x-info__intro">
+                                    {$vo.intro}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {/raccoon:books}
+        </div>
+        <div class="x-rank__list" style="display: none" id="fullflag">
+            {raccoon:books name="books" order="lastupdate desc" where="fullflag=1" limit="10" key="k"}
+            <div class="x-book x-rank__book van-hairline--bottom">
+                <a href="/{$book_ctrl}/{$vo.param}">
+                    <div class="x-book__multi">
+                        <div class="x-book__coverbox">
+                            <img class="x-book__cover lazyimg" src="https://p.pstatp.com/origin/ffa400036691f82c85e5" data-original="{$imgServer}{$vo.cover}" style="width: 1.3rem; height: 1.73333rem;">
+                            <div class="x-book__coverindex">
+                                <span>{$k}</span>
+                            </div>
+                        </div>
+                        <div class="x-book__text--multi" style="width: calc(100% - 1.3rem); height: 1.73333rem;">
+                            <div class="x-rank__book--info">
+                                <p class="x-info__name">{$vo.articlename}</p>
+                                <p class="x-info__author">
+                                    {$vo.cate_name}
+                                    <span>{$vo.author}</span>
+                                </p>
+                                <p class="x-info__intro">
+                                    {$vo.intro}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {/raccoon:books}
         </div>
     </div>
 </div>
 {/block}
 {block name="js"}
-<script src="/static/js/vue.min.js"></script>
-<script src="/static/js/axios.min.js"></script>
 <script>
-    var app = new Vue({
-        el: '#app',
-        data: {
-            op: 'new',
-            books: []
-        },
-        methods: {
-            foo(op) {
-                this.op = op
-                this.getBooks(this.op)
-            },
-            getBooks(op) {
-                axios.get("/m/getRanks", {
-                    params: {
-                        op: op
-                    }
-                }).then(response => {
-                    this.books = response.data.books
-                })
-            }
-        },
-        mounted() {
-            this.getBooks(this.op)
-        },
-    })
+    function change(op)
+    {
+        if (op === 'new'){
+            $('#new1').addClass('is-active')
+            $('#click1').removeClass('is-active')
+            $('#fullflag1').removeClass('is-active')
+            $('#new').show().css('height: calc(736px - 1.2rem);')
+            $('#click').hide()
+            $('#fullflag').hide()
+        } else if(op==='click'){
+            $('#new1').removeClass('is-active')
+            $('#click1').addClass('is-active')
+            $('#fullflag1').removeClass('is-active')
+            $('#new').hide()
+            $('#click').show().css('height: calc(736px - 1.2rem);')
+            $('#fullflag').hide()
+        }else {
+            $('#new1').removeClass('is-active')
+            $('#click1').removeClass('is-active')
+            $('#fullflag1').addClass('is-active')
+            $('#new').hide()
+            $('#click').hide()
+            $('#fullflag').show().css('height: calc(736px - 1.2rem);')
+        }
+    }
 </script>
 {/block}

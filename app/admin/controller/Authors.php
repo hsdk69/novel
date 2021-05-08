@@ -5,8 +5,6 @@ namespace app\admin\controller;
 
 use app\model\ArticleArticle;
 use app\model\SystemUsers;
-use app\service\AuthorService;
-use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\facade\View;
 

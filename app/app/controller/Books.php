@@ -5,7 +5,6 @@ namespace app\app\controller;
 
 
 use app\common\RedisHelper;
-use app\model\Author;
 use app\model\ArticleArticle;
 use app\model\Comments;
 use think\db\exception\DataNotFoundException;

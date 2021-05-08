@@ -63,7 +63,6 @@ class Index extends Base
             $site_name = input('site_name');
             $domain = input('domain');
             $mobile_domain = input('mobile_domain');
-            $mip_domain = input('mip_domain');
             $server = input('server');
             $imgServer = input('imgServer');
             $api_key = input('api_key');
@@ -78,7 +77,6 @@ return [
     'domain' => '{$domain}',
     'site_name' => '{$site_name}',
     'mobile_domain' => '{$mobile_domain}',
-    'mip_domain' => '{$mip_domain}',
     'server' => '{$server}',
     'imgServer' => '{$imgServer}',
     'api_key' => '{$api_key}', 

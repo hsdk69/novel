@@ -16,14 +16,6 @@ use think\facade\View;
 
 class Books extends Base
 {
-    protected $bookService;
-
-    public function initialize()
-    {
-        parent::initialize();
-        $this->bookService = app('bookService');
-    }
-
     public function index()
     {
         $id = input('id');
@@ -48,19 +40,10 @@ class Books extends Base
             cache('book:' . $id, $book, null, 'redis');
         }
 
-
-
         $redis = RedisHelper::GetInstance();
         $day = date("Y-m-d", time());
         //以当前日期为键，增加点击数
         $redis->zIncrBy('click:' . $day, 1, $book->id);
-
-
-        $recommand = cache('randBooks:' . $book->sortid);
-        if (!$recommand) {
-            $recommand = $this->bookService->getByCate($book->sortid, $this->end_point, 10);
-            cache('randBooks:' . $book->sortid, $recommand, null, 'redis');
-        }
 
 
         $start = cache('bookStart:' . $id);
@@ -71,13 +54,9 @@ class Books extends Base
             cache('bookStart:' . $id, $start, null, 'redis');
         }
 
-        $comments = $this->getComments($book->articleid);
-
         View::assign([
             'book' => $book,
             'start' => $start,
-            'recommand' => $recommand,
-            'comments' => $comments,
         ]);
         return view($this->tpl);
     }

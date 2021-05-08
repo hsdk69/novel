@@ -11,36 +11,36 @@
             <div class="wrap1200 ranklist">
                 <div class="leftbarlist fl">
                     <ul>
-                        <li class="{$op == 'new' ? 'on' : ''}">
-                            <a href="/pc/{$rank_ctrl}?cate=new">新书榜</a>
+                        <li id="new1" class="on" onclick="change('new')">
+                            <a>新书榜</a>
                         </li>
-                        <li class="{$op == 'click' ? 'on' : ''}">
-                            <a href="/pc/{$rank_ctrl}?cate=click">点击榜</a>
+                        <li id="click1" onclick="change('click')">
+                            <a>点击榜</a>
                         </li>
-                        <li class="{$op == 'fullflag' ? 'on' : ''}">
-                            <a href="/pc/{$rank_ctrl}?cate=fullflag">完结榜</a>
+                        <li id="fullflag1" onclick="change('fullflag')">
+                            <a>完结榜</a>
                         </li>
                     </ul>
                 </div>
                 <div class="right-cont-box fr ranklistdata">
-                    <div class="rankdatacont">
-                        {volist name="books" id="vo" length="10"}
+                    <div class="rankdatacont" id="new">
+                        {raccoon:books name="books" order="lastupdate desc" limit="10"}
                         <div class="secd-rank-list rank">
                             <dl>
                                 <dt>
-                                    <a href="/pc/{$book_ctrl}/{$vo.param}" target="_blank">
-                                        <img src="{$imgServer}{$vo.cover}" src="https://p.pstatp.com/origin/ffa400036691f82c85e5" style="display: block;">
+                                    <a href="/{$book_ctrl}/{$vo.param}" target="_blank">
+                                        <img data-original="{$imgServer}{$vo.cover}" src="https://p.pstatp.com/origin/ffa400036691f82c85e5" style="display: block;">
                                     </a>
                                 </dt>
                                 <dd>
-                                    <a href="/pc/{$book_ctrl}/{$vo.param}" class="bigpic-book-name" target="_blank">
+                                    <a href="/{$book_ctrl}/{$vo.param}" class="bigpic-book-name" target="_blank">
                                         <span class="num red">{$i}</span>{$vo.articlename}
                                     </a>
                                     <p>
                                         <a>
                                             {$vo.words}字
                                         </a>
-                                        <a href="/pc/{$booklist_act}?sortid={$vo.sortid}" target="_blank">
+                                        <a href="/{$booklist_act}?sortid={$vo.sortid}" target="_blank">
                                             {$vo.cate.cate_name}
                                         </a> |
                                         {$vo.end == 1 ? '已完结' : '连载中'}
@@ -48,7 +48,7 @@
                                     </p>
                                     <p class="big-book-info">{$vo.intro}</p>
                                     <p>
-                                        <a href="/pc/{$search_ctrl}/{$vo.author}" target="_blank" class="red">
+                                        <a href="/{$search_ctrl}/{$vo.author}" target="_blank" class="red">
                                              {$vo.author}
                                         </a>
                                         <span>| {$vo.lastupdate|date='Y-m-d H:i'}</span>
@@ -56,14 +56,117 @@
                                 </dd>
                             </dl>
                             <div class="bigbtn">
-                                <a href="/pc/{$book_ctrl}/{$vo.param}" class="detailbtn" target="_blank">书籍详情</a>
+                                <a href="/{$book_ctrl}/{$vo.param}" class="detailbtn" target="_blank">书籍详情</a>
                             </div>
                         </div>
-                        {/volist}
+                        {/raccoon:books}
+                    </div>
+                    <div class="rankdatacont" id="click" style="display: none">
+                        {raccoon:books name="books" order="allvisit desc" limit="10"}
+                        <div class="secd-rank-list rank">
+                            <dl>
+                                <dt>
+                                    <a href="/{$book_ctrl}/{$vo.param}" target="_blank">
+                                        <img data-original="{$imgServer}{$vo.cover}" src="https://p.pstatp.com/origin/ffa400036691f82c85e5" style="display: block;">
+                                    </a>
+                                </dt>
+                                <dd>
+                                    <a href="/{$book_ctrl}/{$vo.param}" class="bigpic-book-name" target="_blank">
+                                        <span class="num red">{$i}</span>{$vo.articlename}
+                                    </a>
+                                    <p>
+                                        <a>
+                                            {$vo.words}字
+                                        </a>
+                                        <a href="/{$booklist_act}?sortid={$vo.sortid}" target="_blank">
+                                            {$vo.cate.cate_name}
+                                        </a> |
+                                        {$vo.end == 1 ? '已完结' : '连载中'}
+                                        <span class="clicknum">{$vo.allvisit|default=0} 点击</span>
+                                    </p>
+                                    <p class="big-book-info">{$vo.intro}</p>
+                                    <p>
+                                        <a href="/{$search_ctrl}/{$vo.author}" target="_blank" class="red">
+                                            {$vo.author}
+                                        </a>
+                                        <span>| {$vo.lastupdate|date='Y-m-d H:i'}</span>
+                                    </p>
+                                </dd>
+                            </dl>
+                            <div class="bigbtn">
+                                <a href="/{$book_ctrl}/{$vo.param}" class="detailbtn" target="_blank">书籍详情</a>
+                            </div>
+                        </div>
+                        {/raccoon:books}
+                    </div>
+                    <div class="rankdatacont" id="fullflag">
+                        {raccoon:books name="books" order="lastupdate desc" where="fullflag=1" limit="10"}
+                        <div class="secd-rank-list rank">
+                            <dl>
+                                <dt>
+                                    <a href="/{$book_ctrl}/{$vo.param}" target="_blank">
+                                        <img data-original="{$imgServer}{$vo.cover}" src="https://p.pstatp.com/origin/ffa400036691f82c85e5" style="display: block;">
+                                    </a>
+                                </dt>
+                                <dd>
+                                    <a href="/{$book_ctrl}/{$vo.param}" class="bigpic-book-name" target="_blank">
+                                        <span class="num red">{$i}</span>{$vo.articlename}
+                                    </a>
+                                    <p>
+                                        <a>
+                                            {$vo.words}字
+                                        </a>
+                                        <a href="/{$booklist_act}?sortid={$vo.sortid}" target="_blank">
+                                            {$vo.cate.cate_name}
+                                        </a> |
+                                        {$vo.end == 1 ? '已完结' : '连载中'}
+                                        <span class="clicknum">{$vo.allvisit|default=0} 点击</span>
+                                    </p>
+                                    <p class="big-book-info">{$vo.intro}</p>
+                                    <p>
+                                        <a href="/{$search_ctrl}/{$vo.author}" target="_blank" class="red">
+                                            {$vo.author}
+                                        </a>
+                                        <span>| {$vo.lastupdate|date='Y-m-d H:i'}</span>
+                                    </p>
+                                </dd>
+                            </dl>
+                            <div class="bigbtn">
+                                <a href="/{$book_ctrl}/{$vo.param}" class="detailbtn" target="_blank">书籍详情</a>
+                            </div>
+                        </div>
+                        {/raccoon:books}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    function change(op)
+    {
+        if (op === 'new'){
+            $('#new1').addClass('on')
+            $('#click1').removeClass('on')
+            $('#fullflag1').removeClass('on')
+            $('#new').show()
+            $('#click').hide()
+            $('#fullflag').hide()
+        } else if(op==='click'){
+            $('#new1').removeClass('on')
+            $('#click1').addClass('on')
+            $('#fullflag1').removeClass('on')
+            $('#new').hide()
+            $('#click').show()
+            $('#fullflag').hide()
+        }else {
+            $('#new1').removeClass('on')
+            $('#click1').removeClass('on')
+            $('#fullflag1').addClass('on')
+            $('#new').hide()
+            $('#click').hide()
+            $('#fullflag').show()
+        }
+    }
+</script>
 {/block}

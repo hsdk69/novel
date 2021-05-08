@@ -36,7 +36,7 @@
 	</span>
 	<span id="posts">
 		<ul id="post-list" class="post-list">
-            {volist name="comments" id="vo" key="k"}
+            {raccoon:comments name="comments" where="articleid='$book.articleid'" order="id desc"}
 			<li class="post">
 				<div class="post-content">
 					<div class="avatar hovercard">
@@ -63,7 +63,7 @@
 					</div>
 				</div>
 			</li>
-            {/volist}
+            {/raccoon:comments}
 		</ul>
 	</span>
 	<span id="loadmore" style="display: none;"></span>
@@ -81,7 +81,7 @@
 			layer.msg('请勿提交空评论', {icon: 0,shade: 0.3})
 		} else {
 			$.post({
-				url: '/m/commentadd',
+				url: '/commentadd',
 				data: {comment: comment, book_id: book_id},
 				success(res) {
 					if (res.err == 1) {

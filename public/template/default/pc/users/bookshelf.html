@@ -20,31 +20,31 @@
                     <td class="t6">状态</td>
                     <td class="t7">操作</td>
                 </tr>
-                {volist name="books" id="vo"}
+                {raccoon:favors name="favors" where="uid='$xwx_user_id'"}
                 <tr>
                     <td>
-                        <a href="/pc/{$book_ctrl}/{$vo.param}" target="_blank">
-                            <img class="lazyimg" data-original="{$vo.cover}" src="https://p.pstatp.com/origin/ffa400036691f82c85e5">
+                        <a href="/{$book_ctrl}/{$vo.book.param}" target="_blank">
+                            <img class="lazyimg" data-original="{$vo.book.cover}" src="https://p.pstatp.com/origin/ffa400036691f82c85e5">
                         </a>
                     </td>
                     <td class="t3">
-                        <a href="/pc/{$book_ctrl}/{$vo.param}" target="_blank">{$vo.articlename}</a>
+                        <a href="/{$book_ctrl}/{$vo.book.param}" target="_blank">{$vo.book.articlename}</a>
                     </td>
                     <td class="t5">
-                        <a href="/pc/{$book_ctrl}/{$vo.param}" target="_blank">{$vo.cate.cate_name}</a>
+                        <a href="/{$book_ctrl}/{$vo.book.param}" target="_blank">{$vo.book.cate.cate_name}</a>
                     </td>
                     <td class="t4">
-                        <atarget="_blank">{$vo.author}</a>
+                        <a target="_blank">{$vo.book.author}</a>
                     </td>
-                    <td class="t3">{$vo.lastupdate|date='Y-m-d H:i:s'}</td>
+                    <td class="t3">{$vo.book.lastupdate|date='Y-m-d H:i:s'}</td>
 
-                    <td class="t6">{$vo.fullflag == 1 ? '已完结' : '连载中'}</td>
+                    <td class="t6">{$vo.book.fullflag == 1 ? '已完结' : '连载中'}</td>
                     <td class="t7">
-                        <a href="/pc/{$book_ctrl}/{$vo.param}" class="goon" target="_blank">阅读</a>
-                        <i><span class="Collection" ajax-get="" url="/pc/delfavors?id={$vo.articleid}">删除</span></i>
+                        <a href="/{$book_ctrl}/{$vo.book.param}" class="goon" target="_blank">阅读</a>
+                        <i><span class="Collection" ajax-get="" url="/delfavors?id={$vo.book.articleid}">删除</span></i>
                     </td>
                 </tr>
-                {/volist}
+                {/raccoon:favors}
             </tbody>
         </table>
         <div class="page-box">
@@ -55,21 +55,21 @@
                         {if $page.current_page == 1}
                         <li class="disabled"><span>«</span></li>
                         {else/}
-                        <li><a href="/pc/bookshelf?page={$page.current_page-1}{$param}">«</a></li>
+                        <li><a href="/bookshelf?page={$page.current_page-1}{$param}">«</a></li>
                         {/if}
 
                         {for start="1" end="$page.last_page + 1"}
                         {if $i == $page.current_page }
                         <li class="active"><span>1</span></li>
                         {else/}
-                        <li><a href="/pc/bookshelf?page={$i}{$param}">{$i}</a></li>
+                        <li><a href="/bookshelf?page={$i}{$param}">{$i}</a></li>
                         {/if}
                         {/for}
 
                         {if $page.current_page == $page.last_page}
                         <li class="disabled"><span>»</span></li>
                         {else/}
-                        <li><a href="/pc/bookshelf?page={$page.current_page+1}{$param}">»</a></li>
+                        <li><a href="/bookshelf?page={$page.current_page+1}{$param}">»</a></li>
                         {/if}
                         {/if}
                     </ul>

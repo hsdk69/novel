@@ -31,7 +31,7 @@
 <script>
     $('#submitbtn').click(function () {
         $.ajax({
-            url:'/m/userinfo',
+            url:'/userinfo',
             type:'post',
             data: {
                 email: $('#email').val(),
@@ -40,7 +40,7 @@
             success:function (res) {
                 if (res.err == 0) {
                     layer.msg(res.msg, {icon: 1,time: 1000,shade:0.3}, function () {
-                        location.href = '/m/ucenter'
+                        location.href = '/ucenter'
                     })
                 } else {
                     layer.msg(res.msg, {icon: 1,time: 1000,shade:0.3})

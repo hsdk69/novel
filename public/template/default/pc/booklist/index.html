@@ -1,7 +1,7 @@
 {extend name="./template/default/pc/pub/base.html" /}
 {block name="seo"}
-<title>{$cate}分类-{$site_name}</title>
-<meta name="description" content="{$site_name}{$cate}分类">
+<title>{$cate?$cate.cate_name:'全部'}小说分类-{$site_name}</title>
+<meta name="description" content="{$site_name}{$cate?$cate.cate_name:'全部'}小说分类">
 {/block}
 {block name="main"}
 <div class="body-bg" id="app">
@@ -17,11 +17,11 @@
                                 <li :class="{'on' : cate == -1}">
                                     <a @click="cateChange(-1)">全部</a>
                                 </li>
-                                {volist name="cates" id="vo"}
+                                {raccoon:cates name="cates" order="sortid desc"}
                                 <li :class="{'on' : cate == {$vo.sortid}}">
                                     <a @click="cateChange({$vo.sortid})">{$vo.cate_name}</a>
                                 </li>
-                                {/volist}
+                                {/raccoon:cates}
                             </ul>
                         </div>
                         <div class="select selnum">
@@ -30,17 +30,17 @@
                                 <li :class="{'on' : words == -1}">
                                     <a @click="wordsChange(-1)">全部</a>
                                 </li>
-                                <li :class="{'on' : words == 30}">
-                                    <a @click="wordsChange(30)">30万字以内</a>
+                                <li :class="{'on' : words == 300000}">
+                                    <a @click="wordsChange(300000)">30万字以内</a>
                                 </li>
-                                <li :class="{'on' : words == 50}">
-                                    <a @click="wordsChange(50)">50万字以内</a>
+                                <li :class="{'on' : words == 500000}">
+                                    <a @click="wordsChange(500000)">50万字以内</a>
                                 </li>
-                                <li :class="{'on' : words == 100}">
-                                    <a @click="wordsChange(100)">100万字以内</a>
+                                <li :class="{'on' : words == 1000000}">
+                                    <a @click="wordsChange(1000000)">100万字以内</a>
                                 </li>
-                                <li :class="{'on' : words == 200}">
-                                    <a @click="wordsChange(200)">200万字以内</a>
+                                <li :class="{'on' : words == 2000000}">
+                                    <a @click="wordsChange(2000000)">200万字以内</a>
                                 </li>
                             </ul>
                         </div>
@@ -67,22 +67,23 @@
                                 <div class="tabsday-cont">
                                     <div class="tab-cont-1 secd-rank-list">
                                         <div class="listboxw">
-                                            {volist name="books" id="vo"}
+                                            {raccoon:pagedbooks name="pagedBooks" pagesize="20" order="lastupdate desc"
+                                            where="sortid='$cate_selector' and words<='$words_selector' and fullflag='$end_selector'"}
                                             <dl>
                                                 <dt>
-                                                    <a href="/pc/{$book_ctrl}/{$vo.param}" title="{$vo.articlename}">
+                                                    <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.articlename}">
                                                         <img class="lazyimg" data-original="{$imgServer}{$vo.cover}" src="https://p.pstatp.com/origin/ffa400036691f82c85e5" style="display: block;">
                                                     </a>
                                                 </dt>
                                                 <dd>
-                                                    <a href="/pc/{$book_ctrl}/{$vo.param}" class="bigpic-book-name" title="{$vo.articlename}">
+                                                    <a href="/{$book_ctrl}/{$vo.param}" class="bigpic-book-name" title="{$vo.articlename}">
                                                         {$vo.articlename}
                                                     </a>
                                                     <p>
                                                         <a target="_blank">
                                                             {$vo.author}
                                                         </a>|
-                                                        <a href="/pc/{$booklist_act}?sortid={$vo.sortid}" target="_blank">
+                                                        <a href="/{$booklist_act}?sortid={$vo.sortid}" target="_blank">
                                                             {$vo.cate.cate_name}
                                                         </a>|
                                                         {$vo.fullflag == 1 ? '已完结' : '连载中'}
@@ -96,7 +97,7 @@
                                                     </p>
                                                 </dd>
                                             </dl>
-                                            {/volist}
+                                            {/raccoon:pagedbooks}
                                         </div>
                                     </div>
                                 </div>
@@ -109,21 +110,21 @@
                                     {if $page.current_page == 1}
                                     <li class="disabled"><span>«</span></li>
                                     {else/}
-                                    <li><a href="/pc/{$booklist_act}?page={$page.current_page-1}{$param}" title="上一页">«</a></li>
+                                    <li><a href="/{$booklist_act}?page={$page.current_page-1}{$param}" title="上一页">«</a></li>
                                     {/if}
 
                                     {for start="1" end="$page.last_page + 1"}
                                     {if $i == $page.current_page }
                                     <li class="active"><span>{$i}</span></li>
                                     {elseif ($i > $page.current_page - 4 && $i < $page.current_page + 5)/}
-                                    <li><a href="/pc/{$booklist_act}?page={$i}{$param}" title="第{$i}页">{$i}</a></li>
+                                    <li><a href="/{$booklist_act}?page={$i}{$param}" title="第{$i}页">{$i}</a></li>
                                     {/if}
                                     {/for}
 
                                     {if $page.current_page == $page.last_page}
                                     <li><a>»</a></li>
                                     {else/}
-                                    <li><a href="/pc/{$booklist_act}?page={$page.current_page+1}{$param}" title="下一页">»</a></li>
+                                    <li><a href="/{$booklist_act}?page={$page.current_page+1}{$param}" title="下一页">»</a></li>
                                     {/if}
                                     {/if}
                                 </ul>
@@ -148,15 +149,15 @@
         methods: {
             wordsChange(words) {
                 this.words = words
-                window.location.href = '/pc/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
+                window.location.href = '/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
             },
             cateChange(cate) {
                 this.cate = cate
-                window.location.href = '/pc/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
+                window.location.href = '/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
             },
             statusChange(fullflag) {
                 this.fullflag = fullflag
-                window.location.href = '/pc/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
+                window.location.href = '/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
             }
         }
     })

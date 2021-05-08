@@ -7,10 +7,12 @@ return [
     'think\Request'          => Request::class,
     'think\exception\Handle' => ExceptionHandle::class,
     'redis' => \think\cache\driver\Redis::class,
-    'bookService' => \app\service\BookService::class,
-    'chapterService' => \app\service\ChapterService::class,
-    'tailService' => \app\service\TailService::class,
-    'booklogService' => \app\service\BookLogService::class,
+    'bookModel' => \app\model\ArticleArticle::class,
+    'chapterModel' => \app\model\ArticleChapter::class,
     'httpclient' => \GuzzleHttp\Client::class,
-    'userService' => \app\service\UserService::class
+    'userModel' => \app\model\SystemUsers::class,
+    'cateModel' => \app\model\Cate::class,
+    'bannerModel' => \app\model\Banner::class,
+    'commentModel' => \app\model\Comments::class,
+    'favorModel' => \app\model\UserFavor::class
 ];

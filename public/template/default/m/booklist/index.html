@@ -1,8 +1,9 @@
 {extend name="./template/default/m/pub/base2.html" /}
 {block name="seo"}
-<title>{$site_name}-{$cate}分类</title>
-<meta name="description" content="{$site_name}{$cate}分类">
+<title>{$site_name}-{$cate?$cate.cate_name:'全部'}分类</title>
+<meta name="description" content="{$site_name}{$cate?$cate.cate_name:'全部'}分类，{$cate?$cate.cate_name:'全部'}题材">
 {/block}
+{block name="header"}{$cate?$cate.cate_name:'全部'}{/block}
 {block name="main"}
 <div class="x-page__content">
     <div class="x-book__library">
@@ -13,11 +14,11 @@
                     <span class="x-category__item" :class="{'is-active' : cate == -1}">
                         <a @click="cateChange(-1)">全部</a>
                     </span>
-                    {volist name="cates" id="vo"}
+                    {raccoon:cates name="cates" order="sortid desc"}
                     <span class="x-category__item" :class="{'is-active' : cate == {$vo.sortid}}">
                         <a @click="cateChange({$vo.sortid})">{$vo.cate_name}</a>
                     </span>
-                    {/volist}
+                    {/raccoon:cates}
                 </div>
             </div>
 
@@ -27,8 +28,8 @@
                     <span class="x-category__item" :class="{'is-active' : fullflag == -1}">
                         <a @click="statusChange(-1)">全部</a>
                     </span>
-                    <span class="x-category__item" :class="{'is-active' : fullflag == 0}">
-                        <a @click="statusChange(0)">连载</a>
+                    <span class="x-category__item" :class="{'is-active' : fullflag == 2}">
+                        <a @click="statusChange(2)">连载</a>
                     </span>
                     <span class="x-category__item" :class="{'is-active' : fullflag == 1}">
                         <a @click="statusChange(1)">完本</a>
@@ -42,17 +43,17 @@
                     <span class="x-category__item" :class="{'is-active' : words == -1}">
                         <a @click="wordsChange(-1)">全部</a>
                     </span>
-                    <span class="x-category__item" :class="{'is-active' : words == 30}">
-                        <a @click="wordsChange(30)">30万字以内</a>
+                    <span class="x-category__item" :class="{'is-active' : words == 300000}">
+                        <a @click="wordsChange(300000)">30万字以内</a>
                     </span>
-                    <span class="x-category__item" :class="{'is-active' : words == 50}">
-                        <a @click="wordsChange(50)">50万字以内</a>
+                    <span class="x-category__item" :class="{'is-active' : words == 500000}">
+                        <a @click="wordsChange(500000)">50万字以内</a>
                     </span>
-                    <span class="x-category__item" :class="{'is-active' : words == 100}">
-                        <a @click="wordsChange(100)">100万字以内</a>
+                    <span class="x-category__item" :class="{'is-active' : words == 1000000}">
+                        <a @click="wordsChange(1000000)">100万字以内</a>
                     </span>
-                    <span class="x-category__item" :class="{'is-active' : words == 200}">
-                        <a @click="wordsChange(200)">200万字以内</a>
+                    <span class="x-category__item" :class="{'is-active' : words == 2000000}">
+                        <a @click="wordsChange(2000000)">200万字以内</a>
                     </span>
                 </div>
             </div>
@@ -61,16 +62,17 @@
         <div class="x-library__books">
             <div class="van-list">
                 <span>
-                    {volist name="books" id="vo"}
+                     {raccoon:pagedbooks name="pagedBooks" pagesize="20" order="lastupdate desc"
+                    where="sortid='$cate_selector' and words<='$words_selector' and fullflag='$end_selector'"}
                     <div class="x-book">
                         <div class="x-book__multi">
                             <div class="x-book__coverbox">
-                                <a href="/m/{$book_ctrl}/{$vo.param}/" title="{$vo.articlename}">
-                                    <img class="x-book__cover" src="{$imgServer}{$vo.cover}" style="width: 1.6rem; height: 2.13333rem;">
+                                <a href="/{$book_ctrl}/{$vo.param}/" title="{$vo.articlename}">
+                                    <img class="x-book__cover lazyimg" data-original="{$imgServer}{$vo.cover}" src="https://p.pstatp.com/origin/ffa400036691f82c85e5" style="width: 1.6rem; height: 2.13333rem;">
                                 </a>
                             </div>
                             <div class="x-book__text--multi" style="width: calc(100% - 1.6rem); height: 2.13333rem;">
-                                <a href="/m/{$book_ctrl}/{$vo.param}/">
+                                <a href="/{$book_ctrl}/{$vo.param}/">
                                     <div class="x-book__info">
                                         <p class="x-book__info--name">{$vo.articlename}</p>
                                         <p class="x-book__info--chapter">
@@ -85,7 +87,7 @@
                             </div>
                         </div>
                     </div>
-                    {/volist}
+                    {/raccoon:pagedbooks}
                 </span>
             </div>
             <div class="pages_bottom" style="display: block;">
@@ -94,13 +96,13 @@
                     {if $page.current_page == 1}
                     <li class="disabled"><span>«</span></li>
                     {else/}
-                    <li><a href="/m/{$booklist_act}?page={$page.current_page-1}{$param}" title="上一页">«</a></li>
+                    <li><a href="/{$booklist_act}?page={$page.current_page-1}{$param}" title="上一页">«</a></li>
                     {/if}
 
                     {if $page.current_page == $page.last_page}
                     <li class="disabled"><span>»</span></li>
                     {else/}
-                    <li><a href="/m/{$booklist_act}?page={$page.current_page+1}{$param}" title="下一页">»</a></li>
+                    <li><a href="/{$booklist_act}?page={$page.current_page+1}{$param}" title="下一页">»</a></li>
                     {/if}
                     {/if}
                 </ul>
@@ -113,7 +115,6 @@
 <script src="/static/js/vue.min.js"></script>
 <script src="/static/js/axios.min.js"></script>
 <script>
-    $(".lazyimg").lazyload({threshold:100,effect:"fadeIn",skip_invisible:!1});
     var app = new Vue({
         el: '#app',
         data: {
@@ -125,15 +126,15 @@
         methods: {
             wordsChange(words) {
                 this.words = words
-                window.location.href = '/m/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
+                window.location.href = '/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
             },
             cateChange(cate) {
                 this.cate = cate
-                window.location.href = '/m/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
+                window.location.href = '/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
             },
             statusChange(fullflag) {
                 this.fullflag = fullflag
-                window.location.href = '/m/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
+                window.location.href = '/{$booklist_act}?sortid='+this.cate+'&words='+this.words+'&fullflag='+this.fullflag;
             },
             showmore() {
                 this.more = !this.more

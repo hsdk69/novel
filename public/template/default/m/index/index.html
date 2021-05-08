@@ -7,17 +7,17 @@
 <div class="x-city__banner">
     <div class="swiper-container" id="swiper">
         <div class="swiper-wrapper">
-            {volist name="banners" id="vo"}
+            {raccoon:banners name="banners" order="banner_order desc"}
             <div class="swiper-slide">
                 <a href="{if $end_point == 'id'}
-                                      /m/{$book_ctrl}/{$vo.articleid}
+                                      /{$book_ctrl}/{$vo.articleid}
                                       {else /}
-                                      /m/{$book_ctrl}/{$vo.book.backupname}
+                                      /{$book_ctrl}/{$vo.book.backupname}
                                       {/if}">
                     <img src="{$vo.pic}">
                 </a>
             </div>
-            {/volist}
+            {/raccoon:banners}
         </div>
         <div class="van-swipe__indicators">
         </div>
@@ -28,29 +28,28 @@
     <div class="x-part__title">万众追更</div>
     <div class="x-part__books">
         <div class="x-part__books--cover">
-            {volist name="newest" id="vo" length="6"}
+            {raccoon:books name="books" order="lastupdate desc" limit="6"}
             <div class="x-book">
-                <a href="/m/{$book_ctrl}/{$vo.param}/">
+                <a href="/{$book_ctrl}/{$vo.param}/">
                     <div class="x-book__coverbox">
                         <img src="https://p.pstatp.com/origin/ffa400036691f82c85e5" class="x-book__cover lazyimg" data-original="{$imgServer}{$vo.cover}">
                     </div>
                     <div class="x-book__text--normal">{$vo.articlename}</div>
                 </a>
             </div>
-            {/volist}
+            {/raccoon:books}
         </div>
     </div>
 </section>
-{volist name="catelist" id="cateItem" key="k"}
-{in name="$cateItem.cate.id" value="1,2,3"}
+{raccoon:cates name="cates" id="cate" where="sortid in (1,2,3)" key="k"}
 <section class="x-city__part hr-top">
-    <div class="x-part__title">{$cateItem.cate.cate_name}</div>
+    <div class="x-part__title">{$cate.cate_name}</div>
     <div class="x-part__books">
         <div class="x-part__books--cover">
-            {volist name="cateItem.books" id="vo" length="4"}
+            {raccoon:books name="books" where="sortid = '$cate->sortid'" order="lastupdate desc" limit="4"}
             <div class="m-book-single f-cb">
-                <a href="/m/{$book_ctrl}/{$vo.param}" title="{$vo.articlename}">
-                    <img src="{$imgServer}{$vo.cover}" alt="{$vo.articlename}">
+                <a href="/{$book_ctrl}/{$vo.param}" title="{$vo.articlename}">
+                    <img data-original="{$imgServer}{$vo.cover}" src="https://p.pstatp.com/origin/ffa400036691f82c85e5" class="lazyimg" alt="{$vo.articlename}">
                     <h3>{$vo.articlename}</h3>
                     <p>{$vo.author}</p>
                     <p>{$vo.intro}</p>
@@ -60,29 +59,28 @@
                     </p>
                 </a>
             </div>
-            {/volist}
+            {/raccoon:books}
         </div>
     </div>
 </section>
-{/in}
-{/volist}
+{/raccoon:cates}
 <section class="x-city__part hr-top">
     <div class="x-part__title">最受欢迎</div>
     <div class="x-part__books">
-        {volist name="newest" id="vo"}
+        {raccoon:books name="books" order="allvisit desc" limit="10"}
         <div class="x-city__swiper--item">
             <div class="x-book">
                 <div class="x-book__nocover">
                     <div class="x-book__text--multi">
                         <p class="x-book__name">
                             <span class="x-book__titleName">
-                                <a href="/m/{$book_ctrl}/{$vo.param}">{$vo.articlename}</a>
+                                <a href="/{$book_ctrl}/{$vo.param}">{$vo.articlename}</a>
                             </span>
                             <span class="x-book__tag">{$vo.cate.cate_name}</span>
                             <span class="x-book__tag">{$vo.author}</span>
                         </p>
                         <p class="x-book__intro">
-                            <a href="/m/{$chapter_ctrl}/{$vo.lastchapterid}">
+                            <a href="/{$chapter_ctrl}/{$vo.lastchapterid}">
                                 {$vo.lastchapter}
                             </a>
                         </p>
@@ -90,7 +88,7 @@
                 </div>
             </div>
         </div>
-        {/volist}
+        {/raccoon:books}
     </div>
 </section>
 {/block}

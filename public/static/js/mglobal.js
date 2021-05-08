@@ -13,7 +13,7 @@ $(function(){
             }
         }
     };
-
+	$(".lazyimg").lazyload({threshold:100,effect:"fadeIn",skip_invisible:!1});
 	function resi() {
 		var fontSize = Math.min(window.innerWidth, screen.width, document.body.offsetWidth) / 750 * 100 + "px";
 		Cookie.set('fontsize',fontSize, 86400000 * 365, '/');
@@ -57,7 +57,7 @@ $(function(){
 		$('.chapter-list').css({top:chapter_scrolltop+"px"});
 		$('.chapter-list').show();
 		$('.chapter-list').animate({right:"0"},function(){
-			//$('#app').hide();
+			$('#mulu').hide();
 			$('.chapter-list').css({top:0});
 		});
 	});
@@ -68,6 +68,7 @@ $(function(){
 		$('.chapter-list').css({top:chapter_scrolltop+"px"});
 		$('.chapter-list').animate({right:-$(window).innerWidth()+"px"},function(){
 			$('.chapter-list').hide();
+			$('#mulu').show();
 		});
 	});
 

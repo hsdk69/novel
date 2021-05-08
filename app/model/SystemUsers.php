@@ -24,4 +24,14 @@ class SystemUsers extends Model
     {
         return trim($value);
     }
+
+    public function delFavors($uid, $ids)
+    {
+        $where[] = ['uid', '=', $uid];
+        $where[] = ['articleid', 'in', $ids];
+        $favors = UserFavor::where($where)->selectOrFail();
+        foreach ($favors as $favor) {
+            $favor->delete();
+        }
+    }
 }

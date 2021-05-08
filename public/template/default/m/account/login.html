@@ -26,10 +26,10 @@
         </div>
         <div class="app_registerList">
 					<span class="public_AddFloatLeft">
-						<a href="/m/register">我要注册</a>
+						<a href="/register">我要注册</a>
 					</span>
             <span class="public_AddFloatRight">
-						<a href="/m/login">忘记密码</a>
+						<a href="/login">忘记密码</a>
 					</span>
         </div>
         <div class="app_dengLu_title"> <i>以下账号直接登录</i></div>
@@ -44,7 +44,7 @@
 <script>
     $('#loginbtn').click(function () {
         $.ajax({
-            url:'/m/login',
+            url:'/login',
             type:'post',
             data: {
                 username: $('#uname').val(),
@@ -53,7 +53,7 @@
             success:function (res) {
                 if (res.err == 0) {
                     layer.msg(res.msg, {icon: 1,time: 1000,shade:0.3}, function () {
-                        location.href = '/m/ucenter'
+                        location.href = '/ucenter'
                     })
                 } else {
                     layer.msg(res.msg, {icon: 1,time: 1000,shade:0.3})

@@ -6,7 +6,6 @@ namespace app\admin\controller;
 
 use app\model\ArticleArticle;
 use app\model\ArticleChapter;
-use app\model\Tail;
 use think\facade\App;
 
 class Sitemap extends Base
