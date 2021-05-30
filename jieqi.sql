@@ -173,7 +173,7 @@ CREATE TABLE IF NOT EXISTS `jieqi_article_article` (
     `imgflag` tinyint(1) unsigned NOT NULL DEFAULT '0',
     `upaudit` tinyint(1) unsigned NOT NULL DEFAULT '0',
     `power` tinyint(1) unsigned NOT NULL DEFAULT '0',
-    `display` tinyint(1) unsigned NOT NULL DEFAULT '0',
+    `display` tinyint(1) unsigned NOT NULL DEFAULT '1',
     `progress` tinyint(1) unsigned NOT NULL DEFAULT '0',
     `issign` tinyint(1) unsigned NOT NULL DEFAULT '0',
     `signtime` int(11) unsigned NOT NULL DEFAULT '0',

@@ -22,7 +22,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label layui-form-required">作品名称:</label>
                     <div class="layui-input-block">
-                        <input name="book_name" value="{$book.book_name}" class="layui-input"
+                        <input name="articlename" value="{$book.articlename}" class="layui-input"
                                lay-verType="tips" lay-verify="required" required/>
                     </div>
                 </div>
@@ -30,15 +30,20 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label layui-form-required">作品别名:</label>
                     <div class="layui-input-block">
-                        <input name="nick_name" value="{$book.nick_name}" class="layui-input"/>
+                        <input name="backupname" value="{$book.backupname}" class="layui-input"/>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label layui-form-required">题材:</label>
+                    <label class="layui-form-label layui-form-required">题材：</label>
                     <div class="layui-input-block">
-                        <input name="tags" value="{$book.tags}" class="layui-input"
-                               lay-verType="tips" lay-verify="required" required/>
+                        <select name="sortid" lay-verType="tips" lay-verify="required" required>
+                            {volist name="cates" id="vo"}
+                            <option value="{$vo.sortid}" {$book.sortid==$vo.sortid?"selected":""}>
+                                {$vo.cate_name}
+                            </option>
+                            {/volist}
+                        </select>
                     </div>
                 </div>
 
@@ -53,46 +58,19 @@
                     </div>
                 </div>
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label layui-form-required">地区：</label>
-                    <div class="layui-input-block">
-                        <select name="area_id" lay-verType="tips" lay-verify="required" required>
-                            {volist name="areas" id="vo"}
-                            <option value="{$vo.id}" {$book.area_id==$vo.id?"selected":""}>{$vo.area_name}</option>
-                            {/volist}
-                        </select>
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label layui-form-required">起始付费章节：</label>
-                    <div class="layui-input-block">
-                        <input name="start_pay" class="layui-input" value="{$book.start_pay}"
-                               lay-verType="tips" lay-verify="required" required/>
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label layui-form-required">单章价格：</label>
-                    <div class="layui-input-block">
-                        <input name="money" class="layui-input" value="{$book.money}"
-                               lay-verType="tips" lay-verify="required" required/>
-                    </div>
-                </div>
-
                 <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label layui-form-required">简介:</label>
                     <div class="layui-input-block">
-                        <textarea name="summary" class="layui-textarea">{$book.summary}</textarea>
+                        <textarea name="intro" class="layui-textarea">{$book.intro}</textarea>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
                     <label class="layui-form-label layui-form-required">进度：</label>
                     <div class="layui-input-block">
-                        <select name="end" lay-verType="tips" lay-verify="required" required>
-                            <option value="2" {$book.end == 2?"":"selected"}>连载中</option>
-                            <option value="1" {$book.end == 1?"selected":""}>已完结</option>
+                        <select name="fullflag" lay-verType="tips" lay-verify="required" required>
+                            <option value="0" {$book.fullflag == 0?"":"selected"}>连载中</option>
+                            <option value="1" {$book.fullflag == 1?"selected":""}>已完结</option>
                         </select>
                     </div>
                 </div>

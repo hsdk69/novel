@@ -91,38 +91,27 @@
             cellMinWidth: 100,
             cols: [[
                 {type: 'checkbox'},
-                {field: 'id', title: 'ID', align: 'center', sort: true},
-                {field: 'book_name', title: '书名', align: 'center', sort: true},
-                {field: 'nick_name', title: '别名', align: 'center', sort: true},
-                {field: 'tags', title: '题材', align: 'center', sort: true},
+                {field: 'articleid', title: 'ID', align: 'center', sort: true},
+                {field: 'articlename', title: '书名', align: 'center', sort: true},
+                {field: 'backupname', title: '别名', align: 'center', sort: true},
+                {field: 'sortid', title: '题材', align: 'center', sort: true},
                 {
-                    field: 'end',
+                    field: 'fullflag',
                     title: '进度',
                     align: 'center',
                     sort: true,
-                    templet: '<p>{{d.end==1?"完结":"连载"}}</p>'
+                    templet: '<p>{{d.fullflag==1?"完结":"连载"}}</p>'
                 },
                 {
-                    field: 'cover_url',
+                    field: 'cover',
                     title: '封面',
                     align: 'center',
                     sort: true,
-                    templet: '<div><img src="{{d.cover_url}}"/></div>' +
+                    templet: '<div><img src="{{d.cover}}"/></div>' +
                         ''
                 },
-                {field: 'start_pay', title: '起始付费章节', align: 'center', sort: true},
-                {field: 'money', title: '单章价格', align: 'center', sort: true},
-                {field: 'area_id', title: '地区', align: 'center', sort: true},
                 {
-                    field: 'is_top',
-                    title: '推荐',
-                    align: 'center',
-                    sort: true,
-                    templet: '<p>{{d.state==1?"是":"否"}}</p>'
-                },
-                {field: 'create_time', title: '创建时间', align: 'center', sort: true},
-                {
-                    field: 'last_time', title: '更新时间', templet: function (d) {
+                    field: 'lastupdate', title: '更新时间', templet: function (d) {
                         return util.toDateString(d.createTime);
                     }, align: 'center', sort: true
                 },
@@ -136,7 +125,7 @@
             if (obj.event === 'edit') { // 修改
                 index.openTab({
                     title: '作品编辑',
-                    url: "/books/edit?id=" + data.id,
+                    url: "/books/edit?id=" + data.articleid,
                     end: function() {
                         insTb.reload()
                     }
@@ -154,7 +143,7 @@
             } else if (obj.event === 'chapter') {
                 index.openTab({
                     title: '章节管理',
-                    url: "/chapters/list?book_id=" + data.id,
+                    url: "/chapters/list?book_id=" + data.articleid,
                     end: function() {
                         insTb.reload()
                     }
@@ -165,7 +154,7 @@
 
         $('#create').click(function () {
             index.openTab({
-                title: '添加漫画',
+                title: '添加作品',
                 url:'/books/create',
                 end: function() {
                     insTb.reload()

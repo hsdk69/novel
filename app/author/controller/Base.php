@@ -13,6 +13,8 @@ class Base extends BaseController
     protected $username;
     protected $author_name;
     protected $jieqi_ver;
+    protected $server;
+    protected $imgServer;
 
     protected function initialize()
     {
@@ -21,6 +23,8 @@ class Base extends BaseController
         $this->username = session('xwx_author');
         $this->author_name = session('xwx_author_name');
         $this->jieqi_ver = floatval(config('site.jieqi_ver'));
+        $this->server = config('site.server');
+        $this->imgServer = config('site.imgServer');
         if (is_null($this->uid)) {
             $this->redirect(url('account/login'));
         }

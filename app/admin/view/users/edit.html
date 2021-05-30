@@ -37,6 +37,16 @@
                 </div>
 
                 <div class="layui-form-item">
+                    <label class="layui-form-label layui-form-required">状态：</label>
+                    <div class="layui-input-block">
+                        <select name="state" lay-verType="tips" lay-verify="required" required>
+                            <option value="1" {$user.state==1?"selected":""}>正常</option>
+                            <option value="0" {$user.state==0?"selected":""}>锁定</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn" lay-filter="formBasSubmit" lay-submit>&emsp;提交&emsp;</button>
                         <button type="reset" class="layui-btn layui-btn-primary">&emsp;重置&emsp;</button>

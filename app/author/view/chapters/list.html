@@ -75,9 +75,8 @@
             cellMinWidth: 100,
             cols: [[
                 {type: 'checkbox'},
-                {field: 'chapter_order', title: '章节序', align: 'center', sort: true},
-                {field: 'chapter_name', title: '章节名', align: 'center', sort: true},
-                {field: 'count', title: '图片数', align: 'center', sort: true},
+                {field: 'chapterorder', title: '章节序', align: 'center', sort: true},
+                {field: 'chaptername', title: '章节名', align: 'center', sort: true},
                 {field: 'create_time', title: '创建时间', align: 'center', sort: true},
                 {field: 'update_time', title: '创建时间', align: 'center', sort: true},
                 {title: '操作', toolbar: '#tbBasicTbBar', align: 'center', minWidth: 200}
@@ -90,17 +89,17 @@
             if (obj.event === 'edit') { // 修改
                 admin.open({
                     title: '章节编辑',
-                    url: "/chapters/edit?id=" + data.id,
+                    url: "/chapters/edit?id=" + data.chapterid,
                     end: function () {
                         insTb.reload()
                     }
                 });
             } else if (obj.event === 'del') { // 删除
-                del(obj, data.id)
-            } else if (obj.event === 'picture') {
+                del(obj, data.chapterid)
+            } else if (obj.event === 'txt') {
                 index.openTab({
-                    title: '图片管理',
-                    url: "/picture/list?chapter_id=" + data.id,
+                    title: '内容管理',
+                    url: "/chapters/content?chapter_id=" + data.chapterid + '&book_id=' + {$articleid},
                     end: function () {
                         insTb.reload()
                     }
@@ -114,7 +113,7 @@
             if (obj.event === 'add') { // 添加
                 admin.open({
                     title: '添加章节',
-                    url:'/chapters/create?book_id=' + {$book_id},
+                    url:'/chapters/create?book_id=' + {$articleid},
                     end: function() {
                         insTb.reload()
                     }

@@ -20,6 +20,17 @@
                     </div>
                 </div>
 
+                <div class="layui-form-item">
+                    <label class="layui-form-label layui-form-required">封面:</label>
+                    <div class="layui-input-block">
+                        <button id="file-btn-upload" class="layui-btn layui-btn-sm layui-btn-normal icon-btn" type="button">
+                            <i class="layui-icon">&#xe681;</i>上传文件
+                        </button>
+                        <img class="layui-upload-img" id="pic" style="width: 200px;height: auto;margin: 0 10px 10px 0;">
+                        <input type="hidden" name="cover" id="cover" value="">
+                    </div>
+                </div>
+
                 <div class="layui-form-item text-right">
                     <button class="layui-btn" lay-filter="formBasSubmit" lay-submit="">保存</button>
                     <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
@@ -31,18 +42,43 @@
 </div>
 
 <script>
-    layui.use(['layer', 'form', 'laydate', 'admin'], function () {
+    layui.use(['layer', 'form', 'laydate', 'upload'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
         var laydate = layui.laydate;
-        var admin = layui.admin;
+        var upload = layui.upload;
 
         /* 渲染laydate */
         laydate.render({
             elem: '#formBasDateSel',
             trigger: 'click',
             range: true
+        });
+
+        // 上传
+        upload.render({
+            elem: '#file-btn-upload',
+            accept: 'file',
+            exts: 'txt',
+            url: '{:url("upload")}',
+            before: function (obj) {
+                obj.preview(function (index, file, result) {
+                    $('#pic').attr('src', result); //图片链接（base64）
+                });
+            },
+            done: function (res, index, upload) {
+                //如果上传失败
+                if(res.code > 0){
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                $('#cover').val(res.txt);
+            },
+            error: function (index, upload) {
+                //请求异常回调
+                layer.msg('很抱歉，上传出现异常');
+            }
         });
 
         /* 监听表单提交 */

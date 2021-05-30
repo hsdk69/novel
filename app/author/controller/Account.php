@@ -45,6 +45,7 @@ class Account extends BaseController
                     $salt = substr(str_shuffle($key_str), mt_rand(0, strlen($key_str) - 11), 5);
                     $author->salt = $salt;
                     $author->groupid = 6;
+                    $author->state = 0;
                     if ($this->jieqi_ver >= 2.4) {
                         $author->pass = md5(md5($data['password']) . $salt);
                     } else {
@@ -88,16 +89,18 @@ class Account extends BaseController
                 }
                 if ($passsalt != $author['pass']) {
                     return json(['err' => 1, 'msg' => '密码错误']);
-                } else {
-                    $author->lastlogin = time();
-                    $author->save();
-                    session('xwx_author_id', $author->uid);
-                    session('xwx_author', $author->uname);
-                    session('xwx_author_name', $author->name);
-                    return json(['err' => 0, 'msg' => '登录成功']);
                 }
+                if ($author->state == 0) {
+                    return json(['err' => 1, 'msg' => '用户被锁定']);
+                }
+                $author->lastlogin = time();
+                $author->save();
+                session('xwx_author_id', $author->uid);
+                session('xwx_author', $author->uname);
+                session('xwx_author_name', $author->name);
+                return json(['err' => 0, 'msg' => '登录成功']);
             } catch (ModelNotFoundException $e) {
-                return json(['code' => 0, 'err' => 1, 'msg' => '用户名或密码错误']);
+                return json(['code' => 0, 'err' => 1, 'msg' => '不存在该用户']);
             }
         } else {
 
