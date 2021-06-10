@@ -13,13 +13,6 @@ use think\Request;
 
 class Postbot extends Base
 {
-    protected $chapterService;
-
-    public function initialize()
-    {
-        $this->chapterService = new \app\service\ChapterService();
-    }
-
     public function save()
     {
         $data = request()->param();
