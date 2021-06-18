@@ -22,13 +22,13 @@ return [
             // 服务器地址
             'hostname'          => env('database.hostname', '127.0.0.1'),
             // 数据库名
-            'database'          => env('database.database', 'novel'),
+            'database'          => env('database.database', ''),
             // 用户名
-            'username'          => env('database.username', 'root'),
+            'username'          => env('database.username', ''),
             // 密码
-            'password'          => env('database.password', 'root'),
+            'password'          => env('database.password', ''),
             // 端口
-            'hostport'          => env('database.hostport', '3306'),
+            'hostport'          => env('database.hostport', ''),
             // 数据库连接参数
             'params'            => [],
             // 数据库编码默认采用utf8
