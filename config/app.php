@@ -23,12 +23,7 @@ return [
     ],
     // 域名绑定（自动多应用模式有效）
     'domain_bind'      => [
-        'admin' => 'admin',
-        'api' => 'api',
-        'app' => 'app', //如果不需要app，则忽略这项
-        '' => 'index',
-        'www' => 'index',
-        'author' => 'author' //如果不需要作者中心，则忽略这项
+
     ],
     // 禁止URL访问的应用列表（自动多应用模式有效）
     'deny_app_list'    => [

@@ -42,12 +42,11 @@ function generateRandomString($length = 4) {
 }
 
 function adminurl(string $url = '', array $vars = [], $suffix = true, $domain = false) {
-    $defalutModule = 'admin';
     $currentModule = app('http')->getName();
     $string = (string) url($url, $vars, $suffix, $domain);
-    if($currentModule == $defalutModule) {
+    if($currentModule != 'index') {
         #去除url中默认模块名sysusezan
-        $search = '/'.$defalutModule.'/';
+        $search = '/'.$currentModule.'/';
         $pos = stripos($string, $search);
         $string = substr($string, 0, $pos). '/'. substr($string, $pos + strlen($search));
     }

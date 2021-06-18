@@ -86,7 +86,7 @@
             if (obj.event === 'edit') { // 修改
                 parent.layui.index.openTab({
                     title: '编辑题材',
-                    url: "{:url('authors/edit')}?uid=" + data.uid,
+                    url: "{:adminurl('authors/edit')}?uid=" + data.uid,
                     end: function () {
                         insTb.reload();
                     }
@@ -95,7 +95,7 @@
                 layer.confirm('确认要删除吗？', function (index) {
                     $.ajax({
                         type: 'POST',
-                        url: "{:url('delete')}",
+                        url: "{:adminurl('delete')}",
                         data: {uid: data.uid},
                         dataType: 'json',
                         success: function (res) {
@@ -121,7 +121,7 @@
         /* 渲染表格 */
         var insTb = table.render({
             elem: '#tbBasicTable',
-            url: "{:url('authors/list')}",
+            url: "{:adminurl('authors/list')}",
             page: true,
             cellMinWidth: 100,
             cols: [[
@@ -145,7 +145,7 @@
             var name = $('#name').val()
             table.render({
                 elem: '#tbBasicTable',
-                url: '{:url("search")}?uname=' + uname + '&name=' + name,
+                url: '{:adminurl("search")}?uname=' + uname + '&name=' + name,
                 page: true,
                 cellMinWidth: 100,
                 cols: [[

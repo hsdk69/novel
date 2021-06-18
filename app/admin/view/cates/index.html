@@ -84,7 +84,7 @@
         $('#create').click(function () {
             index.openTab({
                 title: '新建题材',
-                url: "{:url('cates/create')}",
+                url: "{:adminurl('cates/create')}",
                 end: function () {
                     insTb.reload();
                 }
@@ -97,7 +97,7 @@
             if (obj.event === 'edit') { // 修改
                 parent.layui.index.openTab({
                     title: '编辑题材',
-                    url: "{:url('cates/edit')}?sortid=" + data.sortid,
+                    url: "{:adminurl('cates/edit')}?sortid=" + data.sortid,
                     end: function () {
                         insTb.reload();
                     }
@@ -106,7 +106,7 @@
                 layer.confirm('确认要删除吗？', function (index) {
                     $.ajax({
                         type: 'POST',
-                        url: "{:url('delete')}",
+                        url: "{:adminurl('delete')}",
                         data: {sortid: data.sortid},
                         dataType: 'json',
                         success: function (res) {
@@ -132,7 +132,7 @@
         /* 渲染表格 */
         var insTb = table.render({
             elem: '#tbBasicTable',
-            url: "{:url('cates/list')}",
+            url: "{:adminurl('cates/list')}",
             page: true,
             cellMinWidth: 100,
             cols: [[
@@ -157,7 +157,7 @@
             var cate_name = $('#cate_name').val()
             table.render({
                 elem: '#tbBasicTable',
-                url: '{:url("search")}?cate_name=' + cate_name,
+                url: '{:adminurl("search")}?cate_name=' + cate_name,
                 page: true,
                 cellMinWidth: 100,
                 cols: [[
