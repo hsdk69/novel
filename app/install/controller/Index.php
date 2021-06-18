@@ -58,9 +58,9 @@ class Index extends Base
                     $key_str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                     $salt = substr(str_shuffle($key_str), mt_rand(0, strlen($key_str) - 11), 5);
                     if ($jieqi_ver >= 2.4) {
-                        $pass = md5(md5($data['password']) . $salt);
+                        $pass = md5(md5($password) . $salt);
                     } else {
-                        $pass = md5(trim($data['password']) . $salt);
+                        $pass = md5(trim($password) . $salt);
                     }
                     $sql = "INSERT INTO {$dbpk}system_groups(`name`,description,grouptype) VALUES('管理员','系统管理员',0);";
                     $db->query($sql);
