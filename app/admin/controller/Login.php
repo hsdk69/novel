@@ -59,7 +59,7 @@ class Login extends BaseController
     {
         session('xwx_admin', null);
         session('xhx_admin_id', null);
-        return redirect(url('login/login'));
+        return redirect(adminurl('login/login'));
     }
 
     public function captcha()
