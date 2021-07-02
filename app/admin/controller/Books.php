@@ -12,6 +12,7 @@ use app\model\ChapterLogs;
 use Overtrue\Pinyin\Pinyin;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
+use think\facade\App;
 use think\facade\View;
 
 class Books extends Base
@@ -52,22 +53,31 @@ class Books extends Base
         try {
             $book = ArticleArticle::findOrFail($data['articleid']);
             if (request()->isPost()) {
+                $book->lastupdate = time();
                 $result = $book->save($data);
                 if ($result) {
-                    return json(['err' => 0, 'msg' => '修改成功']);
+                    $cover = App::getRootPath() .'/public/files/'. $data['cover'];
+                    $bigId = floor((double)($book['articleid'] / 1000));
+                    $dir = App::getRootPath().'/public/files/' . sprintf('/article/image/%s/%s/',$bigId, $book['articleid']);
+                    if (!is_dir($dir))
+                    {
+                        mkdir($dir, 0777, true);
+                    }
+                    $filename = App::getRootPath().'/public/files/' . sprintf('/article/image/%s/%s/%ss.jpg',
+                            $bigId, $book['articleid'], $book['articleid']);
+                    copy($cover, $filename);
+                    unlink($cover);
+                    return json(['err' =>0,'msg'=>'修改成功']);
                 } else {
-                    return json(['err' => 1, 'msg' => '修改失败']);
+                    return json(['err' =>1,'msg'=>'修改失败']);
                 }
             } else {
                 $cates = Cate::select();
-                View::assign([
-                    'book' => $book,
-                    'cates' => $cates
-                ]);
+                View::assign('cates', $cates);
                 return view();
             }
         } catch (ModelNotFoundException $e) {
-            return json(['err' => 0, 'msg' => $e->getMessage()]);
+            abort(404);
         }
     }
 
@@ -79,12 +89,9 @@ class Books extends Base
             ]);
         } else {
             $cover = request()->file('file');
-            $articleid = input('articleid');
-            $bigId = floor((double)($articleid / 1000));
-            $dir = sprintf('article/image/%s/%s/', $bigId, $articleid);
-            $jpg = sprintf('%ss.jpg', $articleid);
-            $savename = str_replace('\\', '/',
-                \think\facade\Filesystem::disk('public')->putFileAs($dir, $cover, $jpg));
+            $dir = 'article/tmp';
+            $savename =str_replace ( '\\', '/',
+                \think\facade\Filesystem::disk('public')->putFile($dir, $cover));
             return json([
                 'code' => 0,
                 'msg' => '',

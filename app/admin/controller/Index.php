@@ -6,6 +6,7 @@ namespace app\admin\controller;
 
 use DirectoryIterator;
 use GuzzleHttp\Client;
+use http\Exception;
 use think\facade\App;
 use think\facade\Cache;
 use think\facade\Db;
@@ -28,8 +29,6 @@ class Index extends Base
         $api_key = config('site.api_key');
         $app_key = config('site.app_key');
         $front_tpl = config('site.tpl');
-        $up_server = config('site.up_server');
-        $json_server = config('site.json_server');
         $jieqi_ver = config('site.jieqi_ver');
 
         $dirs = array();
@@ -50,8 +49,6 @@ class Index extends Base
             'app_key' => $app_key,
             'front_tpl' => $front_tpl,
             'tpl_dirs' => $dirs,
-            'up_server' => $up_server,
-            'json_server' => $json_server,
             'jieqi_ver' => $jieqi_ver
         ]);
         return view();
@@ -68,8 +65,6 @@ class Index extends Base
             $api_key = input('api_key');
             $app_key = input('app_key');
             $front_tpl = input('front_tpl');
-            $up_server = input('up_server');
-            $json_server = input('json_server');
             $jieqi_ver = input('jieqi_ver');
             $site_code = <<<INFO
 <?php
@@ -82,8 +77,6 @@ return [
     'api_key' => '{$api_key}', 
     'app_key' => '{$app_key}',
     'tpl' => '{$front_tpl}',
-    'up_server' => '{$up_server}',
-    'json_server' => '{$json_server}',
     'jieqi_ver' => '{$jieqi_ver}'
  ];
 INFO;
@@ -149,58 +142,58 @@ INFO;
 
     public function upgrade()
     {
-        $server = config('site.up_server');
-        $json_server = config('site.json_server');
+        try {
+            $client = new Client();
+            $srcUrl = App::getRootPath() . "/ver.txt";
+            $localVersion = (int)str_replace('.', '', file_get_contents($srcUrl));
+            $server = "https://cdn.jsdelivr.net/gh/hiliqi/xiaohuanxiong/";
+            $serverFileUrl = $server . "/ver.txt";
+            $res = $client->request('GET', $serverFileUrl); //读取版本号
+            $serverVersion = (int)str_replace('.', '', $res->getBody());
+            echo '<p></p>';
 
-        $client = new Client();
-        $srcUrl = App::getRootPath() . "/public/ver.txt";
-        $localVersion = (int)str_replace('.', '', file_get_contents($srcUrl));
-        $serverFileUrl = $server . "/ver.txt";
-        $res = $client->request('GET', $serverFileUrl); //读取版本号
-        $serverVersion = (int)str_replace('.', '', $res->getBody());
-        echo '<p></p>';
+            if ($serverVersion > $localVersion) {
+                for ($i = $localVersion + 1; $i <= $serverVersion; $i++) {
+                    $res = $client->request('GET', "https://cdn.jsdelivr.net/gh/hiliqi/raccoon_up/novel/" . $i . ".json");
+                    if ((int)($res->getStatusCode()) == 200) {
+                        $json = json_decode($res->getBody(), true);
 
-        if ($serverVersion > $localVersion) {
-            file_put_contents($srcUrl, (string)$res->getBody(), true); //将版本号写入到本地文件
-            echo '<p style="padding-left:15px;font-weight: 400;color:#999;">覆盖版本号</p>';
-            for ($i = $localVersion + 1; $i <= $serverVersion; $i++) {
-                flush();
-                $res = $client->request('GET', $json_server . $i . ".json");
-                if ((int)($res->getStatusCode()) == 200) {
-                    $json = json_decode($res->getBody(), true);
-
-                    foreach ($json['update'] as $value) {
-                        $data = $client->request('GET', $server . '/' . $value)->getBody(); //根据配置读取升级文件的内容
-                        $saveFileName = App::getRootPath() . $value;
-                        $dir = dirname($saveFileName);
-                        if (!file_exists($dir)) {
-                            mkdir($dir, 0777, true);
+                        foreach ($json['update'] as $value) {
+                            $data = $client->request('GET', $server . '/' . $value)->getBody(); //根据配置读取升级文件的内容
+                            $saveFileName = App::getRootPath() . $value;
+                            $dir = dirname($saveFileName);
+                            if (!file_exists($dir)) {
+                                mkdir($dir, 0777, true);
+                            }
+                            file_put_contents($saveFileName, $data, true); //将内容写入到本地文件
+                            echo '<p style="padding-left:15px;font-weight: 400;color:#999;">升级文件' . $value . '</p>';
                         }
-                        file_put_contents($saveFileName, $data, true); //将内容写入到本地文件
-                        echo '<p style="padding-left:15px;font-weight: 400;color:#999;">升级文件' . $value . '</p>';
-                    }
 
-                    foreach ($json['delete'] as $value) {
-                        $flag = unlink(App::getRootPath() . $value);
-                        if ($flag) {
-                            echo '<p style="padding-left:15px;font-weight: 400;color:#999;">删除文件' . $value . '</p>';
-                        } else {
-                            echo '<p style="padding-left:15px;font-weight: 400;color:#999;">删除文件失败</p>';
+                        foreach ($json['delete'] as $value) {
+                            $flag = unlink(App::getRootPath() . $value);
+                            if ($flag) {
+                                echo '<p style="padding-left:15px;font-weight: 400;color:#999;">删除文件' . $value . '</p>';
+                            } else {
+                                echo '<p style="padding-left:15px;font-weight: 400;color:#999;">删除文件失败</p>';
+                            }
                         }
-                    }
 
-                    foreach ($json['sql'] as $value) {
-                        //Db::execute('ALTER TABLE aaa ADD `name` INT(0) NOT NULL DEFAULT 0');
-                        $value = str_replace('[prefix]', $this->prefix, $value);
-                        Db::execute($value);
-                        echo '<p style="padding-left:15px;font-weight: 400;">成功执行以下SQL语句：' . $value . '</p>';
+                        foreach ($json['sql'] as $value) {
+                            //Db::execute('ALTER TABLE aaa ADD `name` INT(0) NOT NULL DEFAULT 0');
+                            $value = str_replace('[prefix]', $this->prefix, $value);
+                            Db::execute($value);
+                            echo '<p style="padding-left:15px;font-weight: 400;">成功执行以下SQL语句：' . $value . '</p>';
+                        }
                     }
                 }
-                ob_flush();
+                echo '<p style="padding-left:15px;font-weight: 400;color:#999;">升级完成</p>';
+                file_put_contents($srcUrl, (string)$res->getBody(), true); //将版本号写入到本地文件
+                echo '<p style="padding-left:15px;font-weight: 400;color:#999;">覆盖版本号</p>';
+            } else {
+                echo '<p style="padding-left:15px;font-weight: 400;color:#999;">已经是最新版本！当前版本是' . $localVersion . '</p>';
             }
-            echo '<p style="padding-left:15px;font-weight: 400;color:#999;">升级完成</p>';
-        } else {
-            echo '<p style="padding-left:15px;font-weight: 400;color:#999;">已经是最新版本！当前版本是' . $localVersion . '</p>';
+        } catch (Exception $e) {
+            echo '<p style="padding-left:15px;font-weight: 400;color:#999;">' . $e->getMessage() . '</p>';
         }
     }
 }

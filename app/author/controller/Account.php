@@ -35,11 +35,13 @@ class Account extends BaseController
                 $map[] = ['groupid', '=', 6];
                 $password = trim($data['password']);
                 try {
-                    $author = SystemUsers::where($map)->find();
+                    $author = SystemUsers::where($map)->findOrFail();
                     return json(['err' => 1, 'msg' => '用户名已存在']);
                 } catch (ModelNotFoundException $exception) {
                     $author = new SystemUsers();
-                    $author->uname = trim($data['username']);
+                    $author->uname = trim($data['uname']);
+                    $author->email = trim($data['email']);
+                    $author->name = trim($data['name']);
                     //生成5位数的dwzkey
                     $key_str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                     $salt = substr(str_shuffle($key_str), mt_rand(0, strlen($key_str) - 11), 5);
@@ -77,7 +79,7 @@ class Account extends BaseController
                 return ['code' => 0, 'err' => 1, 'msg' => '验证码错误'];
             }
             $map = array();
-            $map[] = ['uname', '=', trim(input('username'))];
+            $map[] = ['uname', '=', trim(input('uname'))];
             $map[] = ['groupid', '=', 6];
             $password = trim(input('password'));
             try {

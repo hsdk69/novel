@@ -64,15 +64,6 @@ function verifycode($code,$phone){
     return 1;
 }
 
-function random_color(){
-    mt_srand((double)microtime()*1000000);
-    $c = '';
-    while(strlen($c)<6){
-        $c .= sprintf("%02X", mt_rand(0, 255));
-    }
-    return $c;
-}
-
 function gen_uid($num)
 {
     $key_str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";

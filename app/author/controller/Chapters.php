@@ -21,16 +21,16 @@ class Chapters extends Base
     }
 
     public function list() {
-        $book_id = input('articleid');
-        View::assign('articleid', $book_id);
+        $articleid = input('articleid');
+        View::assign('articleid', $articleid);
         return view();
     }
 
     public function getlist() {
-        $book_id = input('articleid');
+        $articleid = input('articleid');
         $page = intval(input('page'));
         $limit = intval(input('limit'));
-        $data = ArticleChapter::where('articleid','=',$book_id)->order('chapterorder', 'desc');
+        $data = ArticleChapter::where('articleid','=',$articleid)->order('chapterorder', 'desc');
         $count = $data->count();
         $chapters = $data->limit(($page - 1) * $limit, $limit)->select();
         return json([
@@ -42,23 +42,37 @@ class Chapters extends Base
     }
 
     public function create() {
+        $data = request()->param();
         if (request()->isPost()) {
-            $data = request()->param();
+            $content = $data['cover'];
             $chapter = new ArticleChapter();
+            $chapter->chaptername = $data['chapter_name'];
+            $chapter->chapterorder = $data['chapter_order'];
+            $chapter->preface = substr($content,0,20);
+            $chapter->notice = substr($content,0,20);
+            $chapter->foreword = substr($content,0,20);
+            $chapter->display = 1;
+            $chapter->postdate = time();
+            $chapter->lastupdate = time();
+
             $result= $chapter->save($data);
+
             if ($result){
                 $param = [
-                    "id" => $data["articleid"],
+                    "articleid" => $data["articleid"],
                     "lastupdate" => time()
                 ];
                 $result2 = ArticleArticle::update($param);
                 if ($result2) {
-                    $file = App::getRootPath() . $data['cover'];
                     $bigId = floor((double)($chapter['articleid'] / 1000));
-                    $filename = sprintf('/files/article/txt/%s/%s/%s.txt',
-                        $bigId, $chapter['articleid'], $chapter['chapterid']);
-                    copy($file, $filename);
-                    unlink($file);
+                    $dir = App::getRootPath().'/public/files/' . sprintf('/article/txt/%s/%s/',$bigId, $chapter['articleid']);
+                    if (!is_dir($dir))
+                    {
+                        mkdir($dir, 0777, true);
+                    }
+                    $filename = App::getRootPath().'/public/files/' . sprintf('/article/txt/%s/%s/%ss.txt',
+                            $bigId, $chapter['articleid'], $chapter['articleid']);
+                    file_put_contents($filename, $content);
                     return json(['err' =>0,'msg'=>'添加成功']);
                 } else {
                     return json(['err' =>1,'msg'=>'添加失败']);
@@ -67,15 +81,15 @@ class Chapters extends Base
                 return json(['err' =>1,'msg'=>'添加失败']);
             }
         }
-        $book_id = input('articleid');
+        $articleid = $data['articleid'];
         $lastChapterOrder = 0;
-        $lastChapter = ArticleChapter::where('articleid','=',$book_id)
+        $lastChapter = ArticleChapter::where('articleid','=',$articleid)
             ->order('chapterid','desc')->limit(1)->find();
         if ($lastChapter){
             $lastChapterOrder = $lastChapter->chapter_order;
         }
         View::assign([
-            'book_id' => $book_id,
+            'articleid' => $articleid,
             'order' => $lastChapterOrder + 1,
         ]);
         return view();
@@ -110,13 +124,13 @@ class Chapters extends Base
             ]);
         } else {
             $cover = request()->file('file');
-            $dir = 'files/tmp';
+            $dir = 'article/tmp';
             $savename =str_replace ( '\\', '/',
                 \think\facade\Filesystem::disk('public')->putFile($dir, $cover));
             return json([
                 'code' => 0,
                 'msg' => '',
-                'txt' => '/static/upload/'.$savename
+                'txt' => $savename
             ]);
         }
     }
@@ -136,11 +150,11 @@ class Chapters extends Base
     }
 
     public function content(){
-        $book_id = input('book_id');
+        $articleid = input('articleid');
         $chapter_id = input('chapter_id');
-        $bigId = floor((double)($book_id / 1000));
+        $bigId = floor((double)($articleid / 1000));
         $file = sprintf('/files/article/txt/%s/%s/%s.txt',
-            $bigId, $book_id, $chapter_id);
+            $bigId, $articleid, $chapter_id);
         $content = $this->getTxtcontent($this->server . $file);
     }
 

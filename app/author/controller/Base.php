@@ -26,7 +26,7 @@ class Base extends BaseController
         $this->server = config('site.server');
         $this->imgServer = config('site.imgServer');
         if (is_null($this->uid)) {
-            $this->redirect(url('account/login'));
+            $this->redirect(adminurl('account/login'));
         }
         View::assign([
             'site_name' => config('site.site_name')

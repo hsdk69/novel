@@ -49,6 +49,7 @@ class Authors extends Base
                 } else {
                     $author->pass = md5(trim($data['password']) . 'abc');
                 }
+                $author->state = $data['state'];
                 $result = $author->save();
                 if ($result) {
                     return json(['err' => 0, 'msg' => '修改成功']);

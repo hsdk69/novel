@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS `{{$pk}}system_groups` (
     `description` text,
     `grouptype` tinyint(1) NOT NULL DEFAULT '0',
     PRIMARY KEY (`groupid`) USING BTREE,
-    unique key `name` (`name`) USING BTREE
+    UNIQUE KEY `name` (`name`) USING BTREE
     ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `{{$pk}}system_users` (
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `{{$pk}}system_users` (
     `overtime` int(11) NOT NULL DEFAULT '0',
     `state` tinyint(1) unsigned NOT NULL DEFAULT '0',
     PRIMARY KEY (`uid`) USING BTREE,
-    unique key `uname` (`uname`) USING BTREE,
+    UNIQUE KEY `uname` (`uname`) USING BTREE,
     key `pass` (`pass`) USING BTREE,
     key `email` (`email`) USING BTREE,
     key `groupid` (`groupid`) USING BTREE

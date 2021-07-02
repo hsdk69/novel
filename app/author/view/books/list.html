@@ -125,16 +125,38 @@
             if (obj.event === 'edit') { // 修改
                 index.openTab({
                     title: '作品编辑',
-                    url: "/books/edit?id=" + data.articleid,
+                    url: "{:adminurl('books/edit')}?articleid=" + data.articleid,
                     end: function() {
                         insTb.reload()
                     }
                 });
             } else if (obj.event === 'del') { // 删除
-                del(obj, data.id)
+                layer.confirm('确认要删除吗？', function (index) {
+                    $.ajax({
+                        type: 'POST',
+                        url: "{:adminurl('delete')}",
+                        data: {articleid: data.articleid},
+                        dataType: 'json',
+                        success: function (data) {
+                            var result = data;
+                            if (result.err == 0) { //删除成功
+                                layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+                                    location.reload();
+                                });
+                            } else {
+                                layer.msg(result.msg, {icon: 2, time: 1000}, function () {
+                                    location.reload();
+                                });
+                            }
+                        },
+                        error: function (data) {
+                            layer.msg(data);
+                        },
+                    });
+                });
             } else if (obj.event === 'ban') {
                 $.ajax({
-                    url:"ban?id=" + data.id,
+                    url:"ban?articleid=" + data.articleid,
                     type:'post',
                     success(res) {
                         subResHandle(res)
@@ -143,7 +165,7 @@
             } else if (obj.event === 'chapter') {
                 index.openTab({
                     title: '章节管理',
-                    url: "/chapters/list?book_id=" + data.articleid,
+                    url: "{:adminurl('chapters/list')}?articleid=" + data.articleid,
                     end: function() {
                         insTb.reload()
                     }
@@ -155,7 +177,7 @@
         $('#create').click(function () {
             index.openTab({
                 title: '添加作品',
-                url:'/books/create',
+                url:'{:adminurl("books/create")}',
                 end: function() {
                     insTb.reload()
                 }

@@ -33,6 +33,25 @@
 <div class="layui-fluid">
     <div class="layui-card">
         <div class="layui-card-body">
+            <!-- 表格工具栏 -->
+            <form class="layui-form toolbar table-tool-mini">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label w-auto">搜索:</label>
+                        <div class="layui-input-inline">
+                            <input id="keyword" class="layui-input" type="text" placeholder="输入关键字"/>
+                        </div>
+                    </div>
+                    <div class="layui-inline" style="padding-right: 110px;">
+                        <button class="layui-btn icon-btn" lay-filter="tbBasicTbSearch" lay-submit>
+                            <i class="layui-icon">&#xe615;</i>搜索
+                        </button>
+                        <button class="layui-btn icon-btn" type="button" id="create">
+                            <i class="layui-icon"></i>新增
+                        </button>
+                    </div>
+                </div>
+            </form>
             <!-- 数据表格 -->
             <table id="tbBasicTable" lay-filter="tbBasicTable"></table>
         </div>
@@ -56,10 +75,7 @@
 <script>
     layui.use(['layer', 'form', 'table', 'util', 'dropdown', 'admin', 'index'], function () {
         var $ = layui.jquery;
-        var layer = layui.layer;
-        var form = layui.form;
         var table = layui.table;
-        var util = layui.util;
         var admin = layui.admin;
         var index = layui.index;
         var dropdown = layui.dropdown;
@@ -67,7 +83,7 @@
         /* 渲染表格 */
         var insTb = table.render({
             elem: '#tbBasicTable',
-            url: '/chapters/getlist?book_id=' + {$book_id},
+            url: '{:adminurl("chapters/getlist")}?articleid=' + {$articleid},
             page: true,
             toolbar: ['<p>',
                 '<button lay-event="add" class="layui-btn layui-btn-sm icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>&nbsp;',
@@ -75,10 +91,11 @@
             cellMinWidth: 100,
             cols: [[
                 {type: 'checkbox'},
+                {field: 'chapterid', title: '章节ID', align: 'center', sort: true},
                 {field: 'chapterorder', title: '章节序', align: 'center', sort: true},
                 {field: 'chaptername', title: '章节名', align: 'center', sort: true},
-                {field: 'create_time', title: '创建时间', align: 'center', sort: true},
-                {field: 'update_time', title: '创建时间', align: 'center', sort: true},
+                {field: 'postdate', title: '创建时间', align: 'center', sort: true},
+                {field: 'lastupdate', title: '更新时间', align: 'center', sort: true},
                 {title: '操作', toolbar: '#tbBasicTbBar', align: 'center', minWidth: 200}
             ]]
         });
@@ -89,7 +106,7 @@
             if (obj.event === 'edit') { // 修改
                 admin.open({
                     title: '章节编辑',
-                    url: "/chapters/edit?id=" + data.chapterid,
+                    url: "{:adminurl('chapters/edit')}?id=" + data.chapterid,
                     end: function () {
                         insTb.reload()
                     }
@@ -99,7 +116,7 @@
             } else if (obj.event === 'txt') {
                 index.openTab({
                     title: '内容管理',
-                    url: "/chapters/content?chapter_id=" + data.chapterid + '&book_id=' + {$articleid},
+                    url: "{:adminurl('chapters/content')}?chapter_id=" + data.chapterid + '&articleid=' + {$articleid},
                     end: function () {
                         insTb.reload()
                     }
@@ -108,18 +125,15 @@
             dropdown.hideAll();
         });
 
-        /* 表格头工具栏点击事件 */
-        table.on('toolbar(tbBasicTable)', function (obj) {
-            if (obj.event === 'add') { // 添加
-                admin.open({
-                    title: '添加章节',
-                    url:'/chapters/create?book_id=' + {$articleid},
-                    end: function() {
-                        insTb.reload()
-                    }
-                })
-            }
-        });
+        $('#create').click(function () {
+            index.openTab({
+                title: '添加章节',
+                url:'{:adminurl("chapters/create")}?articleid=' + {$articleid},
+                end: function() {
+                    insTb.reload()
+                }
+            })
+        })
     });
 </script>
 {/block}

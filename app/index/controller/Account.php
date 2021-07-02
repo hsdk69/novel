@@ -20,7 +20,7 @@ class Account extends Base
 //                return ['err' => 1, 'msg' => '验证码错误'];
 //            }
             $map = array();
-            $map[] = ['uname', '=', trim(input('username'))];
+            $map[] = ['uname', '=', trim(input('uname'))];
             $map[] = ['groupid', '=', 3];
             $password = trim(input('password'));
             try {
@@ -61,13 +61,13 @@ class Account extends Base
             $data = request()->param();
             $validate = new \app\validate\User();
             if ($validate->check($data)) {
-                $uname =trim($data['username']);
+                $uname =trim($data['uname']);
                 try {
                     SystemUsers::where('uname', '=', $uname)->findOrFail();
                     return json(['err' => 1, 'msg' => '用户名已经存在']);
                 } catch (ModelNotFoundException $e) {
                     $user = new SystemUsers();
-                    $user->uname = trim($data['username']);
+                    $user->uname = trim($data['uname']);
                     //生成5位数的dwzkey
                     $key_str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                     $salt = substr(str_shuffle($key_str), mt_rand(0, strlen($key_str) - 11), 5);

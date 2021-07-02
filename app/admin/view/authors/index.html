@@ -85,7 +85,7 @@
             var data = obj.data; // 获得当前行数据
             if (obj.event === 'edit') { // 修改
                 parent.layui.index.openTab({
-                    title: '编辑题材',
+                    title: '编辑作者',
                     url: "{:adminurl('authors/edit')}?uid=" + data.uid,
                     end: function () {
                         insTb.reload();
@@ -131,6 +131,11 @@
                 {field: 'name', title: '昵称名', align: 'center', sort: true},
                 {field: 'pass', title: '密码', align: 'center', sort: true},
                 {field: 'salt', title: '密码盐', align: 'center', sort: true},
+                {
+                    field: 'state', title: '状态', templet: function (d) {
+                        return d.state === 1 ? '正常' : '锁定';
+                    }, align: 'center', sort: true
+                },
                 {
                     field: 'lastlogin', title: '最近登录', templet: function (d) {
                         return util.timeAgo(d.lastlogin * 1000);

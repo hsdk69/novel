@@ -43,7 +43,7 @@ class Index extends Base
                         'password|登录密码' => 'require|min:5',
                     ]);
                     break;
-                default:
+                case '3':
                     $dbpk = trim($data['pk']);
                     $dsn = "mysql:host=$dbhost:$dbport;dbname=$dbname";
                     $db = new \PDO($dsn, $dbuser, $dbpass);
@@ -54,17 +54,12 @@ class Index extends Base
                     }
                     $username = trim($data['username']);
                     $password = trim($data['password']);
-                    $jieqi_ver = config('site.jieqi_ver');
                     $key_str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                     $salt = substr(str_shuffle($key_str), mt_rand(0, strlen($key_str) - 11), 5);
-                    if ($jieqi_ver >= 2.4) {
-                        $pass = md5(md5($password) . $salt);
-                    } else {
-                        $pass = md5(trim($password) . $salt);
-                    }
-                    $sql = "INSERT INTO {$dbpk}system_groups(`name`,description,grouptype) VALUES('管理员','系统管理员',0);";
+                    $pass = md5(md5(trim($password)) . $salt);
+                    $sql = "INSERT INTO {$dbpk}system_groups (`name`,description,grouptype) VALUES('管理员','系统管理员',0);";
                     $db->query($sql);
-                    $sql = "INSERT INTO {$dbpk}system_users(uname,`name`,pass,salt,groupid) VALUES('$username','管理员','$pass','$salt',2);";
+                    $sql = "INSERT INTO {$dbpk}system_users (uname,`name`,pass,salt,groupid) VALUES('$username','管理员','$pass','$salt',2);";
                     $db->query($sql);
                     $content = str_replace(['{{$dbhost}}', '{{$dbname}}', '{{$dbuser}}', '{{$dbpass}}', '{{$dbport}}', '{{$dbpk}}'],
                         [$dbhost, $dbname, $dbuser, $dbpass, $dbport, $dbpk],
@@ -73,6 +68,8 @@ class Index extends Base
                     @file_put_contents(root_path() . ".env", $content);
                     @touch(public_path() . 'install.lock');
                     $data = "安装成功";
+                    break;
+                default:
                     break;
             }
             if ($res) {

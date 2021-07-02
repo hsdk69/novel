@@ -1,9 +1,24 @@
+{extend name="pub/base" /}
+{block name="head"}
+<title>章节添加</title>
+<style>
+    #formBasForm {
+        max-width: 700px;
+        margin: 30px auto;
+    }
+
+    #formBasForm .layui-form-item {
+        margin-bottom: 25px;
+    }
+</style>
+{/block}
+{block name="main"}
 <div class="layui-fluid" id="closeTag">
     <div class="layui-card">
         <div class="layui-card-body">
             <!-- 表单开始 -->
             <form class="layui-form" id="formBasForm" lay-filter="formBasForm">
-                <input type="hidden" value="{$book_id}" name="book_id">
+                <input type="hidden" value="{$articleid}" name="articleid">
                 <div class="layui-form-item">
                     <label class="layui-form-label layui-form-required">章节名称:</label>
                     <div class="layui-input-block">
@@ -21,12 +36,13 @@
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label layui-form-required">封面:</label>
+                    <label class="layui-form-label layui-form-required">章节内容:</label>
                     <div class="layui-input-block">
-                        <button id="file-btn-upload" class="layui-btn layui-btn-sm layui-btn-normal icon-btn" type="button">
+                        <button id="file-btn-upload" class="layui-btn layui-btn-sm layui-btn-normal icon-btn"
+                                type="button">
                             <i class="layui-icon">&#xe681;</i>上传文件
                         </button>
-                        <img class="layui-upload-img" id="pic" style="width: 200px;height: auto;margin: 0 10px 10px 0;">
+                        <label id="show"></label>
                         <input type="hidden" name="cover" id="cover" value="">
                     </div>
                 </div>
@@ -40,7 +56,8 @@
         </div>
     </div>
 </div>
-
+{/block}
+{block name="js"}
 <script>
     layui.use(['layer', 'form', 'laydate', 'upload'], function () {
         var $ = layui.jquery;
@@ -61,23 +78,25 @@
             elem: '#file-btn-upload',
             accept: 'file',
             exts: 'txt',
+            auto: false, //选择文件后不自动上传
             url: '{:adminurl("upload")}',
-            before: function (obj) {
+            choose: function (obj) {
+                //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
                 obj.preview(function (index, file, result) {
-                    $('#pic').attr('src', result); //图片链接（base64）
+                    //去掉base64位头部
+                    var txt = result.replace(/^data:text\/\w+;base64,/, "");
+                    var urlStr = window.atob(txt).split("\r");
+                    console.log(file);
+                    if (urlStr !== undefined && urlStr.length > 0) {
+                        var content = ''
+                        for (index in urlStr) {
+                            content += urlStr[index]
+                        }
+                        $('#show').html(file.name)
+                        $('#cover').val(content)
+                    }
                 });
-            },
-            done: function (res, index, upload) {
-                //如果上传失败
-                if(res.code > 0){
-                    return layer.msg('上传失败');
-                }
-                //上传成功
-                $('#cover').val(res.txt);
-            },
-            error: function (index, upload) {
-                //请求异常回调
-                layer.msg('很抱歉，上传出现异常');
+                return false;
             }
         });
 
@@ -101,3 +120,4 @@
 
     });
 </script>
+{/block}
