@@ -146,7 +146,7 @@ INFO;
             $client = new Client();
             $srcUrl = App::getRootPath() . "/ver.txt";
             $localVersion = (int)str_replace('.', '', file_get_contents($srcUrl));
-            $server = "https://cdn.jsdelivr.net/gh/hiliqi/xiaohuanxiong/";
+            $server = "https://cdn.jsdelivr.net/gh/hiliqi/novel/";
             $serverFileUrl = $server . "/ver.txt";
             $res = $client->request('GET', $serverFileUrl); //读取版本号
             $serverVersion = (int)str_replace('.', '', $res->getBody());
