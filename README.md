@@ -17,7 +17,7 @@
 - 另外开源一套漫画cms：https://github.com/hiliqi/xiaohuanxiong
 
 # 开源协议
-本程序采用MIT协议开源
+本程序采用Apache协议开源
 
 # 免责声明
 小浣熊小说cms是一款不以盈利为目的的开源小说cms系统。程序的著作权均归作者所有，用户具有自由的使用权。
