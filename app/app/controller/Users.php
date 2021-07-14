@@ -4,7 +4,6 @@
 namespace app\app\controller;
 
 
-use app\common\RedisHelper;
 use app\model\ArticleArticle;
 use app\model\Comments;
 use app\model\SystemUsers;
@@ -48,11 +47,11 @@ class Users extends BaseAuth
 
     public function switchfavor()
     {
-        $redis = RedisHelper::GetInstance();
-        if ($redis->exists('favor_lock:' . $this->uid)) { //如果存在锁
+        $flag = cache('favor_lock:' . $this->uid);
+        if ($flag) { //如果存在锁
             return json(['success' => 0, 'msg' => '操作太频繁']);
         } else {
-            $redis->set('favor_lock:' . $this->uid, 1, 3); //写入锁
+            cache('favor_lock:' . $this->uid, 1, 3); //写入锁
 
             $articleid= input('articleid');
             $where[] = ['articleid', '=', $articleid];

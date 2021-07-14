@@ -5,12 +5,13 @@ namespace app\api\controller;
 
 
 use app\BaseController;
-use app\common\RedisHelper;
 use app\model\ArticleArticle;
 use think\db\exception\ModelNotFoundException;
 use think\facade\Cache;
 use think\facade\App;
 use app\model\SystemUsers;
+use think\facade\Db;
+use think\facade\Env;
 
 class Common extends Base
 {
@@ -22,32 +23,25 @@ class Common extends Base
         return '清理成功';
     }
 
-    public function sycnclicks()
+    //清空月人气
+    public function clearmhits()
     {
-        $day = input('date');
-        if (empty($day)) {
-            $day = date("Y-m-d", strtotime("-1 day"));
-        }
-        $redis = RedisHelper::GetInstance();
-        $hots = $redis->zRevRange('click:' . $day, 0, 10, true);
-        $now = date('Y-m-d');
-        foreach ($hots as $k => $v) {
-            try {
-                $book = ArticleArticle::findOrFail((int)$k);
-                $book->allvisit = $book->allvisit + (int)$v;
-                $book->dayvisit = (int)($book->allvisit / 30);
-                $book->weekvisit = (int)($book->allvisit / 7);
-                $book->monthvisit = (int)($book->allvisit / 2);
+        $prefix = Env::get('database.prefix');
+        Db::query("update ".$prefix."article_article set monthvisit=0");
+    }
 
-                $result = $book->save();
-                if ($result) {
-                    $redis->zRem('click:' . $day, $k); //同步到数据库之后，删除redis中的这个日期的这本漫画的点击数
-                }
-            } catch (ModelNotFoundException $e) {
+    //清空周人气
+    public function clearwhits()
+    {
+        $prefix = Env::get('database.prefix');
+        Db::query("update ".$prefix."article_article set weekvisit=0");
+    }
 
-            }
-        }
-        return json(['success' => 1, 'msg' => '同步完成']);
+    //清空日人气
+    public function cleardhits()
+    {
+        $prefix = Env::get('database.prefix');
+        Db::query("update ".$prefix."article_article set dayvisit=0");
     }
 
     public function resetpwd()

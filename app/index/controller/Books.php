@@ -4,7 +4,6 @@
 namespace app\index\controller;
 
 
-use app\common\RedisHelper;
 use app\model\ArticleArticle;
 use app\model\ArticleChapter;
 use app\model\Comments;
@@ -39,12 +38,15 @@ class Books extends Base
             }
             cache('book:' . $id, $book, null, 'redis');
         }
-
-        $redis = RedisHelper::GetInstance();
-        $day = date("Y-m-d", time());
-        //以当前日期为键，增加点击数
-        $redis->zIncrBy('click:' . $day, 1, $book->id);
-
+        $ip = request()->ip();
+        if (empty(cookie('click:' . $ip))) {
+            $book->hits = $book->allvisit + 1;
+            $book->mhits = $book->monthvisit + 1;
+            $book->whits = $book->weekvisit + 1;
+            $book->dhits = $book->dayvisit + 1;
+            $book->save();
+            cookie('click:' . $ip, $ip);
+        }
 
         $start = cache('bookStart:' . $id);
         if ($start == false) {
@@ -75,8 +77,8 @@ class Books extends Base
     public function commentadd()
     {
         $articleid = input('articleid');
-        $redis = RedisHelper::GetInstance();
-        if ($redis->exists('comment_lock:' . $this->uid)) {
+        $flag = cookie('comment_lock:' . $this->uid);
+        if (!empty($flag)) {
             return json(['msg' => '每10秒只能评论一次', 'err' => 1]);
         } else {
             $comment = new Comments();
@@ -85,7 +87,7 @@ class Books extends Base
             $comment->content = strip_tags(input('comment'));
             $result = $comment->save();
             if ($result) {
-                $redis->set('comment_lock:' . $this->uid, 1, 10); //加10秒锁
+                cookie('comment_lock:' . $this->uid, 1, 10); //加10秒锁
                 cache('comments:' . $articleid, null);
                 return json(['msg' => '评论成功', 'err' => 0]);
             } else {

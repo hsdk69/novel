@@ -4,7 +4,6 @@
 namespace app\app\controller;
 
 
-use app\common\RedisHelper;
 use app\model\ArticleArticle;
 use app\model\Comments;
 use think\db\exception\DataNotFoundException;
@@ -151,13 +150,6 @@ class Books extends Base
     {
         $keyword = input('keyword');
         $num = input('num');
-        $redis = RedisHelper::GetInstance();
-        $redis->zIncrBy($this->redis_prefix . 'hot_search:', 1, $keyword);
-        $hot_search_json = $redis->zRevRange($this->redis_prefix . 'hot_search', 1, 4, true);
-        $hot_search = array();
-        foreach ($hot_search_json as $k => $v) {
-            $hot_search[] = $k;
-        }
         $books = cache('appsearchresult:' . $keyword);
         if (!$books) {
             $books = ArticleArticle::where('articlename', 'like', '%' . $keyword . '%')
@@ -173,7 +165,6 @@ class Books extends Base
             'success' => 1,
             'books' => $books,
             'count' => count($books),
-            'hot_search' => $hot_search
         ];
         return json($result);
     }
@@ -196,10 +187,15 @@ class Books extends Base
             cache('book:' . $id, $book, null, 'redis');
         }
 
-        $redis = RedisHelper::GetInstance();
-        $day = date("Y-m-d", time());
-        //以当前日期为键，增加点击数
-        $redis->zIncrBy('click:' . $day, 1, $book->articleid);
+        $ip = request()->ip();
+        if (empty(cookie('click:' . $ip))) {
+            $book->hits = $book->allvisit + 1;
+            $book->mhits = $book->monthvisit + 1;
+            $book->whits = $book->weekvisit + 1;
+            $book->dhits = $book->dayvisit + 1;
+            $book->save();
+            cookie('click:' . $ip, $ip);
+        }
 
         $start = cache('bookStart:' . $id);
         if ($start == false) {

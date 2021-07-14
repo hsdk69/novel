@@ -3,7 +3,6 @@
 
 namespace app\index\controller;
 
-use app\common\RedisHelper;
 use app\model\SystemUsers;
 use app\model\UserFavor;
 use think\db\exception\DataNotFoundException;
@@ -50,11 +49,10 @@ class Users extends BaseUc
     public function addfavor()
     {
         if (request()->isPost()) {
-            $redis = RedisHelper::GetInstance();
-            if ($redis->exists('favor_lock:' . $this->uid)) { //如果存在锁
+            if (!empty(cookie('favor_lock:' . $this->uid))) { //如果存在锁
                 return json(['err' => 1, 'msg' => '操作太频繁']);
             } else {
-                $redis->set('favor_lock:' . $this->uid, 1, 3); //写入锁
+               cookie('favor_lock:' . $this->uid, 1, 3); //写入锁
                 $articleid = input('articleid');
 
                 $where[] = ['articleid', '=', $articleid];
