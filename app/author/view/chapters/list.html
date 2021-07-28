@@ -66,7 +66,6 @@
 <!-- 表格操作列 -->
 <script type="text/html" id="tbBasicTbBar">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="picture">图片管理</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 
@@ -106,7 +105,7 @@
             if (obj.event === 'edit') { // 修改
                 admin.open({
                     title: '章节编辑',
-                    url: "{:adminurl('chapters/edit')}?id=" + data.chapterid,
+                    url: "{:adminurl('chapters/edit')}?articleid=" + data.chapterid,
                     end: function () {
                         insTb.reload()
                     }
