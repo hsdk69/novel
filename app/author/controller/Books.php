@@ -161,7 +161,7 @@ class Books extends Base
         switch ($name_format) {
             case 'pure':
                 $arr = $pinyin->convert($str);
-                $str = implode($arr,'');
+                $str = implode('', $arr);
                 break;
             case 'abbr':
                 $str = $pinyin->abbr($str);break;

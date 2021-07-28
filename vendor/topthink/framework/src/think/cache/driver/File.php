@@ -105,8 +105,7 @@ class File extends Driver
 
             if ($this->options['data_compress'] && function_exists('gzcompress')) {
                 //启用数据压缩
-                $content = preg_replace_callback('#s:(\d+):"(.*?)";#s',function($match){return 's:'.strlen($match[2]).':"'.$match[2].'";';},$content);
-                $content = unserialize($content);
+                $content = gzuncompress($content);
             }
 
             return is_string($content) ? ['content' => $content, 'expire' => $expire] : null;
