@@ -59,15 +59,15 @@ class Users extends Base
     {
         $data = request()->param();
         try {
-            $admin = SystemUsers::where('uid', '=', $data['uid'])->findOrFail();
+            $user = SystemUsers::where('uid', '=', $data['uid'])->findOrFail();
             if (request()->isPost()) {
-                $admin->uname = $data['uname'];
+                $user->uname = $data['uname'];
                 if (empty($data['password']) || is_null($data['password'])) {
 
                 } else {
-                    $admin->pass = md5(trim($data['password']) . 'abc');
+                    $user->pass = md5(trim($data['password']) . 'abc');
                 }
-                $result = $admin->save();
+                $result = $user->save();
                 if ($result) {
                     return json(['err' => 0, 'msg' => '修改成功']);
                 } else {
@@ -75,7 +75,7 @@ class Users extends Base
                 }
             }
             View::assign([
-                'admin' => $admin,
+                'user' => $user,
             ]);
         } catch (ModelNotFoundException $e) {
             return json(['err' => 1, 'msg' => $e->getMessage()]);
