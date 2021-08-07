@@ -57,10 +57,10 @@ class Index extends Base
                     $key_str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                     $salt = substr(str_shuffle($key_str), mt_rand(0, strlen($key_str) - 11), 5);
                     $pass = md5(md5(trim($password)) . $salt);
-                    $sql = "INSERT INTO {$dbpk}system_groups (`name`,description,grouptype) VALUES('管理员','系统管理员',0);";
+                    $sql = "INSERT INTO {$dbpk}system_groups (`name`,description,grouptype) VALUES('游客','游客',0);INSERT INTO {$dbpk}system_groups (`name`,description,grouptype) VALUES('管理员','系统管理员',0);INSERT INTO {$dbpk}system_users (uname,`name`,pass,salt,groupid) VALUES('$username','管理员','$pass','$salt',2);";
                     $db->query($sql);
-                    $sql = "INSERT INTO {$dbpk}system_users (uname,`name`,pass,salt,groupid) VALUES('$username','管理员','$pass','$salt',2);";
-                    $db->query($sql);
+                    // $sql = "";
+                    // $db->query($sql);
                     $content = str_replace(['{{$dbhost}}', '{{$dbname}}', '{{$dbuser}}', '{{$dbpass}}', '{{$dbport}}', '{{$dbpk}}'],
                         [$dbhost, $dbname, $dbuser, $dbpass, $dbport, $dbpk],
                         file_get_contents(app_path() . 'data' . DS . 'database.tpl'));

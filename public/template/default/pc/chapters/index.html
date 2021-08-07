@@ -144,7 +144,7 @@
                             <div class="catalog-list-wrap">
                                 <div class="volume-list">
                                     <ul>
-                                        {raccoon:chapters name="chapters" where="articleid='$chapter->articleid'" order="chapter_order asc"}
+                                        {raccoon:chapters name="chapters" where="articleid='$chapter->articleid'" order="chapterorder asc"}
                                         <li>
                                             <a href="/{$chapter_ctrl}/{$vo.chapterid}">{$vo.chaptername}</a>
                                         </li>

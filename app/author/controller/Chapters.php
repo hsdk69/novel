@@ -86,7 +86,7 @@ class Chapters extends Base
         $lastChapter = ArticleChapter::where('articleid','=',$articleid)
             ->order('chapterid','desc')->limit(1)->find();
         if ($lastChapter){
-            $lastChapterOrder = $lastChapter->chapter_order;
+            $lastChapterOrder = $lastChapter->chapterorder;
         }
         View::assign([
             'articleid' => $articleid,

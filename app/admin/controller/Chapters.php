@@ -42,8 +42,8 @@ class Chapters extends Base
         try {
             $chapter = ArticleChapter::findOrFail(input('id'));
             if (request()->isPost()) {
-                $chapter->chapter_name = input('chaptername');
-                $chapter->chapter_order = input('chapterorder');
+                $chapter->chaptername = input('chaptername');
+                $chapter->chapterorder = input('chapterorder');
                 $result = $chapter->save();
                 if ($result) {
                     $param = [
