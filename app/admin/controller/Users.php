@@ -65,7 +65,7 @@ class Users extends Base
                 if (empty($data['password']) || is_null($data['password'])) {
 
                 } else {
-                    $user->pass = md5(trim($data['password']) . 'abc');
+                    $user->pass = md5(md5($password).$admin['salt']);
                 }
                 $result = $user->save();
                 if ($result) {
