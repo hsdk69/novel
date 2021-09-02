@@ -13,7 +13,7 @@
                     <span class="titmenu">搜索结果</span>
                 </div>
                 <div class="rankdatacont search">
-                    {raccoon:books name="books" order="lastupdate desc" limit="20"}
+                    {raccoon:books name="books" order="lastupdate desc" limit="20" where="articlename like '%$keyword%'"}
                     <div class="secd-rank-list">
                         <dl>
                             <dt>
