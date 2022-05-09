@@ -16,7 +16,7 @@
 # 关于
 - 官方博客：https://www.xiaohuanxiong.net/
 - 文档地址：https://www.kancloud.cn/hiliqi/xhxxscms
-- 官方QQ群：780362399
+- 官方飞机群：https://t.me/easy_cms
 - 另外开源一套漫画cms：https://github.com/hiliqi/xiaohuanxiong
 
 # 开源协议
