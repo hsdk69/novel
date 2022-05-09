@@ -14,7 +14,6 @@
   目前有一套小说站群系统，兼容杰奇，吸收了市面上各个站群系统的优点，功能十分强大，持续更新，不开源，有兴趣了解的可以加下面的QQ群。
 
 # 关于
-- 官方博客：https://www.xiaohuanxiong.net/
 - 文档地址：https://www.kancloud.cn/hiliqi/xhxxscms
 - 官方飞机群：https://t.me/easy_cms
 - 另外开源一套漫画cms：https://github.com/hiliqi/xiaohuanxiong
